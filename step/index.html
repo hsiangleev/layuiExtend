@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../layui/css/admin.css" media="all">
+    <link rel="stylesheet" href="step.css" media="all">
+</head>
+<body>
+    <div class="layui-step" id="step">
+        <div class="layui-step-content layui-clear">
+            <div class="layui-step-content-item">条目1</div>
+            <div class="layui-step-content-item">条目2</div>
+            <div class="layui-step-content-item">条目3</div>
+            <div class="layui-step-content-item">条目4</div>
+            <div class="layui-step-content-item">条目5</div>
+        </div>
+        <div class="layui-step-btn">
+            <div class="layui-btn-group">
+                <button class="layui-btn goFirst">第一步</button>
+                <button class="layui-btn prev">上一步</button>
+                <button class="layui-btn next">下一步</button>
+                <button class="layui-btn goLast">最后一步</button>
+                <button class="layui-btn goStep">走到第二步</button>
+                <button class="layui-btn disabled">禁用第三步</button>
+                <button class="layui-btn abled">解禁第三步</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../layui/layui.js"></script>
+    <script>
+        
+        layui.config({
+            base: "../layui/lay/mymodules/"
+        }).use(['jquery','step'], function(){
+            var $ = layui.jquery;
+            var step = layui.step;
+            step.render({
+                elem: '.layui-step',
+                // title: ["第一步","第二步","第三步","第四步"],
+                // description: ["aaa","bbb","ccc","ddd"],
+                // currentStep: 2,
+                canIconClick: true,
+            });
+            $(".goFirst").on("click",function() {
+                step.goFirst();
+            })
+            $(".prev").on("click",function() {
+                step.prev();
+            })
+            $(".next").on("click",function() {
+                step.next();
+            })
+            $(".goLast").on("click",function() {
+                step.goLast();
+            })
+            $(".goStep").on("click",function() {
+                step.goStep(2);
+            })
+            $(".disabled").on("click",function() {
+                step.disabled(3);
+            })
+            $(".abled").on("click",function() {
+                step.abled(3);
+            })
+        });
+    </script>
+
+</body>
+</html>

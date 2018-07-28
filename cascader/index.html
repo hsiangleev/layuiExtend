@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../layui/css/admin.css" media="all">
+    <link rel="stylesheet" href="cascader.css" media="all">
+</head>
+<body>
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择框</label>
+        <div class="layui-input-block">
+            <input type="text" id="a" class="layui-input" readonly="readonly">
+        </div>
+    </div>
+    
+
+    <script src="../layui/layui.js"></script>
+    <script>
+        layui.config({
+            base: "../layui/lay/mymodules/"
+        }).use(['form',"jquery","cascader"], function(){
+            var $ = layui.jquery;
+            var cascader = layui.cascader;
+            
+            var data = [
+                {
+                    value: 'A',
+                    label: 'a',
+                    children: [
+                        {
+                            value: 'AA1',
+                            label: 'aa1',
+                        },
+                        {
+                            value: 'BB1',
+                            label: 'bb1'
+                        }
+                    ]
+                },
+                {
+                    value: 'B',
+                    label: 'b',
+                    children: [
+                        {
+                            value: 'AA2',
+                            label: 'aa2',
+                            children: [
+                                {
+                                    value: 'AAA3',
+                                    label: 'aaa3',
+                                    children: [
+                                        {
+                                            value: 'AAA3',
+                                            label: 'aaa3',
+                                            children: [
+                                                {
+                                                    value: 'AAA3',
+                                                    label: 'aaa3',
+                                                },
+                                                {
+                                                    value: 'BBB3',
+                                                    label: 'bbb3'
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    value: 'BBB3',
+                                    label: 'bbb3'
+                                }
+                            ]
+                        },
+                        {
+                            value: 'BB2',
+                            label: 'bb2',
+                            children: [
+                                {
+                                    value: 'AAA4',
+                                    label: 'aaa4',
+                                },
+                                {
+                                    value: 'BBB4',
+                                    label: 'bbb4'
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    value: 'C',
+                    label: 'c',
+                }
+            ]
+            cascader({
+                elem: "#a",
+                data: data,
+                // url: "/aa",
+                // type: "post",
+                // triggerType: "change",
+                // showLastLevels: true,
+                // where: {
+                //     a: "aaa"
+                // },
+                value: ["B", "BB2", "BBB4"],
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+            
+        });
+    </script>
+        
+</body>
+</html>
