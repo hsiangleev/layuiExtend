@@ -218,7 +218,10 @@ layui.define(["jquery"], function (exports) {
             if(j<=this.currentStep){
                 throw "已经走过的步骤不能禁用";
             }
-            this.disabledStep.push(j);
+            // 当前步不存在则加入数组，否存重复添加
+            if($.inArray(j,this.disabledStep)===-1){
+                this.disabledStep.push(j);
+            }
             //默认为起始从第一步开始，若第一步为disabled，则从前往后找到第一个不是disabled的作为第一步
             for(var i=this.currentStep;i<this.len;i++){
                 if($.inArray(i, this.disabledStep) === -1){
