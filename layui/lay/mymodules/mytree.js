@@ -35,7 +35,7 @@ layui.define('jquery', function(exports){
         }
         that.tree(elem);
         that.on(elem);
-
+        // lee-
         elem.after('<ul id="tree-menu">'+
               '<li><a href="javascript:;">复制</a></li>'+
               '<li><a href="javascript:;">新增</a></li>'+
@@ -46,6 +46,7 @@ layui.define('jquery', function(exports){
       $(document).on("click",function() {
           $("#tree-menu").hide();
       })
+      // -lee
     };
     
     //树节点解析
@@ -100,8 +101,8 @@ layui.define('jquery', function(exports){
         
             //触发点击节点回调
             typeof options.click === 'function' && that.click(li, item); 
-            options.contextmenu && typeof options.contextmenu === 'function'?that.contextmenu(li, item):"";
-        
+            options.contextmenu && typeof options.contextmenu === 'function'?that.contextmenu(li, item):"";     // lee
+            
             //伸展节点
             that.spread(li, item);
         
@@ -110,22 +111,23 @@ layui.define('jquery', function(exports){
         });
     };
     
-    var oldDom;
+    var oldDom;     // lee
     //点击节点回调
     Tree.prototype.click = function(elem, item){
         var that = this, options = that.options;
         elem.children('a').on('click', function(e){
             layui.stope(e);
+            // lee-
             $("#tree-menu").hide();
             // 点击添加背景色
             if(oldDom) oldDom.removeClass("tree-menu-bg");
             $(elem[0]).children("a").addClass("tree-menu-bg");
             oldDom=$(elem[0]).children("a");
-
+            // -lee
             options.click(item)
         });
     };
-    // 右键菜单
+    // 右键菜单lee-
     Tree.prototype.contextmenu = function(elem, item){
         var that = this, options = that.options;
         elem.children('a').on('contextmenu', function(e){
@@ -240,6 +242,7 @@ layui.define('jquery', function(exports){
         });
         
     };
+    // -lee
     
     //伸展节点
     Tree.prototype.spread = function(elem, item){
@@ -341,6 +344,7 @@ layui.define('jquery', function(exports){
         });
     };
 
+    // lee-
     Tree.prototype.reload = function() {
         var tree = new Tree(this.options = this.options || {});
         var elem = $(this.options.elem);
@@ -350,6 +354,7 @@ layui.define('jquery', function(exports){
         elem.empty();
         tree.init(elem);
     }
+    // -lee
     
     //暴露接口
     exports('mytree', function(options) {
