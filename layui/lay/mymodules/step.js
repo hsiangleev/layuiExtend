@@ -16,15 +16,18 @@ layui.define(["jquery"], function (exports) {
         this.title=option.title?option.title:[];
         this.description=option.description?option.description:[];
         this.canIconClick=option.canIconClick?option.canIconClick:false;
+        this.isOpenStepLevel=option.isOpenStepLevel?option.isOpenStepLevel:false;
         this.len=0;   // 页面个数
         this.currentStep=(option.currentStep && option.currentStep>=1)?option.currentStep:1;    // 当前走到第几步
 
-
         this.disabledStep=[];
+
+        this.finalStep=1;       // 当前走到最远的步骤
 
         this.parameterInit();
         this.domRender();
         this.init();
+        this.openStepLevel();
         this.changeStep();
     }
 
@@ -141,6 +144,25 @@ layui.define(["jquery"], function (exports) {
                 })
             })():"";
         },
+        // 是否严格按照步骤条顺序执行步骤
+        openStepLevel: function() {
+            var self=this;
+            this.isOpenStepLevel?(function() {
+                // 如果开启这一项，则默认关闭icon点击事件
+                self.canIconClick=false;
+                $(self.elem).off().on("click",".layui-step-title-item .step-icon",function() {
+                    var index=$(this).parent(".layui-step-title-item").index()+1;
+                    // 判断如果当前点击的步骤超过已走过的最大步，则不跳转
+                    if(index>self.finalStep){
+                        return;
+                    }
+                    // 判断点击的是否为disabled
+                    if($.inArray(index, self.disabledStep) === -1){
+                        self.goStep(index);
+                    }
+                })
+            })():"";
+        },
         // 跳转第几步
         goStep: function(i) {
             if((i<1 || i>this.len)){
@@ -162,6 +184,8 @@ layui.define(["jquery"], function (exports) {
         // 跳到最后一步
         goLast: function() {
             this.goStep(this.len);
+            this.finalStep=this.len;
+            this.openStepLevel();
         },
         // 跳到上一步
         prev: function () {
@@ -199,6 +223,13 @@ layui.define(["jquery"], function (exports) {
             this.nextGo(origin);
         },
         nextGo: function(origin) {
+            if(this.currentStep===this.finalStep){
+                // 更新最远步
+                this.finalStep++;
+                this.openStepLevel();
+            }
+            console.log(this.finalStep);
+
             this.currentStep++;
             // 判断后面的是否全都已经禁用
             if(this.currentStep>this.len){
