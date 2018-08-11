@@ -228,7 +228,6 @@ layui.define(["jquery"], function (exports) {
                 this.finalStep++;
                 this.openStepLevel();
             }
-            console.log(this.finalStep);
 
             this.currentStep++;
             // 判断后面的是否全都已经禁用
