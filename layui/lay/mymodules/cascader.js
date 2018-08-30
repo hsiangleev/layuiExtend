@@ -217,7 +217,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
 
             // 如果有初始值，则第一次不回调
             this.count++;
-            if(this.option.value && this.count===1 && this.option.success){
+            if($.isArray(this.option.value) && this.option.value.length>0 && this.count===1 && this.option.success){
                 return;
             }
             if(this.option.success) this.option.success(this.valueArr,this.textArr);
@@ -225,7 +225,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
         // 赋初值
         initValue: function() {
             var self=this;
-            this.option.value?(function(){
+            ($.isArray(this.option.value) && this.option.value.length>0)?(function(){
                 var value=self.option.value;
                 $(self.elem).trigger("click");
 
