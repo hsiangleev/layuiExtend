@@ -49,8 +49,9 @@ layui.use(['form',"jquery","cascader"], function(){
         //     a: "aaa"
         // },
         value: ["A", "AA1"],
-        success: function (data) {
-            console.log(data);
+        success: function (valData,labelData) {
+            console.log(valData);
+            console.log(labelData);
         }
     });
 });
@@ -65,6 +66,6 @@ layui.use(['form',"jquery","cascader"], function(){
 > + triggerType：触发方式，不填或其他都为click，可选参数"change"，即鼠标移入触发
 > + showLastLevels：输入框是否只显示最后一级,默认false，即全显示
 > + value：传入的初始值，类型为数组，值为data的value值
-> + success：回调函数，选择完成之后的回调函数，返回值为value数组
+> + success：回调函数，选择完成之后的回调函数，返回值第一个参数为value数组，第二个参数为label数组
 
 

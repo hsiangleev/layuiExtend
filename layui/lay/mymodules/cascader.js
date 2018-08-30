@@ -220,7 +220,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
             if(this.option.value && this.count===1 && this.option.success){
                 return;
             }
-            if(this.option.success) this.option.success(this.valueArr);
+            if(this.option.success) this.option.success(this.valueArr,this.textArr);
         },
         // 赋初值
         initValue: function() {
