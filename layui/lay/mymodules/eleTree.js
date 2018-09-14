@@ -16,11 +16,11 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
         this.data=[];
         this.showCheckbox=this.option.showCheckbox;
         this.drag=this.option.drag;
-        this.contextmenuList=[];
-        this.node="";
-        this.checkedData=[];
-        this.prevClickEle;       // 记录上次点击的dom
-        this.treeMenu="";
+        this.contextmenuList=[];    
+        this.node="";               // 生成树的dom字符串
+        this.checkedData=[];        // 被选中的数据
+        this.prevClickEle;          // 记录上次点击的dom
+        this.treeMenu="";           // 右键菜单字符串
 
         this.render();
     }
@@ -64,7 +64,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
         // 初始化容器和标签
         init: function () {
             var self=this;
-            this.node=[];
+            this.node="";
             $(this.elem).empty();
             $(this.elem).off();
             this.nodeInit(this.data,0,false);
@@ -85,6 +85,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
             this.checkInit();
             
         },
+        // dom生成
         nodeInit: function(arr,count,spread) {
             // count: 第几层
             // spread: 是否不展开
@@ -143,8 +144,8 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
             this.node=a.join("");
             return this.node;   // 返回已经遍历完的子节点
         },
+        // 展开合并动画
         eleTreeEvent: function() {
-            // 展开合并动画
             var self=this;
             $(this.elem).on("click",".eleTree-node-content",function(e) {
                 e.stopPropagation();
@@ -181,6 +182,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                 $("#tree-menu").hide().remove();
             });
         },
+        // 右键菜单
         rightClickMenu: function() {
             var self=this;
             var menuStr=['<ul id="tree-menu" lay-filter="treeMenu">'
@@ -483,6 +485,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                     "background-color": "#f5f5f5",
                     width: "100%"
                 })
+                $("#tree-menu").hide().remove();
 
                 $(document.body).on("mousemove",function(e) {
                     // t为了区别click事件
@@ -504,7 +507,6 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                     $(self.elem).css("user-select","auto");
                     $(document.body).off("mousemove").off("mouseup");
                     var target=$(e.target);
-                    
 
                     // 数据更改
                     var dataReset=function() {
@@ -565,7 +567,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                         var parentData=d.parentData.data;
                         var i=d.parentData.childIndex;
                         if(d.index.length===1){
-                            parentData.children.push(temData)
+                            parentData.children?parentData.children.push(temData):parentData.children=[temData];
                         }else{
                             parentData.children[i].children?parentData.children[i].children.push(temData):parentData.children[i].children=[temData];
                         }
@@ -635,7 +637,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
         reInitData: function(node) {
             var i=node.index();
             var floor=Number(node.attr("eletree-floor"));
-            var arr=[];
+            var arr=[];     // 节点对应的index
             while (floor>=0) {
                 arr.push(i);
                 floor=floor-1;
@@ -644,7 +646,9 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
             }
             arr=arr.reverse();
             var oData=this.data;
+            // 当前节点的父节点数据
             var parentData=oData[arr[0]];
+            // 当前节点的data数据
             var d = oData[arr[0]];
             for(var i = 1; i<arr.length; i++){
                 d = d["children"][arr[i]];

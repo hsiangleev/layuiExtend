@@ -52,7 +52,7 @@ layui.use(['jquery','eleTree'], function(){
 });
 ```
 
-#### **step.render()参数说明**
+#### **eleTree.render()参数说明**
 > + elem：外层容器
 > + data：data或url参数二选一，data优先 (静态数据)，必选参数
 > + url：data或url参数二选一，data优先 (获取数据地址)，必选参数
