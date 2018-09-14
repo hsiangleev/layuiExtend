@@ -31,46 +31,99 @@
         }).use(['jquery','eleTree'], function(){
             var $ = layui.jquery;
             var eleTree = layui.eleTree;
+
+            var data=[
+                {
+                    "label": "a",
+                    "spread": true,
+                    "children": [
+                        {
+                            "label": "aa1",
+                            "spread": true,
+                            "disabled": true,
+                            "children": [
+                                {
+                                    "label": "aaa1",
+                                    "children": [
+                                        {
+                                            "label": "aaaa1",
+                                            "checked": true
+                                        },
+                                        {
+                                            "label": "bbbb1"
+                                        },
+                                        {
+                                            "label": "cccc1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "bbb1",
+                                    "checked": true
+                                },
+                                {
+                                    "label": "ccc1"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "bb1"
+                        },
+                        {
+                            "label": "cc1"
+                        }
+                    ]
+                },
+                {
+                    "label": "c",
+                    "spread": true,
+                    "children": [
+                        {
+                            "label": "aa1",
+                            "disabled": true
+                        },
+                        {
+                            "label": "bb1",
+                            "checked": true
+                        }
+                    ]
+                }
+            
+            ]
             eleTree.render({
                 elem: '.eleTree',
-                url: "/tree",
-                type: "post",
-                // data: data,
+                // url: "../../data/home/tree.json",
+                // type: "post",
+                data: data,
                 showCheckbox: true,
                 contextmenuList: ["copy","add","edit","remove"],
                 drag: true
             });
 
-            // eleTree.on("add",function(data) {
-            //     eleTree.reload({where: {data: JSON.stringify(data.data)}})
-            // })
-            // eleTree.on("edit",function(data) {
-            //     console.log(data);
-            //     eleTree.reload({where: {data: JSON.stringify(data.data)}})
-            // })
-            // eleTree.on("remove",function(data) {
-            //     console.log(data);
-            //     eleTree.reload({where: {data: JSON.stringify(data.data)}})
-            // })
-            // eleTree.on("toggleSlide",function(data) {
-            //     console.log(data);
-            //     eleTree.reload({where: {data: JSON.stringify(data.data)}})
-            // })
-            // eleTree.on("checkbox",function(data) {
-            //     console.log(data);
-            //     // eleTree.reload({where: {data: JSON.stringify(data.data)}})
-            // })
+            eleTree.on("add",function(data) {
+                console.log(data);
+                // 若后台修改，则重新获取后台数据，然后重载
+                // eleTree.reload({where: {data: JSON.stringify(data.data)}})
+            })
+            eleTree.on("edit",function(data) {
+                console.log(data);
+            })
+            eleTree.on("remove",function(data) {
+                console.log(data);
+            })
+            eleTree.on("toggleSlide",function(data) {
+                console.log(data);
+            })
+            eleTree.on("checkbox",function(data) {
+                console.log(data);
+            })
             eleTree.on("drag",function(data) {
                 console.log(data);
-                eleTree.reload({where: {data: JSON.stringify(data.data)}})
             })
 
-            // $("#add").on("click",function() {
-            //     console.log(eleTree.checkedData);
-            //     eleTree.reload()
-            // })
-
-            // eleTree.reload()
+            $("#add").on("click",function() {
+                console.log(eleTree.checkedData);
+            })
             
         });
     </script>

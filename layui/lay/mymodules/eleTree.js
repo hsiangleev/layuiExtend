@@ -71,6 +71,8 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
 
             $(this.elem).html(this.node);
             this.checkboxEvent();
+            // 更新选中的数据
+            this.getCheckedData();
 
             if(this.drag){
                 this.nodeDrag();

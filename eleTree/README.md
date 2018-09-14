@@ -13,14 +13,38 @@
 layui.use(['jquery','eleTree'], function(){
     var $ = layui.jquery;
     var eleTree = layui.eleTree;
+
     eleTree.render({
         elem: '.eleTree',
-        url: "/tree",
-        type: "post",
-        where: {a: "aaa"},
-        // data: data,
-        showCheckbox: true
+        // url: "../../data/home/tree.json",
+        // type: "post",
+        // where: {a: "aaa"},
+        data: data,
+        showCheckbox: true,
+        contextmenuList: ["copy","add","edit","remove"],
+        drag: true
     });
+
+    eleTree.on("add",function(data) {
+        console.log(data);
+        // 若后台修改，则重新获取后台数据，然后重载
+        // eleTree.reload({where: {data: JSON.stringify(data.data)}})
+    })
+    eleTree.on("edit",function(data) {
+        console.log(data);
+    })
+    eleTree.on("remove",function(data) {
+        console.log(data);
+    })
+    eleTree.on("toggleSlide",function(data) {
+        console.log(data);
+    })
+    eleTree.on("checkbox",function(data) {
+        console.log(data);
+    })
+    eleTree.on("drag",function(data) {
+        console.log(data);
+    })
 
     $("#add").on("click",function() {
         console.log(eleTree.checkedData);
@@ -35,10 +59,21 @@ layui.use(['jquery','eleTree'], function(){
 > + type：获取后台数据类型(默认get)，可选参数
 > + where：ajax附带的额外参数，可选参数
 > + showCheckbox：是否启用checkbox，类型为数组，可选参数
+> + contextmenuList：右键操作，类型为数组，可选["copy","add","edit","remove"]，不写则不启用右键功能
+> + drag：右键操作，是否启用拖拽功能，可选参数
     
 
 #### **外部可使用的变量说明**
 > + checkedData：获取当前选中的数据
+
+
+#### **外部可使用的事件说明**
+> + add：右键添加触发事件
+> + edit：右键编辑触发事件
+> + remove：右键删除触发事件
+> + toggleSlide：展开与合并触发事件
+> + checkbox：checkbox被选中触发事件
+> + drag：拖拽触发事件
 
 
 #### **data数据格式**
@@ -62,19 +97,12 @@ layui.use(['jquery','eleTree'], function(){
                 label: 'bb1',
             }
         ]
-    },
-    {
-        label: 'c',
-        children: [
-            {
-                label: 'aa1',
-            },
-            {
-                label: 'bb1'
-            }
-        ]
     }
 ]
 
 ```
+
+
+#### **注意**
+> + 所有修改功能只是在前台完成，若要实现后台数据更改，则使用新数据去修改后台重新reload，即 eleTree.reload({where: {data: data.data}})
 
