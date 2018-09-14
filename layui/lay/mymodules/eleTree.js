@@ -1,7 +1,6 @@
 /**
- * 基于layui的无限级联选择器
- * 使用：
- * 
+ * 基于layui的tree重写
+ * author: hsianglee
  */
 
 layui.define(["jquery","laytpl","layer","form"], function (exports) {
