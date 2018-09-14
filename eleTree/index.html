@@ -38,23 +38,32 @@
                 // data: data,
                 showCheckbox: true,
                 contextmenuList: ["copy","add","edit","remove"],
+                drag: true
             });
 
-            eleTree.on("add",function(data) {
-                eleTree.reload({where: {data: JSON.stringify(data.data)}})
-            })
+            // eleTree.on("add",function(data) {
+            //     eleTree.reload({where: {data: JSON.stringify(data.data)}})
+            // })
             // eleTree.on("edit",function(data) {
             //     console.log(data);
+            //     eleTree.reload({where: {data: JSON.stringify(data.data)}})
             // })
             // eleTree.on("remove",function(data) {
             //     console.log(data);
+            //     eleTree.reload({where: {data: JSON.stringify(data.data)}})
             // })
             // eleTree.on("toggleSlide",function(data) {
             //     console.log(data);
+            //     eleTree.reload({where: {data: JSON.stringify(data.data)}})
             // })
             // eleTree.on("checkbox",function(data) {
             //     console.log(data);
+            //     // eleTree.reload({where: {data: JSON.stringify(data.data)}})
             // })
+            eleTree.on("drag",function(data) {
+                console.log(data);
+                eleTree.reload({where: {data: JSON.stringify(data.data)}})
+            })
 
             // $("#add").on("click",function() {
             //     console.log(eleTree.checkedData);
