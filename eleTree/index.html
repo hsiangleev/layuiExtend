@@ -51,15 +51,18 @@
                                         },
                                         {
                                             "label": "bbbb1"
-                                        },
-                                        {
-                                            "label": "cccc1"
                                         }
                                     ]
                                 },
                                 {
                                     "label": "bbb1",
-                                    "checked": true
+                                    "spread": true,
+                                    "children": [
+                                        {
+                                            "label": "aaaa1",
+                                            "checked": true
+                                        }
+                                    ]
                                 },
                                 {
                                     "label": "ccc1"
@@ -67,7 +70,13 @@
                             ]
                         },
                         {
-                            "label": "bb1"
+                            "label": "bb1",
+                            "children": [
+                                {
+                                    "label": "aaaa1",
+                                    "checked": true
+                                }
+                            ]
                         },
                         {
                             "label": "cc1"
@@ -76,7 +85,6 @@
                 },
                 {
                     "label": "c",
-                    "spread": true,
                     "children": [
                         {
                             "label": "aa1",
@@ -97,7 +105,8 @@
                 data: data,
                 showCheckbox: true,
                 contextmenuList: ["copy","add","edit","remove"],
-                drag: true
+                drag: true,
+                accordion: true
             });
 
             eleTree.on("add",function(data) {
