@@ -22,7 +22,8 @@ layui.use(['jquery','eleTree'], function(){
         data: data,
         showCheckbox: true,
         contextmenuList: ["copy","add","edit","remove"],
-        drag: true
+        drag: true,
+        accordion: true
     });
 
     eleTree.on("add",function(data) {
@@ -60,7 +61,8 @@ layui.use(['jquery','eleTree'], function(){
 > + where：ajax附带的额外参数，可选参数
 > + showCheckbox：是否启用checkbox，类型为数组，可选参数
 > + contextmenuList：右键操作，类型为数组，可选["copy","add","edit","remove"]，不写则不启用右键功能
-> + drag：右键操作，是否启用拖拽功能，可选参数
+> + drag：是否启用拖拽功能，可选参数，默认关闭
+> + accordion：是否启用手风琴功能，可选参数，默认关闭
     
 
 #### **外部可使用的变量说明**
