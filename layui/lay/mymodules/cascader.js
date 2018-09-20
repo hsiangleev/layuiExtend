@@ -305,9 +305,8 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
             })
                 
             // input点击显示隐藏
-            $(self.elem).on("click", function (event) {
+            $(self.elem).on("click", function () {
                 self.onOff = !self.onOff;
-                event.stopPropagation();
                 zIndex++;
                 if (self.onOff) {
                     $(self.elem).siblings(".urp-cascader-content").find("ul").slideDown(100);
@@ -320,7 +319,8 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
                 }
             })
             // 点击外层文档隐藏
-            $(document).on("click",function() {
+            $(document).on("click",function(event) {
+                if(event.target.isEqualNode($(self.elem).get(0))) return;
                 self.onOff = false;
                 if(!self.onOff){
                     $(self.elem).siblings(".urp-cascader-content").find("ul").slideUp(100);
