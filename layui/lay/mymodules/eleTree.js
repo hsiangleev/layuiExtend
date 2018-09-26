@@ -1,6 +1,7 @@
 /**
  * 基于layui的tree重写
  * author: hsianglee
+ * 最近修改时间: 2018/09/26
  */
 
 layui.define(["jquery","laytpl","layer","form"], function (exports) {
@@ -21,6 +22,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
         this.checkedData=[];        // 被选中的数据
         this.prevClickEle;          // 记录上次点击的dom
         this.treeMenu="";           // 右键菜单字符串
+        this.filter="";
 
         this.render();
     }
@@ -36,6 +38,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                 throw "缺少elem节点选择器";
             })();
             self.contextmenuList=self.option.contextmenuList?self.option.contextmenuList:[];
+            self.filter=$(self.elem).attr("lay-filter");
             // 判断data参数
             if(self.option.data){
                 self.data=self.option.data;
@@ -195,7 +198,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                 self.prevClickEle=$(this);
 
                 // 数据返回
-                layui.event.call(this, "eleTree", 'toggleSlide(treeMenu)', {
+                layui.event.call(this, "eleTree", 'toggleSlide('+ self.filter +')', {
                     data: self.data
                     ,currentData: d
                 });
@@ -261,7 +264,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                         self.accordionFn($(_self),data);
 
                         // 数据返回
-                        layui.event.call(_self, "eleTree", 'add(treeMenu)', {
+                        layui.event.call(_self, "eleTree", 'add('+ self.filter +')', {
                             value: value
                             ,data: self.data
                             ,currentData: d
@@ -318,7 +321,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                         var d=self.reInitData(node).currentData;
                         d.label=value;
                         // 数据返回
-                        layui.event.call(_self, "eleTree", 'edit(treeMenu)', {
+                        layui.event.call(_self, "eleTree", 'edit('+ self.filter +')', {
                             value: value
                             ,data: self.data
                             ,currentData: d
@@ -348,7 +351,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                     }
 
                     // 数据返回
-                    layui.event.call(_self, "eleTree", 'remove(treeMenu)', {
+                    layui.event.call(_self, "eleTree", 'remove('+ self.filter +')', {
                         data: self.data
                         ,parentData: d
                     });
@@ -364,8 +367,8 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
         },
         // 自定义checkbox解析
         checkboxRender: function() {
-            $(".eleTree-checkbox").remove();
-            $("input.eleTree-hideen[type=checkbox]").each(function(index,item){
+            $(this.elem).find(this.elem+" .eleTree-checkbox").remove();
+            $(this.elem+" input.eleTree-hideen[type=checkbox]").each(function(index,item){
                 if($(item).hasClass("eleTree-disabled")){
                     $(item).after('<div class="eleTree-checkbox eleTree-checkbox-disabled"><i class="layui-icon"></i></div>');
                 }else{
@@ -476,7 +479,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                 self.getCheckedData();
 
                 // 数据返回
-                layui.event.call(inp, "eleTree", 'checkbox(treeMenu)', {
+                layui.event.call(inp, "eleTree", 'checkbox('+ self.filter +')', {
                     data: self.data
                     ,checkedData: self.checkedData
                     ,currentData: d
@@ -526,14 +529,14 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                     $(self.elem).css("user-select","auto");
                     $(document.body).off("mousemove").off("mouseup");
                     var target=$(e.target);
-
                     // 数据更改
-                    var dataReset=function(len) {
+                    var dataReset=function(len,childIndex) {
                         // 删除数据
                         var d=self.reInitData(node);
                         var parentData=d.parentData.data;
                         var temData=d.currentData;
                         var i=d.parentData.childIndex;
+
                         if(len===0){
                             // 判断目标是否超出范围
                             return false;
@@ -545,16 +548,31 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                             parentData.children.splice(i,1);
                             parentData.children.length===0 && delete parentData.children;
                         }
+                        // 如果是同级的上面的移动到下面，则index减一
+                        if(i<childIndex){
+                            childIndex=childIndex-1;
+                        }
 
-                        return temData;
+                        return {
+                            temData: temData,
+                            childIndex: childIndex
+                        };
                     }
+
+                    // 判断是否是同一个dom树
+                    var isOwnTarget=target.parents(".eleTree").length===0?target.get(0):target.parents(".eleTree").get(0);
+                    if(!(isOwnTarget.isEqualNode($(self.elem+".eleTree").get(0)))){
+                        return;
+                    }
+
                     // 判断目标是否是最外层
-                    if((target.get(0).isEqualNode($(".eleTree").get(0)))){
-                        var d=dataReset();
+                    if(target.get(0).isEqualNode($(self.elem+".eleTree").get(0))){
+                        var dataRe=dataReset();
+                        var d=dataRe.temData;
                         self.data.push(d);
                         node.remove();
                         // 添加节点
-                        $(".eleTree").append(temNode);
+                        $(self.elem+".eleTree").append(temNode);
                         // 改floor
                         temNode.attr("eletree-floor","0");
                         // 加padding
@@ -567,11 +585,11 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
 
                         // 数据返回
                         if(time>2){
-                            layui.event.call(_self, "eleTree", 'drag(treeMenu)', {
+                            layui.event.call(_self, "eleTree", 'drag('+ self.filter +')', {
                                 data: self.data
                                 ,currentData: d
                             });
-                            eleTree.reload({data: self.data});
+                            eleTree.reload(self.elem, {data: self.data});
                         }
                         return;
                     }
@@ -585,13 +603,16 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
 
                     if(!isNotParentsNode){
                         var d=self.reInitData(t.parent(".eleTree-node"));
-                        var temData=dataReset(d.index.length);
+                        var i=d.parentData.childIndex;
+                        var dataRe=dataReset(d.index.length,i);
+                        var temData=dataRe.temData;
+                        i=dataRe.childIndex;
+
                         // 判断目标是否超出范围
                         if(temData){
                             node.remove();
                             // 添加之前先删dom
                             var parentData=d.parentData.data;
-                            var i=d.parentData.childIndex;
                             if(d.index.length===1){
                                 parentData.children?parentData.children.push(temData):parentData.children=[temData];
                             }else{
@@ -616,12 +637,12 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
 
                             // 数据返回
                             if(time>2){
-                                layui.event.call(_self, "eleTree", 'drag(treeMenu)', {
+                                layui.event.call(_self, "eleTree", 'drag('+ self.filter +')', {
                                     data: self.data
                                     ,currentData: temData
                                     ,targetData: d.currentData
                                 });
-                                eleTree.reload({data: self.data});
+                                eleTree.reload(self.elem, {data: self.data});
                             }
                         }
                     }
@@ -634,7 +655,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
         // 初始化checkbox选中状态
         checkInit: function(arr,floor) {
             var self=this;
-            $("input[eleTree-status='1']").each(function(index,item) {
+            $(self.elem+" input[eleTree-status='1']").each(function(index,item) {
                 var checkboxEl=$(item).siblings(".eleTree-checkbox");
                 var childNode=checkboxEl.parent(".eleTree-node-content").siblings(".eleTree-node-group").find("input[name='eleTree-node']");
                 // 选择当前
@@ -655,11 +676,12 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
         getCheckedData: function() {
             this.checkedData=[];
             var self=this;
-            $("input[eletree-status='1']").each(function(index,item) {
+            $(this.elem+" input[eletree-status='1']").each(function(index,item) {
                 var node=$(item).parent(".eleTree-node-content").parent(".eleTree-node ");
                 var d=self.reInitData(node).currentData;
                 self.checkedData.push(d);
             })
+            return this.checkedData
         },
         // 通过dom节点找对应数据
         reInitData: function(node) {
@@ -695,21 +717,33 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
             }
         },
     }
+    
+    var thisEleTree=function() {
+        thisEleTree.o[this.elem] = this;
+        thisEleTree.config[this.elem] = this.option;
+        thisEleTree.getCheckedData[this.elem] = this.getCheckedData;
+    }
+    // 保存当前对象(为了获取选中元素时改变this指向)
+    thisEleTree.o = {};
+    // 保存对象的option
+    thisEleTree.config = {};
+    // 获取选中的元素
+    thisEleTree.getCheckedData = {};
 
     var eleTree={
-        obj: "",
-        get checkedData (){
-            return this.obj.checkedData;
+        checkedData (elem){
+            return thisEleTree.getCheckedData[elem].call(thisEleTree.o[elem]);
         },
         render: function(option) {
-            this.obj=new Class(option);
+            var inst=new Class(option);
+            thisEleTree.call(inst);
         },
         on: function(events, callback) {
-            return layui.onevent.call(this.obj, "eleTree", events+"(treeMenu)", callback);
+            return layui.onevent.call(this, "eleTree", events, callback);
         },
-        reload: function(option) {
-            this.obj.option = $.extend({}, this.obj.option, option);
-            this.obj.render();
+        reload: function(elem, option) {
+            var config = thisEleTree.config[elem];
+            this.render($.extend({}, config, option));
         }
     }
     

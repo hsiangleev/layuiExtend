@@ -14,14 +14,12 @@
             height: 100%;
             background-color: #fff;
         }
-        
     </style>
 </head>
 <body>
-    <div class="eleTree">
-        
-    </div>
-    <button id="add">add</button>
+    <div class="eleTree ele1" lay-filter="data1"></div>
+    <div class="eleTree ele2" lay-filter="data2"></div>
+    <button class="layui-btn">获取选中数据</button>
 
     <script src="../layui/layui.js"></script>
     <script>
@@ -98,9 +96,47 @@
                 }
             
             ]
+            var data2=[
+            {
+                    "label": "a",
+                    "spread": true,
+                    "children": [
+                        {
+                            "label": "aa1",
+                            "spread": true,
+                            "disabled": true
+                        },
+                        {
+                            "label": "bb1",
+                            "children": [
+                                {
+                                    "label": "aaaa1",
+                                    "checked": true
+                                }
+                            ]
+                        },
+                        {
+                            "label": "cc1"
+                        }
+                    ]
+                },
+                {
+                    "label": "c",
+                    "children": [
+                        {
+                            "label": "aa1",
+                            "disabled": true
+                        },
+                        {
+                            "label": "bb1",
+                            "checked": true
+                        }
+                    ]
+                }
+            ];
             eleTree.render({
-                elem: '.eleTree',
-                // url: "../../data/home/tree.json",
+                elem: '.ele1',
+                // url: "/tree",
                 // type: "post",
                 data: data,
                 showCheckbox: true,
@@ -108,30 +144,41 @@
                 drag: true,
                 accordion: true
             });
+            
+            eleTree.render({
+                elem: '.ele2',
+                // url: "../../data/home/tree.json",
+                // type: "post",
+                data: data2,
+                showCheckbox: true,
+                contextmenuList: ["add","remove"],
+                drag: true,
+                accordion: true
+            });
 
-            eleTree.on("add",function(data) {
+            eleTree.on("add(data1)",function(data) {
                 console.log(data);
                 // 若后台修改，则重新获取后台数据，然后重载
-                // eleTree.reload({where: {data: JSON.stringify(data.data)}})
+                // eleTree.reload(".ele1", {where: {data: JSON.stringify(data.data)}})
             })
-            eleTree.on("edit",function(data) {
+            eleTree.on("edit(data1)",function(data) {
                 console.log(data);
             })
-            eleTree.on("remove",function(data) {
+            eleTree.on("remove(data1)",function(data) {
                 console.log(data);
             })
-            eleTree.on("toggleSlide",function(data) {
+            eleTree.on("toggleSlide(data1)",function(data) {
                 console.log(data);
             })
-            eleTree.on("checkbox",function(data) {
+            eleTree.on("checkbox(data1)",function(data) {
                 console.log(data);
             })
-            eleTree.on("drag",function(data) {
+            eleTree.on("drag(data2)",function(data) {
                 console.log(data);
             })
 
-            $("#add").on("click",function() {
-                console.log(eleTree.checkedData);
+            $(".layui-btn").on("click",function() {
+                console.log(eleTree.checkedData(".ele2"));
             })
             
         });

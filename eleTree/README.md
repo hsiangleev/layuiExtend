@@ -3,8 +3,9 @@
 #### **html元素**
 -----------------
 ```javascript
-<div class="eleTree"></div>
-<button id="add">add</button>
+<div class="eleTree ele1" lay-filter="data1"></div>
+<div class="eleTree ele2" lay-filter="data2"></div>
+<button class="layui-btn">获取选中数据</button>
 ```
 
 #### **js引用**
@@ -15,40 +16,50 @@ layui.use(['jquery','eleTree'], function(){
     var eleTree = layui.eleTree;
 
     eleTree.render({
-        elem: '.eleTree',
-        // url: "../../data/home/tree.json",
+        elem: '.ele1',
+        // url: "/tree",
         // type: "post",
-        // where: {a: "aaa"},
         data: data,
         showCheckbox: true,
         contextmenuList: ["copy","add","edit","remove"],
         drag: true,
         accordion: true
     });
+    
+    eleTree.render({
+        elem: '.ele2',
+        // url: "../../data/home/tree.json",
+        // type: "post",
+        data: data2,
+        showCheckbox: true,
+        contextmenuList: ["add","remove"],
+        drag: true,
+        accordion: true
+    });
 
-    eleTree.on("add",function(data) {
+    eleTree.on("add(data1)",function(data) {
         console.log(data);
         // 若后台修改，则重新获取后台数据，然后重载
-        // eleTree.reload({where: {data: JSON.stringify(data.data)}})
+        // eleTree.reload(".ele1", {where: {data: JSON.stringify(data.data)}})
     })
-    eleTree.on("edit",function(data) {
+    eleTree.on("edit(data1)",function(data) {
         console.log(data);
     })
-    eleTree.on("remove",function(data) {
+    eleTree.on("remove(data1)",function(data) {
         console.log(data);
     })
-    eleTree.on("toggleSlide",function(data) {
+    eleTree.on("toggleSlide(data1)",function(data) {
         console.log(data);
     })
-    eleTree.on("checkbox",function(data) {
+    eleTree.on("checkbox(data1)",function(data) {
         console.log(data);
     })
-    eleTree.on("drag",function(data) {
+    eleTree.on("drag(data2)",function(data) {
         console.log(data);
     })
 
-    $("#add").on("click",function() {
-        console.log(eleTree.checkedData);
+    $(".layui-btn").on("click",function() {
+        console.log(eleTree.checkedData(".ele2"));
     })
 });
 ```
@@ -65,17 +76,17 @@ layui.use(['jquery','eleTree'], function(){
 > + accordion：是否启用手风琴功能，可选参数，默认关闭
     
 
-#### **外部可使用的变量说明**
-> + checkedData：获取当前选中的数据
+#### **外部可使用的函数说明**
+> + checkedData(elem)：获取当前的选择器elem选中的数据
 
 
 #### **外部可使用的事件说明**
-> + add：右键添加触发事件
-> + edit：右键编辑触发事件
-> + remove：右键删除触发事件
-> + toggleSlide：展开与合并触发事件
-> + checkbox：checkbox被选中触发事件
-> + drag：拖拽触发事件
+> + add(filter)：右键添加触发事件
+> + edit(filter)：右键编辑触发事件
+> + remove(filter)：右键删除触发事件
+> + toggleSlide(filter)：展开与合并触发事件
+> + checkbox(filter)：checkbox被选中触发事件
+> + drag(filter)：拖拽触发事件
 
 
 #### **data数据格式**
