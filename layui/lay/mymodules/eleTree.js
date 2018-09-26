@@ -530,7 +530,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                     $(document.body).off("mousemove").off("mouseup");
                     var target=$(e.target);
                     // 数据更改
-                    var dataReset=function(len,childIndex) {
+                    var dataReset=function(len,childIndex,t) {
                         // 删除数据
                         var d=self.reInitData(node);
                         var parentData=d.parentData.data;
@@ -548,8 +548,10 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                             parentData.children.splice(i,1);
                             parentData.children.length===0 && delete parentData.children;
                         }
-                        // 如果是同级的上面的移动到下面，则index减一
-                        if(i<childIndex){
+                        // 如果是同级的，并且从上面的移动到下面，则index减一
+                        var f1=Number(node.attr("eletree-floor"))-1;
+                        var f2=Number(node.attr("eletree-floor"))-1;
+                        if(i<childIndex && node.parents(".eleTree-node[eletree-floor='"+f1+"']").get(0).isEqualNode(t.parents(".eleTree-node[eletree-floor='"+f2+"']").get(0))){
                             childIndex=childIndex-1;
                         }
 
@@ -604,7 +606,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                     if(!isNotParentsNode){
                         var d=self.reInitData(t.parent(".eleTree-node"));
                         var i=d.parentData.childIndex;
-                        var dataRe=dataReset(d.index.length,i);
+                        var dataRe=dataReset(d.index.length,i,t);
                         var temData=dataRe.temData;
                         i=dataRe.childIndex;
 
