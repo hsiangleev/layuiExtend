@@ -117,5 +117,5 @@ layui.use(['jquery','eleTree'], function(){
 
 
 #### **注意**
-> + 所有修改功能只是在前台完成，若要实现后台数据更改，则使用新数据去修改后台重新reload，即 eleTree.reload({where: {data: data.data}})
+> + 所有修改功能只是在前台完成，若要实现后台数据更改，则使用新数据去修改后台重新reload，即 eleTree.reload(".ele1", {where: {data: data.data}})
 
