@@ -228,7 +228,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                 $(this).addClass("eleTree-node-content-active");
                 
                 // 菜单位置
-                $(self.elem).after(self.treeMenu);
+                $(document.body).after(self.treeMenu);
                 $("#tree-menu").css({
                     left: event.pageX,
                     top: event.pageY,
