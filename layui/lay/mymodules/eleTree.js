@@ -1,7 +1,7 @@
 /**
  * 基于layui的tree重写
  * author: hsianglee
- * 最近修改时间: 2018/09/26
+ * 最近修改时间: 2018/10/11
  */
 
 layui.define(["jquery","laytpl","layer","form"], function (exports) {
