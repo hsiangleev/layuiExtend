@@ -230,8 +230,8 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                 // 菜单位置
                 $(document.body).after(self.treeMenu);
                 $("#tree-menu").css({
-                    left: event.pageX,
-                    top: event.pageY,
+                    left: e.pageX,
+                    top: e.pageY,
                 }).show();
                 // 复制
                 $("#tree-menu li.copy").off().on("click",function() {
@@ -733,7 +733,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
     thisEleTree.getCheckedData = {};
 
     var eleTree={
-        checkedData (elem){
+        checkedData: function(elem){
             return thisEleTree.getCheckedData[elem].call(thisEleTree.o[elem]);
         },
         render: function(option) {
