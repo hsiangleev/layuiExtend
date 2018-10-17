@@ -1,7 +1,8 @@
 /**
  * 基于layui的tree重写
  * author: hsianglee
- * 最近修改时间: 2018/10/11
+ * 最近修改时间: 2018/10/17
+ * 说明：因isEqualNode，ie8不支持拖拽功能
  */
 
 layui.define(["jquery","laytpl","layer","form"], function (exports) {
@@ -23,6 +24,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
         this.prevClickEle;          // 记录上次点击的dom
         this.treeMenu="";           // 右键菜单字符串
         this.filter="";
+        this.isIE8=navigator.appName=="Microsoft Internet Explorer" && navigator.appVersion.split(";")[1].replace(/[ ]/g,"")=="MSIE8.0";
 
         this.render();
     }
@@ -68,6 +70,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
         init: function () {
             var self=this;
             this.node="";
+            this.es5ArrMethods();
             $(this.elem).empty();
             $(this.elem).off();
             this.nodeInit(this.data,0,false);
@@ -85,6 +88,74 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
             this.checkInit();
             
         },
+        // 增加foreach,some,every方法支持ie8
+        es5ArrMethods: function() {
+            if (!Array.prototype.every) {
+                Array.prototype.every = function (every_fun, thisArg) {
+                    var _this = null,
+                        iKey = 0,
+                        len = this.length; //无符号右移
+                    if (typeof every_fun !== "function") {
+                        throw new TypeError("every_fun is not a function");
+                    }
+                    if (thisArg) {
+                        _this = thisArg;
+                    }//绑定执行环境
+                    for (; iKey < len; iKey++) {
+                        var  key_Value = this[iKey];
+                        if(!every_fun.call(_this, key_Value, iKey, this)){
+                            return false;
+                        };
+                    }
+                    return true;
+                }
+            }
+            if (!Array.prototype.some) {
+                Array.prototype.some = function (some_fun, thisArg) {
+                    var _this = null,
+                        iKey = 0,
+                        arr_len = this.length;
+                    if (typeof some_fun != 'function') {
+                        throw new typeError('some_fun is not a function')
+                    }
+                    if (thisArg) {
+                        _this = thisArg;
+                    }
+                    for (; iKey < arr_len; iKey++) {
+                        var key_value = this[iKey];
+                        if (some_fun.call(_this, key_value, iKey, this)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }
+            if (!Array.prototype.forEach) {
+                Array.prototype.forEach = function(callback/*, thisArg*/) {
+                    var T, k;
+                    if (this == null) {
+                        throw new TypeError('this is null or not defined');
+                    }
+                    var O = Object(this);
+                    var len = O.length >>> 0;   // 所有非数值转换成0,所有大于等于 0 等数取整数部分
+                    if (typeof callback !== 'function') {
+                        throw new TypeError(callback + ' is not a function');
+                    }
+                    if (arguments.length > 1) {
+                        T = arguments[1];
+                    }
+                    k = 0;
+                    while (k < len) {
+                        var kValue;
+                        if (k in O) {
+                            kValue = O[k];
+                            callback.call(T, kValue, k, O);
+                        }
+                        k++;
+                    }
+                };
+            }
+        },
         // dom生成
         nodeInit: function(arr,count,spread) {
             // count: 第几层
@@ -98,11 +169,22 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                             // 判断叶子节点
                             ,(function() {
                                 if(val.children && val.children.length>0){
-                                    var s='<i class="layui-icon layui-icon-triangle-r ';
-                                    if(val.spread){
-                                        s+='icon-rotate';
+                                    if(self.isIE8){
+                                        var s='<i class="layui-icon ';
+                                        if(val.spread){
+                                            s+='layui-icon-triangle-d ';
+                                        }else{
+                                            s+='layui-icon-triangle-r ';
+                                        }
+                                        s+=' "></i>'
+                                    }else{
+                                        var s='<i class="layui-icon layui-icon-triangle-r ';
+                                        if(val.spread){
+                                            s+='icon-rotate';
+                                        }
+                                        s+=' "></i>'
                                     }
-                                    s+=' "></i>'
+                                    
                                     return s;
                                 }else{
                                     return '<i class="layui-icon layui-icon-triangle-r" style="color: transparent;"></i>'
@@ -150,7 +232,14 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
             // 手风琴
             var parentSibling=ele.parent(".eleTree-node").siblings(".eleTree-node");
             parentSibling.children(".eleTree-node-group").children().slideUp("fast");
-            parentSibling.children(".eleTree-node-content").find(".layui-icon-triangle-r").removeClass("icon-rotate");
+            
+            if(this.isIE8){
+                parentSibling.children(".eleTree-node-content").children(".eleTree-node-content-icon").children(".layui-icon").removeClass("layui-icon-triangle-d").addClass("layui-icon-triangle-r");
+            }else{
+                parentSibling.children(".eleTree-node-content").find(".layui-icon-triangle-r").removeClass("icon-rotate");
+
+            }
+
             var parentData=d.parentData;
             // 最外层判断
             if(d.index.length===1){
@@ -180,21 +269,36 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                 var data=self.reInitData(node);
                 var d=data.currentData;
                 // 切换下拉
-                var el=$(this).find(".layui-icon-triangle-r");
-                if(el.hasClass("icon-rotate")){
-                    $(this).siblings(".eleTree-node-group").children().slideUp("fast");
-                    el.removeClass("icon-rotate");
-                    // 数据修改
-                    delete d.spread;
+                var el=$(this).children(".eleTree-node-content-icon").children(".layui-icon");
+                if(self.isIE8) {
+                    // ie8
+                    if(el.hasClass("layui-icon-triangle-d")){
+                        $(this).siblings(".eleTree-node-group").children().slideUp("fast");
+                        el.removeClass("layui-icon-triangle-d").addClass("layui-icon-triangle-r");
+                        // 数据修改
+                        delete d.spread;
+                    }else{
+                        $(this).siblings(".eleTree-node-group").children().slideDown("fast");
+                        el.addClass("layui-icon-triangle-d").removeClass("layui-icon-triangle-r");
+                        // 数据修改
+                        d.spread=true;
+                        self.accordionFn($(this),data);
+                    }
                 }else{
-                    $(this).siblings(".eleTree-node-group").children().slideDown("fast");
-                    el.addClass("icon-rotate");
-                    // 数据修改
-                    d.spread=true;
-
-                    self.accordionFn($(this),data);
-                    
+                    if(el.hasClass("icon-rotate")){
+                        $(this).siblings(".eleTree-node-group").children().slideUp("fast");
+                        el.removeClass("icon-rotate");
+                        // 数据修改
+                        delete d.spread;
+                    }else{
+                        $(this).siblings(".eleTree-node-group").children().slideDown("fast");
+                        el.addClass("icon-rotate");
+                        // 数据修改
+                        d.spread=true;
+                        self.accordionFn($(this),data);
+                    }
                 }
+                
                 self.prevClickEle=$(this);
 
                 // 数据返回
@@ -231,7 +335,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                 $(document.body).after(self.treeMenu);
                 $("#tree-menu").css({
                     left: e.pageX,
-                    top: e.pageY,
+                    top: e.pageY
                 }).show();
                 // 复制
                 $("#tree-menu li.copy").off().on("click",function() {
@@ -255,7 +359,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                         var d=data.currentData;
                         d.children?"":d.children=[];
                         var obj={
-                            label: value,
+                            label: value
                         }
                         isChecked?obj.checked=true:"";
                         d.children.push(obj);
@@ -314,7 +418,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                 $("#tree-menu li.edit").off().on("click",function() {
                     layer.prompt({
                         value: $(_self).children(".eleTree-node-content-label").text(),
-                        title: '请输入修改的label值',
+                        title: '请输入修改的label值'
                     },function(value, index, elem){
                         // 数据修改
                         var node=$(_self).parent(".eleTree-node ");
@@ -717,7 +821,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                 },
                 index: arr
             }
-        },
+        }
     }
     
     var thisEleTree=function() {
