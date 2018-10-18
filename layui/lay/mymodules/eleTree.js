@@ -1,7 +1,7 @@
 /**
  * 基于layui的tree重写
  * author: hsianglee
- * 最近修改时间: 2018/10/17
+ * 最近修改时间: 2018/10/18
  * 说明：因isEqualNode，ie8不支持拖拽功能
  */
 
@@ -231,7 +231,7 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
             if(!this.accordion) return;
             // 手风琴
             var parentSibling=ele.parent(".eleTree-node").siblings(".eleTree-node");
-            parentSibling.children(".eleTree-node-group").children().slideUp("fast");
+            parentSibling.children(".eleTree-node-group").children().hide("fast");
             
             if(this.isIE8){
                 parentSibling.children(".eleTree-node-content").children(".eleTree-node-content-icon").children(".layui-icon").removeClass("layui-icon-triangle-d").addClass("layui-icon-triangle-r");
@@ -273,12 +273,12 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                 if(self.isIE8) {
                     // ie8
                     if(el.hasClass("layui-icon-triangle-d")){
-                        $(this).siblings(".eleTree-node-group").children().slideUp("fast");
+                        $(this).siblings(".eleTree-node-group").children().hide("fast");
                         el.removeClass("layui-icon-triangle-d").addClass("layui-icon-triangle-r");
                         // 数据修改
                         delete d.spread;
                     }else{
-                        $(this).siblings(".eleTree-node-group").children().slideDown("fast");
+                        $(this).siblings(".eleTree-node-group").children().show("fast");
                         el.addClass("layui-icon-triangle-d").removeClass("layui-icon-triangle-r");
                         // 数据修改
                         d.spread=true;
@@ -286,12 +286,12 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                     }
                 }else{
                     if(el.hasClass("icon-rotate")){
-                        $(this).siblings(".eleTree-node-group").children().slideUp("fast");
+                        $(this).siblings(".eleTree-node-group").children().hide("fast");
                         el.removeClass("icon-rotate");
                         // 数据修改
                         delete d.spread;
                     }else{
-                        $(this).siblings(".eleTree-node-group").children().slideDown("fast");
+                        $(this).siblings(".eleTree-node-group").children().show("fast");
                         el.addClass("icon-rotate");
                         // 数据修改
                         d.spread=true;
