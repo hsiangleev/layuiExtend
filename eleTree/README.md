@@ -5,6 +5,7 @@
 ```javascript
 <div class="eleTree ele1" lay-filter="data1"></div>
 <div class="eleTree ele2" lay-filter="data2"></div>
+<div class="eleTree ele3" lay-filter="data3"></div>
 <button class="layui-btn">获取选中数据</button>
 ```
 
@@ -35,6 +36,32 @@ layui.use(['jquery','eleTree'], function(){
         contextmenuList: ["add","remove"],
         drag: true,
         accordion: true
+    });
+
+    var k=1;
+    eleTree.render({
+        elem: '.ele3',
+        data: data3,
+        showCheckbox: true,
+        contextmenuList: ["copy","add","edit","remove"],
+        accordion: true,
+        lazy: true,
+        loadData: function(item,callback) {
+            setTimeout(function() {
+                k++;
+                var d = [
+                    {
+                        "label": "d"
+                    }
+                ];
+                console.log(item);
+                if(k>=3){
+                    d[0].isLeaf=true;
+                    return void callback(d);
+                }
+                callback(d);
+            }, 500);
+        }
     });
 
     eleTree.on("add(data1)",function(data) {
@@ -74,6 +101,8 @@ layui.use(['jquery','eleTree'], function(){
 > + contextmenuList：右键操作，类型为数组，可选["copy","add","edit","remove"]，不写则不启用右键功能
 > + drag：是否启用拖拽功能，可选参数，默认关闭
 > + accordion：是否启用手风琴功能，可选参数，默认关闭
+> + lazy：开启懒加载功能，可选参数，默认关闭
+> + loadData：懒加载回调函数(item,callback)，若开启懒加载，则此参数必须（item为点击的dom所对应的数据，callback,回调，最后使用新数据作为callback函数的参数，调用此函数）
     
 
 #### **外部可使用的函数说明**
@@ -96,6 +125,7 @@ layui.use(['jquery','eleTree'], function(){
 // children: 子元素数组
 // disabled: 是否禁用
 // checked: 是否选中
+// isLeaf: 是否为叶子节点(懒加载是使用)
 [
     {
         label: 'a',
@@ -118,4 +148,5 @@ layui.use(['jquery','eleTree'], function(){
 
 #### **注意**
 > + 所有修改功能只是在前台完成，若要实现后台数据更改，则使用新数据去修改后台重新reload，即 eleTree.reload(".ele1", {where: {data: data.data}})
-
+> + 懒加载功能与拖拽功能还存在一点冲突，尽量不要同时使用
+> + 除了拖拽功能，其它功能支持到ie8

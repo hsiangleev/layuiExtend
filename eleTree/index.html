@@ -18,6 +18,7 @@
 <body>
     <div class="eleTree ele1" lay-filter="data1"></div>
     <div class="eleTree ele2" lay-filter="data2"></div>
+    <div class="eleTree ele3" lay-filter="data3"></div>
     <button class="layui-btn">获取选中数据</button>
 
     <script src="../layui/layui.js"></script>
@@ -153,6 +154,44 @@
                 contextmenuList: ["add","remove"],
                 drag: true,
                 accordion: true
+            });
+
+            var data3=[
+                {
+                    "label": "a"
+                },
+                {
+                    "label": "aa",
+                    "isLeaf": true
+                }
+            ]
+            var k=1;
+            eleTree.render({
+                elem: '.ele3',
+                // url: "/tree",
+                // type: "post",
+                data: data3,
+                showCheckbox: true,
+                contextmenuList: ["copy","add","edit","remove"],
+                // drag: true,
+                accordion: true,
+                lazy: true,
+                loadData: function(item,callback) {
+                    setTimeout(function() {
+                        k++;
+                        var d = [
+                            {
+                                "label": "d"
+                            }
+                        ];
+                        console.log(item);
+                        if(k>=3){
+                            d[0].isLeaf=true;
+                            return void callback(d);
+                        }
+                        callback(d);
+                    }, 500);
+                }
             });
 
             eleTree.on("add(data1)",function(data) {

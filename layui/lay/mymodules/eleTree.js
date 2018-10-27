@@ -1,7 +1,7 @@
 /**
  * 基于layui的tree重写
  * author: hsianglee
- * 最近修改时间: 2018/10/18
+ * 最近修改时间: 2018/10/27
  * 说明：因isEqualNode，ie8不支持拖拽功能
  */
 
@@ -18,6 +18,8 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
         this.showCheckbox=this.option.showCheckbox;
         this.drag=this.option.drag;
         this.accordion=this.option.accordion;
+        this.lazy=this.option.lazy;
+        this.loadData=this.option.loadData;
         this.contextmenuList=[];    
         this.node="";               // 生成树的dom字符串
         this.checkedData=[];        // 被选中的数据
@@ -40,6 +42,10 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                 throw "缺少elem节点选择器";
             })();
             self.contextmenuList=self.option.contextmenuList?self.option.contextmenuList:[];
+            self.lazy && !self.loadData && (function() {
+                throw "缺少懒加载回调函数";
+            })()
+            
             self.filter=$(self.elem).attr("lay-filter");
             // 判断data参数
             if(self.option.data){
@@ -168,9 +174,9 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                         ,'<span class="eleTree-node-content-icon">'
                             // 判断叶子节点
                             ,(function() {
-                                if(val.children && val.children.length>0){
+                                var fn=function(lazyClassStr) {
                                     if(self.isIE8){
-                                        var s='<i class="layui-icon ';
+                                        var s='<i class="layui-icon '+lazyClassStr;
                                         if(val.spread){
                                             s+='layui-icon-triangle-d ';
                                         }else{
@@ -178,14 +184,19 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                                         }
                                         s+=' "></i>'
                                     }else{
-                                        var s='<i class="layui-icon layui-icon-triangle-r ';
+                                        var s='<i class="layui-icon layui-icon-triangle-r '+lazyClassStr;
                                         if(val.spread){
                                             s+='icon-rotate';
                                         }
                                         s+=' "></i>'
                                     }
-                                    
                                     return s;
+                                }
+                                if(val.children && val.children.length>0){
+                                    return fn("");
+                                }else if(self.lazy && !val.children && !val.isLeaf){
+                                    // 懒加载
+                                    return fn("lazy-icon ")
                                 }else{
                                     return '<i class="layui-icon layui-icon-triangle-r" style="color: transparent;"></i>'
                                 }
@@ -273,11 +284,22 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                 if(self.isIE8) {
                     // ie8
                     if(el.hasClass("layui-icon-triangle-d")){
+                        // 合并
                         $(this).siblings(".eleTree-node-group").children().hide("fast");
                         el.removeClass("layui-icon-triangle-d").addClass("layui-icon-triangle-r");
                         // 数据修改
                         delete d.spread;
                     }else{
+                        // 展开
+                        // 懒加载数据
+                        if(self.lazy && el.hasClass("lazy-icon")){
+                            el.removeClass("layui-icon-triangle-r").addClass("layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop");
+                            self.loadData(d,function(childrenData) {
+                                d.children=childrenData;
+                                self.render();
+                            })
+                        }
+
                         $(this).siblings(".eleTree-node-group").children().show("fast");
                         el.addClass("layui-icon-triangle-d").removeClass("layui-icon-triangle-r");
                         // 数据修改
@@ -286,11 +308,22 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                     }
                 }else{
                     if(el.hasClass("icon-rotate")){
+                        // 合并
                         $(this).siblings(".eleTree-node-group").children().hide("fast");
                         el.removeClass("icon-rotate");
                         // 数据修改
                         delete d.spread;
                     }else{
+                        // 展开
+                        // 懒加载数据
+                        if(self.lazy && el.hasClass("lazy-icon")){
+                            el.removeClass("layui-icon-triangle-r icon-rotate").addClass("layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop");
+                            self.loadData(d,function(childrenData) {
+                                d.children=childrenData;
+                                self.render();
+                            })
+                        }
+
                         $(this).siblings(".eleTree-node-group").children().show("fast");
                         el.addClass("icon-rotate");
                         // 数据修改
