@@ -1,7 +1,6 @@
 ## 下拉菜单
 
 #### **html元素**
------------------
 ```javascript
 <div class="urp-dropdown">
     <button class="layui-btn urp-dropdown-btn">
@@ -21,12 +20,6 @@
                 Another action action action
             </a>
         </li>
-        <li>
-            <a href="javascript:;">
-                <i class="layui-icon layui-icon-website"></i>
-                Another action
-            </a>
-        </li>
     </ul>
 </div>
 ```
@@ -39,29 +32,53 @@
 ## table中使用
 #### **html模板**
 ```javascript
-<div class="urp-dropdown urp-dropdown-table">
-    <button class="layui-btn urp-dropdown-btn" lay-event="dropdown">
-        操作<i class="layui-icon layui-icon-down"></i>
-    </button>
-</div>
+/*表格toolbar模板*/
+<script type="text/html" id="barDemo">
+    <div class="urp-dropdown urp-dropdown-table">
+        <button class="layui-btn layui-btn-primary layui-btn-xs urp-dropdown-btn" lay-event="dropdown">
+            操作<i class="layui-icon layui-icon-down"></i>
+        </button>
+    </div>
+</script>
 ```
 #### **js触发事件**
 ```javascript
-table.on('tool(table)', function (obj) {
+table.on('tool(test)', function (obj) {
     var data = obj.data;
     if (obj.event === 'dropdown') {
-        // 拼接数组(几个数组代表几个按钮)
         var options = [
             {
-                title: "查看", // 按钮显示内容
-                icon: "layui-icon-form", // 图标样式
-                url: "http://baidu.com", // 按钮跳转地址（与event二选一）
-                event: function () {
+                title: "百度", // 按钮显示内容
+                icon: "layui-icon-release", // 图标样式
+                url: "http://baidu.com" // 按钮跳转地址（与event二选一）
+            },
+            {
+                title: "事件",
+                icon: "layui-icon-release",
+                event: function() {
                     // 按钮触发事件
+                    layer.alert("触发了事件",{icon: 1});
                 }
             }
         ];
-        urp.dropdown(options);
+        dropdown(options);
     }
 })
 ```
+#### **说明**
+> + 引入dropdown模块
+> + 以 urp- 开头的class为必需的
+> + dropdown(options)：options参数为数组，数组中的每个对象代表一个按钮
+
+```javascript
+// options参数
+{
+    title: "查看", // 按钮显示内容
+    icon: "layui-icon-form", // 图标样式
+    url: "http://baidu.com", // 按钮跳转地址（与event二选一）
+    event: function () {
+        // 按钮触发事件
+    }
+}
+```
+
