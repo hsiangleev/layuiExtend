@@ -66,7 +66,7 @@ table.on('tool(test)', function (obj) {
 })
 ```
 #### **说明**
-> + 引入dropdown模块
+> + 引入dropdown模块和css文件
 > + 以 urp- 开头的class为必需的
 > + dropdown(options)：options参数为数组，数组中的每个对象代表一个按钮
 
