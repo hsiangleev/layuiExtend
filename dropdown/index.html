@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../dropdown/dropdown.css" media="all">
+</head>
+<body>
+    <div class="urp-dropdown">
+        <button class="layui-btn urp-dropdown-btn">
+            Action
+            <i class="layui-icon layui-icon-down"></i>
+        </button>
+        <ul class="urp-dropdown-menu">
+            <li>
+                <a href="javascript:;">
+                    <i class="layui-icon layui-icon-senior"></i>
+                    action
+                </a>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="layui-icon layui-icon-auz"></i>
+                    Another action action action
+                </a>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="layui-icon layui-icon-website"></i>
+                    Another action
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <table class="layui-hide" id="demo" lay-filter="test"></table>
+
+    <script type="text/html" id="barDemo">
+        <div class="urp-dropdown urp-dropdown-table">
+            <button class="layui-btn  layui-btn-primary layui-btn-xs urp-dropdown-btn" lay-event="dropdown">
+                操作<i class="layui-icon layui-icon-down"></i>
+            </button>
+        </div>
+    </script>
+
+    <script src="../layui/layui.js"></script>
+    <script>
+        
+        layui.config({
+            base: "../layui/lay/mymodules/"
+        }).use(['jquery','table','layer','dropdown'], function(){
+            var $ = layui.jquery;
+            var table = layui.table;
+            var layer = layui.layer;
+            var dropdown = layui.dropdown;
+            var data=[];
+            for(var i=0;i<20;i++){
+                data.push({
+                    id: i,
+                    username: "aaa"+i,
+                    experience: "aaa",
+                    sex: "aaa",
+                })
+            }
+            table.render({
+                elem: '#demo'
+                ,data: data
+                ,limit: 15
+                ,page: true
+                ,cols: [[ //表头
+                    {type: 'checkbox', fixed: 'left'}
+                    ,{field: 'username', title: '用户名'}
+                    ,{field: 'experience', title: '积分', sort: true, totalRow: true}
+                    ,{field: 'sex', title: '性别', sort: true}
+                    ,{fixed: 'right', width: 165, align:'center', toolbar: '#barDemo'}
+                ]]
+            });
+
+            table.on('tool(test)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'dropdown') {
+                    var options = [
+                        {
+                            title: "百度",
+                            icon: "layui-icon-release",
+                            url: "http://baidu.com"
+                        },
+                        {
+                            title: "事件",
+                            icon: "layui-icon-release",
+                            event: function() {
+                                layer.alert("触发了事件",{icon: 1});
+                            }
+                        }
+                    ];
+                    if(data.id%2===1){
+                        options.push(
+                            {
+                                title: "layui",
+                                icon: "layui-icon-release",
+                                url: "https://www.layui.com/"
+                            }
+                        )
+                    }else{
+                        options.push(
+                            {
+                                title: "qq",
+                                icon: "layui-icon-release",
+                                url: "https://www.qq.com/"
+                            }
+                        )
+                    }
+                    dropdown(options);
+                }
+            })
+            
+        });
+    </script>
+
+</body>
+</html>
