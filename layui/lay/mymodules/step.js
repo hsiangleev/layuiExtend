@@ -20,7 +20,7 @@ layui.define(["jquery"], function (exports) {
         this.len=0;   // 页面个数
         this.currentStep=(option.currentStep && option.currentStep>=1)?option.currentStep:1;    // 当前走到第几步
 
-        this.disabledStep=[];
+        this.disabledStep=Object.prototype.toString.call(option.disabledStep)==="[object Array]"?option.disabledStep:[];
 
         this.finalStep=1;       // 当前走到最远的步骤
 

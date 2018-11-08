@@ -34,9 +34,10 @@ layui.use(['jquery','step'], function(){
         elem: '.layui-step',
         // title: ["第一步","第二步","第三步","第四步"],
         description: ["aaa","bbb","ccc","ddd"],
-        currentStep: 1,
+        // currentStep: 2,
+        // disabledStep: [1,3],
         // canIconClick: true,
-        isOpenStepLevel: true,
+        // isOpenStepLevel: true,
     });
     $(".goFirst").on("click",function() {
         step.goFirst();
@@ -74,6 +75,7 @@ layui.use(['jquery','step'], function(){
 > + canIconClick：上方步骤条是否可以点击，可省略，默认false
 > + description：步骤条下方描述性文字，类型为数组，可省略
 > + isOpenStepLevel：是否严格按照步骤条顺序执行，即未走过的步骤不可点，走过的可点，可省略，若开启则默认canIconClick字段关闭
+> + disabledStep：初始禁用的步骤，类型为数组，可省略
     
 
 #### **外部可以使用的函数说明**
