@@ -74,9 +74,10 @@ layui.define(["jquery"], function (exports) {
             $(".urp-dropdown").removeClass("open");
             $(".urp-dropdown-menu-table").remove();
         });
-        $(window).on("scroll", function () {
+        // 滚动移除
+        window.addEventListener("scroll",function() {
             $(".urp-dropdown-menu-table").remove();
-        })
+        },true);
     }
     documentEvent();
 
