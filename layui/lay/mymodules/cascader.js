@@ -64,7 +64,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
         this.onOff=false;       // 是否显示
         this.positionArr=[];    // 当前点击的面板在数据中的下标位置
         this.blockData={};      // 当前点击的当前面板的数据
-        this.count=0;           // 进入finishInitData的次数
+        // this.count=0;           // 进入finishInitData的次数
 
         this.initOption();
     }
@@ -81,6 +81,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
             })();
 
             self.triggerType=self.option.triggerType==="change"?"mouseenter":"click";
+            self.changeOnSelect=self.option.changeOnSelect || false;
 
             // 判断data参数
             if(self.option.data){
@@ -168,7 +169,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
             
         },
         // 若有第二层则初始化第二层
-        initChild: function () {
+        initChild: function (triggerData) {
             // 删除后面的面板
             this.domContent.find(".urp-cascader-child:gt("+(this.floor)+")").remove();
             // 获取text值
@@ -193,9 +194,17 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
                     this.domContent.find("ul.urp-cascader-child:gt("+(this.floor)+")").find("li").eq(i).find("i").hide()
                 );
             }
+
+            if(this.changeOnSelect){
+                // 文本拼接
+                this.textStr=this.textArr.join("/");
+                $(this.elem).val(this.textStr);
+                
+                if(triggerData!=="initValue" && this.option.success) this.option.success(this.valueArr,this.textArr);
+            }
         },
         // 结束之后拿取数据
-        finishInitData: function () {
+        finishInitData: function (triggerData) {
             this.domContent.find(".urp-cascader-child:gt("+(this.floor)+")").remove();
             
             this.textArr.length=this.floor;
@@ -216,11 +225,12 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
             $(this.elem).siblings("i").replaceWith('<i class="layui-icon layui-icon-down"></i>');
 
             // 如果有初始值，则第一次不回调
-            this.count++;
-            if($.isArray(this.option.value) && this.option.value.length>0 && this.count===1 && this.option.success){
-                return;
-            }
-            if(this.option.success) this.option.success(this.valueArr,this.textArr);
+            if(triggerData!=="initValue" && this.option.success) this.option.success(this.valueArr,this.textArr);
+            // this.count++;
+            // if($.isArray(this.option.value) && this.option.value.length>0 && this.count===1 && this.option.success){
+            //     return;
+            // }
+            // if(this.option.success) this.option.success(this.valueArr,this.textArr);
         },
         // 赋初值
         initValue: function() {
@@ -284,7 +294,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
                 // 判断当前是否存在子层
                 ("children" in self.blockData)?(
                     // 初始化子层
-                    self.initChild()
+                    self.initChild(triggerData)
                 ):(
                     // 判断触发方式
                     self.triggerType==="mouseenter"?(function() {
@@ -299,7 +309,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
                             $(_self).trigger("click");
                         }
                     })():(
-                        self.finishInitData()
+                        self.finishInitData(triggerData)
                     )
                 );
             })
