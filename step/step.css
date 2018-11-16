@@ -113,8 +113,6 @@ html,body{
     padding: 15px 0px;
     top: 0px;
     left: 0px;
-    color: #f69;
-    font-size: 30px;
     display: none;
 }
 .layui-step-content-item .content-item-before{
@@ -131,5 +129,82 @@ html,body{
     position: fixed;
     top: calc(100% - 40px);
     right: 0px;
+}
+
+.layui-step.layui-step-line .layui-step-title-item{
+    background-color: #eef1f5;
+    text-align: left;
+    height: 50px;
+    min-height: 50px;
+    box-sizing: border-box;
+}
+.layui-step.layui-step-line .layui-step-title-item::after{
+    content: "";
+    width: 0px;
+    display: inline-block;
+    height: 0px;
+    background-color: transparent;
+    position: absolute;
+    top: 0px;
+    left: 100%;
+
+    border-style: solid dashed dashed;
+    border-color:  transparent transparent transparent #eef1f5;
+    border-width: 25px;
+    border-left-width: 15px;
+}
+.layui-step.layui-step-line .layui-step-title-item.step-first::before{
+    border: 0px;
+}
+.layui-step.layui-step-line .layui-step-title-item.step-first{
+    padding-left: 10px;
+}
+.layui-step.layui-step-line .layui-step-title-item::before{
+    content: "";
+    width: 0px;
+    display: inline-block;
+    height: 0px;
+    background-color: transparent;
+    position: absolute;
+    top: 0px;
+    left: auto;
+    right: 100%;
+
+    border-style: solid dashed dashed;
+    border-color:  #eef1f5 #eef1f5 #eef1f5 transparent;
+    border-width: 25px;
+    border-left-width: 15px;
+}
+.layui-step.layui-step-line .layui-step-title-item.step-last::after{
+    border: 0px;
+}
+.layui-step.layui-step-line .layui-step-title-item .step-icon{
+    float: left;
+    margin-top: 10px;
+}
+.layui-step.layui-step-line .layui-step-title-item .step-text{
+    float: left;
+    margin: 15px 0 0 0;
+    color: #26C281;
+}
+.layui-step.layui-step-line .layui-step-title-item .step-description{
+    float: left;
+    margin: 15px 0 0 0;
+    color: #26C281;
+}
+.layui-step.layui-step-line .layui-step-title-item.step-current .step-text,
+.layui-step.layui-step-line .layui-step-title-item.step-current .step-description {
+    color: #32c5d2;
+}
+.layui-step.layui-step-line .layui-step-title-item.step-disabled .step-text{
+    color: #ccc;
+}
+@media screen and (max-width: 768px) {
+    .layui-step.layui-step-line .layui-step-title-item .step-text{
+        display: none;
+    }
+    .layui-step.layui-step-line .layui-step-title-item .step-description{
+        display: none;
+    }
 }
 /* #endregion */

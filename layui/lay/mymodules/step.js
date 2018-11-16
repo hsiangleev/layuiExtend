@@ -22,6 +22,8 @@ layui.define(["jquery"], function (exports) {
 
         this.disabledStep=Object.prototype.toString.call(option.disabledStep)==="[object Array]"?option.disabledStep:[];
 
+        this.styleLine=$(option.elem).hasClass("layui-step-line");
+
         this.finalStep=1;       // 当前走到最远的步骤
 
         this.parameterInit();
@@ -61,8 +63,14 @@ layui.define(["jquery"], function (exports) {
         domRender: function() {
             var self=this;
             var titleStr='<div class="layui-step-title layui-clear">'+
-            '<div class="layui-step-title-item step-first" style="width: '+(100/this.len)+'%;">'+
-                '<div class="step-icon">'+
+            '<div class="layui-step-title-item step-first"'
+            if(this.styleLine){
+                titleStr+=' style="width: calc('+(100/this.len)+'% - 50px);margin-right: 50px;">'
+            }else{
+                titleStr+=' style="width: '+(100/this.len)+'%;">'
+            }
+            
+            titleStr+='<div class="step-icon">'+
                     '<i>1</i>'+
                 '</div>'+
                 '<div class="step-text">'+
@@ -73,8 +81,14 @@ layui.define(["jquery"], function (exports) {
                 '</div>'+
             '</div>';
             for(var i=1;i<this.title.length-1;i++){
-                titleStr+='<div class="layui-step-title-item" style="width: '+(100/this.len)+'%;">'+
-                    '<div class="step-icon">'+
+                titleStr+='<div class="layui-step-title-item"';
+                if(this.styleLine){
+                    titleStr+=' style="width: calc('+(100/this.len)+'% - 50px);margin-right: 50px;">'
+                }else{
+                    titleStr+=' style="width: '+(100/this.len)+'%;">'
+                }
+
+                titleStr+='<div class="step-icon">'+
                         '<i>'+(i+1)+'</i>'+
                     '</div>'+
                     '<div class="step-text">'+
@@ -100,8 +114,14 @@ layui.define(["jquery"], function (exports) {
             $(this.elem).prepend(titleStr);
 
             // 生成三角
+            var self=this;
             $(this.elem).find(".layui-step-content-item").each(function(index,val) {
-                $(this).append("<span class='content-item-before' style='left: calc("+((100/(self.len*2))+((100*index)/self.len))+"% - 10px);'></span>");
+                if(self.styleLine){
+                    var l=index===0 ? 15 : 5;
+                    $(this).append("<span class='content-item-before' style='left: calc("+((100*index)/self.len)+"% + "+l+"px);'></span>");
+                }else{
+                    $(this).append("<span class='content-item-before' style='left: calc("+((100/(self.len*2))+((100*index)/self.len))+"% - 10px);'></span>");
+                }
             })
         },
         // 添加样式
