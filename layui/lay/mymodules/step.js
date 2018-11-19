@@ -1,8 +1,8 @@
  /**
  
  @Name : layui.step 基于layui的步骤条面板
- @Author：hsianglee
- @License：MIT
+ * author: hsianglee
+ * 最近修改时间: 2018/11/16
  
  */
 

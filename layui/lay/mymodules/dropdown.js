@@ -1,7 +1,8 @@
  /**
  
  @Name : layui.dropdown 基于layui的下拉菜单
- @Author：hsianglee
+ * author: hsianglee
+ * 最近修改时间: 2018/11/16
  
  */
 

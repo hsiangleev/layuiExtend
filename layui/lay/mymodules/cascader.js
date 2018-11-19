@@ -1,5 +1,7 @@
 /**
  * 基于layui的无限级联选择器
+ * author: hsianglee
+ * 最近修改时间: 2018/11/16
  * 使用：
  * layui.cascader({
         // 必选参数：选择器

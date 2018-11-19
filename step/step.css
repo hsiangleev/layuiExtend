@@ -134,8 +134,8 @@ html,body{
 .layui-step.layui-step-line .layui-step-title-item{
     background-color: #eef1f5;
     text-align: left;
-    height: 50px;
-    min-height: 50px;
+    height: 40px;
+    min-height: 40px;
     box-sizing: border-box;
 }
 .layui-step.layui-step-line .layui-step-title-item::after{
@@ -146,12 +146,11 @@ html,body{
     background-color: transparent;
     position: absolute;
     top: 0px;
-    left: 100%;
+    left: 99.99%;
 
     border-style: solid dashed dashed;
     border-color:  transparent transparent transparent #eef1f5;
-    border-width: 25px;
-    border-left-width: 15px;
+    border-width: 20px;
 }
 .layui-step.layui-step-line .layui-step-title-item.step-first::before{
     border: 0px;
@@ -168,28 +167,27 @@ html,body{
     position: absolute;
     top: 0px;
     left: auto;
-    right: 100%;
+    right: 99.99%;
 
     border-style: solid dashed dashed;
     border-color:  #eef1f5 #eef1f5 #eef1f5 transparent;
-    border-width: 25px;
-    border-left-width: 15px;
+    border-width: 20px;
 }
 .layui-step.layui-step-line .layui-step-title-item.step-last::after{
     border: 0px;
 }
 .layui-step.layui-step-line .layui-step-title-item .step-icon{
     float: left;
-    margin-top: 10px;
+    margin-top: 7px;
 }
 .layui-step.layui-step-line .layui-step-title-item .step-text{
     float: left;
-    margin: 15px 0 0 0;
+    margin: 10px 0 0 0;
     color: #26C281;
 }
 .layui-step.layui-step-line .layui-step-title-item .step-description{
     float: left;
-    margin: 15px 0 0 0;
+    margin: 10px 0 0 0;
     color: #26C281;
 }
 .layui-step.layui-step-line .layui-step-title-item.step-current .step-text,
