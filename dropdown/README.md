@@ -1,6 +1,7 @@
 ## 下拉菜单
 
 #### **html元素**
+-----------------
 ```javascript
 <div class="urp-dropdown">
     <button class="layui-btn urp-dropdown-btn">
@@ -20,6 +21,12 @@
                 Another action action action
             </a>
         </li>
+        <li>
+            <a href="javascript:;">
+                <i class="layui-icon layui-icon-website"></i>
+                Another action
+            </a>
+        </li>
     </ul>
 </div>
 ```
@@ -32,53 +39,39 @@
 ## table中使用
 #### **html模板**
 ```javascript
-/*表格toolbar模板*/
-<script type="text/html" id="barDemo">
-    <div class="urp-dropdown urp-dropdown-table">
-        <button class="layui-btn layui-btn-primary layui-btn-xs urp-dropdown-btn" lay-event="dropdown">
-            操作<i class="layui-icon layui-icon-down"></i>
-        </button>
-    </div>
-</script>
+<div class="urp-dropdown urp-dropdown-table">
+    <button class="layui-btn urp-dropdown-btn">
+        操作<i class="layui-icon layui-icon-down"></i>
+    </button>
+</div>
 ```
 #### **js触发事件**
 ```javascript
-table.on('tool(test)', function (obj) {
-    var data = obj.data;
-    if (obj.event === 'dropdown') {
-        var options = [
-            {
-                title: "百度", // 按钮显示内容
-                icon: "layui-icon-release", // 图标样式
-                url: "http://baidu.com" // 按钮跳转地址（与event二选一）
-            },
-            {
-                title: "事件",
-                icon: "layui-icon-release",
-                event: function() {
-                    // 按钮触发事件
-                    layer.alert("触发了事件",{icon: 1});
+// 需引入dropdown模块
+table.render({
+    elem: "#demo"
+    // ...
+    , done: function (res) {
+        // 表格下拉菜单初始化
+        dropdown("#demo", res.data, function (data) {
+            // 拼接数组(几个数组代表几个按钮)
+            var options = [
+                {
+                    title: "查看", // 按钮显示内容
+                    icon: "layui-icon-form", // 图标样式
+                    url: "http://baidu.com", // 按钮跳转地址（与event二选一）
+                    event: function () {
+                        // 按钮触发事件
+                    }
                 }
-            }
-        ];
-        dropdown(options);
+            ];
+            return options;
+        })
     }
-})
-```
-#### **说明**
-> + 引入dropdown模块和css文件
-> + 以 urp- 开头的class为必需的
-> + dropdown(options)：options参数为数组，数组中的每个对象代表一个按钮
-
-```javascript
-// options参数
-{
-    title: "查看", // 按钮显示内容
-    icon: "layui-icon-form", // 图标样式
-    url: "http://baidu.com", // 按钮跳转地址（与event二选一）
-    event: function () {
-        // 按钮触发事件
-    }
-}
+});
 ```
 
+#### dropdown参数
+> + 第一个参数为table选择器，若页面只有一个表格下拉菜单则可省略
+> + 第一个参数为table的数据，参数必需
+> + 第一个参数为回调函数，可以编辑按钮信息，函数需返回一个数组options，参数必需
