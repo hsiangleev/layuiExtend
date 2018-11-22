@@ -1,7 +1,7 @@
 /**
  * 基于layui的tree重写
  * author: hsianglee
- * 最近修改时间: 2018/10/27
+ * 最近修改时间: 2018/11/22
  * 说明：因isEqualNode，ie8不支持拖拽功能
  */
 
@@ -477,6 +477,13 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                     var d=data.parentData.data;
                     var arr=data.index;
 
+                    // 数据返回
+                    layui.event.call(_self, "eleTree", 'remove('+ self.filter +')', {
+                        data: self.data
+                        ,parentData: d
+                        ,currentData: data.currentData
+                    });
+
                     // 最外层判断
                     if(arr.length===1){
                         self.data.splice(arr[arr.length-1],1);
@@ -487,11 +494,6 @@ layui.define(["jquery","laytpl","layer","form"], function (exports) {
                         }
                     }
 
-                    // 数据返回
-                    layui.event.call(_self, "eleTree", 'remove('+ self.filter +')', {
-                        data: self.data
-                        ,parentData: d
-                    });
                     // dom删除
                     var tem=$(_self).parent(".eleTree-node").parent(".eleTree-node-group");
                     $(_self).parent(".eleTree-node").remove();
