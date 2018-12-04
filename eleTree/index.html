@@ -9,215 +9,469 @@
     <link rel="stylesheet" href="../eleTree/eleTree.css" media="all">
     <style>
         html,body{
-            width: 100%;
+            width: 80%;
             height: 100%;
+            margin: 0 auto;
             background-color: #fff;
+        }
+        .eleTree{
+            width: 350px;
+            height: 300px;
+            border: 1px solid #ccc;
+            overflow: hidden;
         }
     </style>
 </head>
 <body>
-    <div class="eleTree ele1" lay-filter="data1"></div>
-    <div class="eleTree ele2" lay-filter="data2"></div>
-    <div class="eleTree ele3" lay-filter="data3"></div>
-    <button class="layui-btn">获取选中数据</button>
+    <a href="../eleTree/test.html" style="color: #ff4200;line-height: 60px;font-size: 30px;">示例链接</a>
+    <fieldset class="layui-elem-field layui-field-title site-title">
+        <legend>
+            <a name="options">快速使用</a>
+        </legend>
+    </fieldset>
+    <div class="content1">
+        <div class="eleTree ele1"></div>
+        <h3>下面就是它对应的代码：</h3>
+        <pre class="layui-code pre1">
+<!-- <div class="eleTree ele1"></div> -->
+eleTree.render({
+    elem: '.ele1',
+    data: [
+        {
+            id: 1,
+            label: "安徽省",
+            children: [
+                {
+                    id: 2,
+                    label: "马鞍山市",
+                    disabled: true,
+                    children: [
+                        {
+                            id: 3,
+                            label: "和县",
+                        },
+                        {
+                            id: 4,
+                            label: "花山区",
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            id: 5,
+            label: "河南省",
+            children: [
+                {
+                    id: 6,
+                    label: "郑州市"
+                }
+            ]
+        }
+    ],
+    showCheckbox: true,
+});
+        </pre> 
+    </div>
+
+    <fieldset class="layui-elem-field layui-field-title site-title">
+        <legend>
+            <a name="options">基础参数一览表</a>
+        </legend>
+    </fieldset>
+    <table class="layui-table">
+        <colgroup>
+            <col width="100">
+            <col width="100">
+            <col>
+            <col width="150">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>参数</th>
+                <th>类型</th>
+                <th>说明</th>
+                <th>示例值</th>
+            </tr> 
+        </thead>
+        <tbody>
+            <tr>
+                <td>elem</td>
+                <td>String/DOM</td>
+                <td>指定原始 table 容器的选择器或 DOM，方法渲染方式必填</td>
+                <td>".ele"</td>
+            </tr>
+            <tr>
+                <td>data</td>
+                <td>Array</td>
+                <td>直接赋值数据</td>
+                <td>[{},{},...]</td>
+            </tr>
+            <tr>
+                <td>emptText</td>
+                <td>String</td>
+                <td>当数据为空时现实的内容</td>
+                <td>暂无数据</td>
+            </tr>
+            <tr>
+                <td>url</td>
+                <td>String</td>
+                <td>异步数据接口</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>renderAfterExpand</td>
+                <td>Boolean</td>
+                <td>是否在第一次展开某个树节点后才渲染其子节点</td>
+                <td>false</td>
+            </tr>
+            <tr>
+                <td>highlightCurrent</td>
+                <td>Boolean</td>
+                <td>是否高亮当前选中节点，默认值是 false。</td>
+                <td>false</td>
+            </tr>
+            <tr>
+                <td>defaultExpandAll</td>
+                <td>Boolean</td>
+                <td>是否默认展开所有节点</td>
+                <td>false</td>
+            </tr>
+            <tr>
+                <td>expandOnClickNode</td>
+                <td>Boolean</td>
+                <td>是否在点击节点的时候展开或者收缩节点， 默认值为 true，如果为 false，则只有点箭头图标的时候才会展开或者收缩节点。</td>
+                <td>true</td>
+            </tr>
+            <tr>
+                <td>checkOnClickNode</td>
+                <td>Boolean</td>
+                <td>是否在点击节点的时候选中节点，默认值为 false，即只有在点击复选框时才会选中节点。</td>
+                <td>false</td>
+            </tr>
+            <tr>
+                <td>defaultExpandedKeys</td>
+                <td>Array</td>
+                <td>默认展开的节点的 key 的数组</td>
+                <td>[23,24]</td>
+            </tr>
+            <tr>
+                <td>autoExpandParent</td>
+                <td>Boolean</td>
+                <td>展开子节点的时候是否自动展开父节点</td>
+                <td>false</td>
+            </tr>
+            <tr>
+                <td>showCheckbox</td>
+                <td>Boolean</td>
+                <td>节点是否可被选择</td>
+                <td>false</td>
+            </tr>
+            <tr>
+                <td>checkStrictly</td>
+                <td>Boolean</td>
+                <td>在显示复选框的情况下，是否严格的遵循父子不互相关联的做法，默认为 false</td>
+                <td>false</td>
+            </tr>
+            <tr>
+                <td>defaultCheckedKeys</td>
+                <td>Array</td>
+                <td>默认勾选的节点的 key 的数组</td>
+                <td>[22]</td>
+            </tr>
+            <tr>
+                <td>accordion</td>
+                <td>Boolean</td>
+                <td>是否每次只打开一个同级树节点展开（手风琴效果）</td>
+                <td>false</td>
+            </tr>
+            <tr>
+                <td>indent</td>
+                <td>Number</td>
+                <td>相邻级节点间的水平缩进，单位为像素</td>
+                <td>16</td>
+            </tr>
+            <tr>
+                <td>lazy</td>
+                <td>Boolean</td>
+                <td>是否懒加载子节点，需与 load 方法结合使用。
+                    <div style="color: #ff4200;">注意：懒加载 > 展开所有 > 初始展开项 > 初始渲染所有子节点 > 初始选中项 > 每次点击只渲染当前层（默认）</div>
+                    <div style="color: #ff4200;">即 1. 如开启懒加载，则不会展开所有，每次只渲染当前层；2. 若初始有展开项或选中项，则会直接渲染所有子节点</div>
+                </td>
+                <td>false</td>
+            </tr>
+            <tr>
+                <td>load</td>
+                <td>Function</td>
+                <td>加载子树数据的方法，仅当 lazy 属性为true 时生效</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>draggable</td>
+                <td>Boolean</td>
+                <td>是否开启拖拽节点功能</td>
+                <td>false</td>
+            </tr>
+            <tr>
+                <td>contextmenuList</td>
+                <td>Array</td>
+                <td>启用右键菜单，支持的操作有："copy","add","edit","remove"</td>
+                <td>["copy","add","edit","remove"]</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <fieldset class="layui-elem-field layui-field-title site-title">
+        <legend>
+            <a name="options">异步数据接口</a>
+        </legend>
+    </fieldset>
+    <table class="layui-table">
+        <colgroup>
+            <col width="100">
+            <col width="100">
+            <col>
+            <col width="150">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>参数</th>
+                <th>功能</th>
+            </tr> 
+        </thead>
+        <tbody>
+            <tr>
+                <td>url</td>
+                <td>异步数据接口</td>
+            </tr>
+            <tr>
+                <td>method</td>
+                <td>接口http请求类型，默认：get</td>
+            </tr>
+            <tr>
+                <td>where</td>
+                <td>接口的其它参数。如：where: {token: 'sasasas', id: 123}</td>
+            </tr>
+            <tr>
+                <td>contentType</td>
+                <td>发送到服务端的内容编码类型。如果你要发送 json 内容，可以设置：contentType: 'application/json'</td>
+            </tr>
+            <tr>
+                <td>headers</td>
+                <td>接口的请求头。如：headers: {token: 'sasasas'}</td>
+            </tr>
+            <tr>
+                <td>request</td>
+                <td>对于后台数据重新定义名字 
+<pre class="layui-code req1">
+eleTree.render({
+    // ...
+    // 默认
+    request: {
+        name: "label",
+        key: "id",
+        children: "children",
+        disabled: "disabled",
+        isLeaf: "isLeaf"
+    }
+})
+</pre> 
+                </td>
+                <tr>
+                    <td>response</td>
+                    <td>对后台返回的数据格式重新定义
+<pre class="layui-code req1">
+eleTree.render({
+    // ...
+    // 默认
+    response: {
+        statusName: "code",
+        statusCode: 0,
+        dataName: "data"
+    }
+})
+</pre> 
+                    </td>
+            </tr>
+            <tr>
+                <td>done</td>
+                <td>数据请求完成的回调函数，只有异步请求才会有
+<pre class="layui-code req1">
+eleTree.render({
+    // ...
+    done: function(res){
+        // res即为你接口返回的信息。
+        console.log(res);
+    }
+})
+</pre> 
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <fieldset class="layui-elem-field layui-field-title site-title">
+        <legend>
+            <a name="options">基础方法</a>
+        </legend>
+    </fieldset>
+    <pre class="layui-code req1">
+var el=eleTree.render({
+    // ...
+})
+> el.updateKeyChildren(key,data) // 更新子节点
+> el.updateKeySelf(key,data) //更新当前节点
+> el.getChecked(leafOnly, includeHalfChecked)   // 获取选中的节点，接收两个 boolean 类型的参数，1. 是否只是叶子节点，默认值为 false 2. 是否包含半选节点，默认值为 false
+> el.setChecked(arr) //设置选中的节点，传入数组key值
+> el.unCheckNodes() //取消所有选中的节点
+> el.expandAll() //展开所有
+> el.unExpandAll() //合并所有
+> el.remove(key) //删除节点
+> el.append(key,data) //添加子节点
+> el.insertBefore(key,data) //添加到节点之前
+> el.insertAfter(key,data) //添加到节点之后
+> el.reload(data) //重新加载树
+    </pre> 
+    
+    <fieldset class="layui-elem-field layui-field-title site-title">
+        <legend>
+            <a name="options">事件监听</a>
+        </legend>
+    </fieldset>
+    <pre class="layui-code req1">
+eleTree.render({
+    // ...
+})
+// 节点点击事件
+eleTree.on("nodeClick(data1)",function(d) {
+    console.log(d.data);    // 点击节点对于的数据
+    console.log(d.event);   // event对象
+    console.log(d.node);    // 点击的dom节点
+    console.log(this);      // 与d.node相同
+}) 
+// input被选中事件
+eleTree.on("nodeChecked(data1)",function(d) {
+    console.log(d.data);    // 点击节点对于的数据
+    console.log(d.isChecked);   // input是否被选中
+    console.log(d.node);    // 点击的dom节点
+    console.log(this);      // input对于的dom
+})
+// 鼠标右键事件
+eleTree.on("nodeContextmenu(data1)",function(d) {
+    console.log(d.data);    // 点击节点对于的数据
+    console.log(d.event);   // event对象
+    console.log(d.node);    // 点击的dom节点
+    console.log(this);      // 与d.node相同
+})
+// 节点被拖拽事件
+eleTree.on("nodeDrag(data1)",function(d) {
+    console.log(d);
+    d.stop();           // 取消拖拽
+    console.log(d.current);    // 起始节点对应的dom和数据
+    console.log(d.target);   // 鼠标落点对应的dom和数据
+    console.log(this);      // 鼠标落点对应的dom
+})
+// 添加子节点事件
+eleTree.on("nodeAppend(data1)",function(d) {
+    console.log(d.data);    // 点击节点对于的数据
+    console.log(d.node);    // 点击的dom节点
+    console.log(this);      // 与d.node相同
+    d.stop();               // 取消添加
+    d.setData({             // 自定义数据
+        key: 666,
+        label: "aaa"
+    })
+})
+// 添加节点之前事件
+eleTree.on("nodeInsertBefore(data1)",function(d) {
+    console.log(d.data);    // 点击节点对于的数据
+    console.log(d.node);    // 点击的dom节点
+    console.log(this);      // 与d.node相同
+    d.stop();               // 取消添加
+    d.setData({             // 自定义数据
+        key: 666,
+        label: "aaa"
+    })
+})
+// 添加节点之后事件
+eleTree.on("nodeInsertAfter(data1)",function(d) {
+    console.log(d.data);    // 点击节点对于的数据
+    console.log(d.node);    // 点击的dom节点
+    console.log(this);      // 与d.node相同
+    d.stop();               // 取消添加
+    d.setData({             // 自定义数据
+        key: 666,
+        label: "aaa"
+    })
+})
+// 节点被编辑事件
+eleTree.on("nodeEdit(data1)",function(d) {
+    console.log(d.data);        // 点击节点对于的数据
+    console.log(d.node);        // 点击的dom节点
+    console.log(d.value);       // 新输入的值
+    console.log(this);          // 与d.node相同
+    d.stop();                   // 取消编辑
+})
+// 节点被删除事件
+eleTree.on("nodeRemove(data1)",function(d) {
+    console.log(d.data);        // 点击节点对于的数据
+    console.log(d.node);        // 点击的dom节点
+    d.stop();                   // 取消删除
+})
+    </pre> 
 
     <script src="../layui/layui.js"></script>
     <script>
         
         layui.config({
             base: "../layui/lay/mymodules/"
-        }).use(['jquery','eleTree'], function(){
+        }).use(['jquery','table','eleTree','code'], function(){
             var $ = layui.jquery;
             var eleTree = layui.eleTree;
+            var table = layui.table;
+            var code = layui.code;
 
             var data=[
                 {
-                    "label": "a",
-                    "spread": true,
-                    "children": [
+                    id: 1,
+                    label: "安徽省",
+                    children: [
                         {
-                            "label": "aa1",
-                            "spread": true,
-                            "disabled": true,
-                            "children": [
+                            id: 2,
+                            label: "马鞍山市",
+                            disabled: true,
+                            children: [
                                 {
-                                    "label": "aaa1",
-                                    "children": [
-                                        {
-                                            "label": "aaaa1",
-                                            "checked": true
-                                        },
-                                        {
-                                            "label": "bbbb1"
-                                        }
-                                    ]
+                                    id: 3,
+                                    label: "和县",
                                 },
                                 {
-                                    "label": "bbb1",
-                                    "spread": true,
-                                    "children": [
-                                        {
-                                            "label": "aaaa1",
-                                            "checked": true
-                                        }
-                                    ]
-                                },
-                                {
-                                    "label": "ccc1"
+                                    id: 4,
+                                    label: "花山区",
                                 }
                             ]
-                        },
-                        {
-                            "label": "bb1",
-                            "children": [
-                                {
-                                    "label": "aaaa1",
-                                    "checked": true
-                                }
-                            ]
-                        },
-                        {
-                            "label": "cc1"
                         }
                     ]
                 },
                 {
-                    "label": "c",
-                    "children": [
+                    id: 5,
+                    label: "河南省",
+                    children: [
                         {
-                            "label": "aa1",
-                            "disabled": true
-                        },
-                        {
-                            "label": "bb1",
-                            "checked": true
+                            id: 6,
+                            label: "郑州市"
                         }
                     ]
                 }
-            
             ]
-            var data2=[
-            {
-                    "label": "a",
-                    "spread": true,
-                    "children": [
-                        {
-                            "label": "aa1",
-                            "spread": true,
-                            "disabled": true
-                        },
-                        {
-                            "label": "bb1",
-                            "children": [
-                                {
-                                    "label": "aaaa1",
-                                    "checked": true
-                                }
-                            ]
-                        },
-                        {
-                            "label": "cc1"
-                        }
-                    ]
-                },
-                {
-                    "label": "c",
-                    "children": [
-                        {
-                            "label": "aa1",
-                            "disabled": true
-                        },
-                        {
-                            "label": "bb1",
-                            "checked": true
-                        }
-                    ]
-                }
-            ];
+            
             eleTree.render({
                 elem: '.ele1',
-                // url: "/tree",
-                // type: "post",
                 data: data,
                 showCheckbox: true,
-                contextmenuList: ["copy","add","edit","remove"],
-                drag: true,
-                accordion: true
             });
-            
-            eleTree.render({
-                elem: '.ele2',
-                // url: "../../data/home/tree.json",
-                // type: "post",
-                data: data2,
-                showCheckbox: true,
-                contextmenuList: ["add","remove"],
-                drag: true,
-                accordion: true
-            });
-
-            var data3=[
-                {
-                    "label": "a"
-                },
-                {
-                    "label": "aa",
-                    "isLeaf": true
-                }
-            ]
-            var k=1;
-            eleTree.render({
-                elem: '.ele3',
-                // url: "/tree",
-                // type: "post",
-                data: data3,
-                showCheckbox: true,
-                contextmenuList: ["copy","add","edit","remove"],
-                // drag: true,
-                accordion: true,
-                lazy: true,
-                loadData: function(item,callback) {
-                    setTimeout(function() {
-                        k++;
-                        var d = [
-                            {
-                                "label": "d"
-                            }
-                        ];
-                        console.log(item);
-                        if(k>=3){
-                            d[0].isLeaf=true;
-                            return void callback(d);
-                        }
-                        callback(d);
-                    }, 500);
-                }
-            });
-
-            eleTree.on("add(data1)",function(data) {
-                console.log(data);
-                // 若后台修改，则重新获取后台数据，然后重载
-                // eleTree.reload(".ele1", {where: {data: JSON.stringify(data.data)}})
-            })
-            eleTree.on("edit(data1)",function(data) {
-                console.log(data);
-            })
-            eleTree.on("remove(data1)",function(data) {
-                console.log(data);
-            })
-            eleTree.on("toggleSlide(data1)",function(data) {
-                console.log(data);
-            })
-            eleTree.on("checkbox(data1)",function(data) {
-                console.log(data);
-            })
-            eleTree.on("drag(data2)",function(data) {
-                console.log(data);
-            })
-
-            $(".layui-btn").on("click",function() {
-                console.log(eleTree.checkedData(".ele2"));
-            })
+            layui.code({elem: ".pre1",about: true,title: "对应的代码",encode: true});
+            layui.code({elem: ".req1",about: true,title: "code",encode: true});
             
         });
     </script>

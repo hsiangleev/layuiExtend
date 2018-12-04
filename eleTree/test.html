@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../eleTree/eleTree.css" media="all">
+    <style>
+        html,body{
+            width: 80%;
+            height: 100%;
+            margin: 0 auto;
+            background-color: #fff;
+        }
+        .eleTree{
+            width: 350px;
+            height: 500px;
+            border: 1px solid #ccc;
+            overflow: hidden;
+            display: inline-block;
+        }
+        .inp{
+            width: 100%;
+            line-height: 30px;
+        }
+        .slideTest{
+            margin: 0 10px;
+        }
+        .met{
+            display: none;
+            width: 100%;
+        }
+        .ele4{
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <fieldset class="layui-elem-field layui-field-title site-title">
+        <legend>
+            <a name="options">属性示例</a>
+        </legend>
+    </fieldset>
+    <div class="eleTree ele1" lay-filter="data1"></div>
+    <div class="eleTree layui-form">
+        <div class="inp"><input type="checkbox" name="opera" lay-filter="test" title="renderAfterExpand" lay-skin="primary" checked></div>
+        <div class="inp"><input type="checkbox" name="opera" lay-filter="test" title="highlightCurrent" lay-skin="primary"> </div>
+        <div class="inp"><input type="checkbox" name="opera" lay-filter="test" title="defaultExpandAll" lay-skin="primary"> </div>
+        <div class="inp"><input type="checkbox" name="opera" lay-filter="test" title="expandOnClickNode" lay-skin="primary" checked> </div>
+        <div class="inp"><input type="checkbox" name="opera" lay-filter="test" title="checkOnClickNode" lay-skin="primary"> </div>
+        <div class="inp"><input type="checkbox" name="opera" lay-filter="test" title="autoExpandParent" lay-skin="primary"> </div>
+        <div class="inp"><input type="checkbox" name="opera" lay-filter="test" title="showCheckbox" lay-skin="primary"> </div>
+        <div class="inp"><input type="checkbox" name="opera" lay-filter="test" title="checkStrictly" lay-skin="primary"> </div>
+        <div class="inp"><input type="checkbox" name="opera" lay-filter="test" title="accordion" lay-skin="primary"> </div>
+        <div class="inp"><input type="checkbox" name="opera" lay-filter="test" title="draggable" lay-skin="primary"> </div>
+
+        <div class="inp">
+            <h3>contextmenuList</h3>
+            <input type="checkbox" name="opera" lay-filter="menuList" title="copy" lay-skin="primary">
+            <input type="checkbox" name="opera" lay-filter="menuList" title="add" lay-skin="primary">
+            <input type="checkbox" name="opera" lay-filter="menuList" title="edit" lay-skin="primary">
+            <input type="checkbox" name="opera" lay-filter="menuList" title="remove" lay-skin="primary">
+        </div> 
+        <!-- <div class="inp"><input type="checkbox" name="opera" lay-filter="test" title="defaultExpandedKeys" lay-skin="primary"></div>  -->
+        <!-- <div class="inp"><input type="checkbox" name="opera" lay-filter="test" title="defaultCheckedKeys" lay-skin="primary"></div>  -->
+        <div class="inp">
+            <h3>indent</h3>
+            <div class="slideTest"></div>
+        </div>
+    </div>
+    <fieldset class="layui-elem-field layui-field-title site-title">
+        <legend>
+            <a name="options">方法示例</a>
+        </legend>
+    </fieldset>
+    <div class="eleTree ele2" lay-filter="data2"></div>
+    <div class="eleTree layui-form">
+        <select name="city" lay-filter="methods">
+            <option value="">请选择一个方法</option>
+            <option value="updateKeyChildren">更新子节点</option>
+            <option value="updateKeySelf">更新当前节点</option>
+            <option value="getChecked">获取选中的节点</option>
+            <option value="setChecked">设置选中的节点</option>
+            <option value="unCheckNodes">取消所有选中的节点</option>
+            <option value="expandAll">展开所有</option>
+            <option value="unExpandAll">合并所有</option>
+            <option value="remove">删除节点</option>
+            <option value="append">添加子节点</option>
+            <option value="insertBefore">添加到节点之前</option>
+            <option value="insertAfter">添加到节点之后</option>
+            <option value="reload">重新加载树</option>
+        </select>  
+        <div class="updateKeyChildren met">
+<pre class="layui-code code ">
+el2.updateKeyChildren(22,[
+    {
+        id: 23,
+        label: "濉溪县1",
+        disabled: true
+    }
+]);
+</pre>
+        </div>
+        <div class="updateKeySelf met">
+<pre class="layui-code code ">
+el2.updateKeySelf(22,{
+    label: "淮北市1",
+    disabled: true
+})
+</pre>
+        </div>
+        <div class="getChecked met">
+<pre class="layui-code code ">
+console.log(el2.getChecked(true,false));
+</pre>
+        </div>
+        <div class="setChecked met">
+<pre class="layui-code code">
+el2.setChecked([12])
+</pre>
+        </div>
+        <div class="unCheckNodes met">
+<pre class="layui-code code">
+el2.unCheckNodes();
+</pre>
+        </div>
+        <div class="expandAll met">
+<pre class="layui-code code">
+el2.expandAll();
+</pre>
+        </div>
+        <div class="unExpandAll met">
+<pre class="layui-code code">
+el2.unExpandAll();
+</pre>
+        </div>
+        <div class="remove met">
+<pre class="layui-code code">
+el2.remove(23);
+el2.remove(24);
+</pre>
+        </div>
+        <div class="append met">
+<pre class="layui-code code">
+el2.append(23,{
+    id: 26,
+    label: "烈山区",
+    disabled: true
+})
+</pre>
+        </div>
+        <div class="insertBefore met">
+<pre class="layui-code code">
+el2.insertBefore(24,{
+    id: 26,
+    label: "烈山区",
+    disabled: true
+})
+</pre>
+        </div>
+        <div class="insertAfter met">
+<pre class="layui-code code">
+el2.insertAfter(1,{
+    id: 26,
+    label: "烈山区",
+    disabled: true
+})
+</pre>
+        </div>
+        <div class="reload met">
+<pre class="layui-code code">
+ el2=el2.reload();
+</pre>
+        </div>
+    </div>
+    
+    <fieldset class="layui-elem-field layui-field-title site-title">
+        <legend>
+            <a name="options">事件示例</a>
+        </legend>
+    </fieldset>
+    <div class="eleTree ele3" lay-filter="data3"></div>
+    <div class="eleTree layui-form">
+        <h3 style="line-height: 50px;text-align:center;color: #ff4200">请在触发动作时查看控制台数据</h3>
+    </div>
+
+    <fieldset class="layui-elem-field layui-field-title site-title">
+        <legend>
+            <a name="options">懒加载示例</a>
+        </legend>
+    </fieldset>
+    <div class="eleTree ele4" lay-filter="data4"></div>
+<pre class="layui-code lazy">
+var el4=eleTree.render({
+    elem: '.ele4',
+    data: [
+        {
+            "id": 1,
+            "label": "安徽省"
+        },
+        {
+            "id": 11,
+            "label": "江苏省"
+        }
+    ],
+    showCheckbox: true,
+    lazy: true,
+    load: function(data,callback) {
+        console.log(data);
+        var newData;
+        switch (data.id) {
+            case 1:
+                newData=[
+                    {
+                        "id": 2,
+                        "label": "马鞍山市"
+                    }
+                ]
+                break;
+            case 2:
+                newData=[
+                    {
+                        "id": 3,
+                        "label": "和县",
+                        "isLeaf": true
+                    }
+                ]
+                break;
+            case 11:
+                newData=[
+                    {
+                        "id": 12,
+                        "label": "苏州市",
+                        "disabled": true,
+                        "isLeaf": true
+                    }
+                ]
+                break;
+        
+            default:
+                break;
+        }
+        setTimeout(function() {
+            callback(newData);
+        },500);
+        
+    }
+});
+</pre>
+
+    <script src="../layui/layui.js"></script>
+    <script>
+        
+        layui.config({
+            base: "../layui/lay/mymodules/"
+        }).use(['jquery','table','eleTree','code','form','slider'], function(){
+            var $ = layui.jquery;
+            var eleTree = layui.eleTree;
+            var table = layui.table;
+            var code = layui.code;
+            var form = layui.form;
+            var slider = layui.slider;
+
+            var obj={
+                elem: '.ele1',
+                url: "../eleTree/tree.json",
+                renderAfterExpand: true,
+                expandOnClickNode: true
+            }
+
+            var el1=eleTree.render(obj);
+
+            form.on('checkbox(test)', function(data){
+                var title=$(data.elem).attr("title");
+                var isChecked=data.elem.checked;
+                if(isChecked){
+                    obj[title]=true;
+                }else{
+                    obj[title]=false;
+                }
+                el1.reload(obj)
+            });  
+            var arr=[];
+            form.on('checkbox(menuList)', function(data){
+                var title=$(data.elem).attr("title");
+                var isChecked=data.elem.checked;
+                if(isChecked){
+                    arr.push(title);
+                }else{
+                    console.log(arr.indexOf(title));
+                    arr.splice(arr.indexOf(title),1);
+                }
+                obj["contextmenuList"]=arr;
+                el1.reload(obj);
+            }); 
+            slider.render({
+                elem: '.slideTest',
+                min: 10,
+                max: 30,
+                showstep: true,
+                value: 16,
+                change: function(value){
+                    obj["indent"]=value;
+                    el1.reload(obj);
+                }
+            });
+
+
+            var el2=eleTree.render({
+                elem: '.ele2',
+                url: "../eleTree/tree.json",
+                showCheckbox: true,
+                defaultExpandAll: true,
+                done: function() {
+                    // el2.remove(24);
+                }
+            });
+            form.on('select(methods)', function(data){
+                methods[data.value]();
+                $("."+data.value).css("display","inline-block").siblings(".met").hide();
+            }); 
+            layui.code({elem: ".code",about: true,title: "对应的代码",encode: true});
+            layui.code({elem: ".lazy",about: true,title: "对应的代码",encode: true});
+
+            var methods={
+                updateKeyChildren: function() {
+                    el2.updateKeyChildren(22,[
+                        {
+                            id: 23,
+                            label: "濉溪县1",
+                            disabled: true
+                        }
+                    ]);
+                },
+                updateKeySelf: function() {
+                    el2.updateKeySelf(22,{
+                        label: "淮北市1",
+                        disabled: true
+                    })
+                },
+                getChecked: function() {
+                    console.log(el2.getChecked(true,false));
+                },
+                setChecked: function() {
+                    el2.setChecked([12])
+                },
+                unCheckNodes: function() {
+                    el2.unCheckNodes();
+                },
+                expandAll: function() {
+                    el2.expandAll();
+                },
+                unExpandAll: function() {
+                    el2.unExpandAll();
+                },
+                remove: function() {
+                    el2.remove(23);
+                    el2.remove(24);
+                },
+                append: function() {
+                    el2.append(23,{
+                        id: 26,
+                        label: "烈山区",
+                        disabled: true
+                    })
+                },
+                insertBefore: function() {
+                    el2.insertBefore(24,{
+                        id: 26,
+                        label: "烈山区",
+                        disabled: true
+                    })
+                },
+                insertAfter: function() {
+                    el2.insertAfter(1,{
+                        id: 26,
+                        label: "烈山区",
+                        disabled: true
+                    })
+                },
+                reload: function() {
+                    el2=el2.reload();
+                }
+            }
+            
+
+            var el3=eleTree.render({
+                elem: '.ele3',
+                url: "../eleTree/tree.json",
+                showCheckbox: true,
+                defaultExpandAll: true,
+                draggable: true,
+                contextmenuList: ["copy","add","edit","remove"]
+            });
+            eleTree.on("nodeClick(data3)",function(d) {
+                console.group("节点点击nodeClick:")
+                console.log(d.data);    // 点击节点对于的数据
+                console.log(d.event);   // event对象
+                console.log(d.node);    // 点击的dom节点
+                console.log(this);      // 与d.node相同
+                console.groupEnd();      
+
+            }) 
+            eleTree.on("nodeChecked(data3)",function(d) {
+                console.group("节点选中nodeChecked:")
+                console.log(d.data);    // 点击节点对于的数据
+                console.log(d.isChecked);   // input是否被选中
+                console.log(d.node);    // 点击的dom节点
+                console.log(this);      // input对于的dom
+                console.groupEnd();      
+            })
+            eleTree.on("nodeContextmenu(data3)",function(d) {
+                console.group("节点右键nodeContextmenu:")
+                console.log(d.data);    // 点击节点对于的数据
+                console.log(d.event);   // event对象
+                console.log(d.node);    // 点击的dom节点
+                console.log(this);      // 与d.node相同
+                console.groupEnd();      
+            })
+            eleTree.on("nodeDrag(data3)",function(d) {
+                console.group("节点拖拽nodeDrag:")
+                // d.stop();           // 取消拖拽
+                console.log(d.current);    // 起始节点对应的dom和数据
+                console.log(d.target);   // 鼠标落点对应的dom和数据
+                console.log(this);      // 鼠标落点对应的dom
+                console.groupEnd();      
+            })
+
+            eleTree.on("nodeAppend(data3)",function(d) {
+                console.group("添加子节点nodeAppend:")
+                console.log(d.data);    // 点击节点对于的数据
+                console.log(d.node);    // 点击的dom节点
+                console.log(this);      // 与d.node相同
+                // d.stop();            // 取消添加
+                // d.setData({          // 自定义数据
+                //     key: 666,
+                //     label: "aaa"
+                // })
+                console.groupEnd();      
+            })
+            eleTree.on("nodeInsertBefore(data3)",function(d) {
+                console.group("添加节点之前nodeInsertBefore:")
+                console.log(d.data);    // 点击节点对于的数据
+                console.log(d.node);    // 点击的dom节点
+                console.log(this);      // 与d.node相同
+                // d.stop();            // 取消添加
+                // d.setData({          // 自定义数据
+                //     key: 666,
+                //     label: "aaa"
+                // })
+                console.groupEnd();      
+            })
+            eleTree.on("nodeInsertAfter(data3)",function(d) {
+                console.group("添加节点之后nodeInsertAfter:")
+                console.log(d.data);    // 点击节点对于的数据
+                console.log(d.node);    // 点击的dom节点
+                console.log(this);      // 与d.node相同
+                // d.stop();            // 取消添加
+                // d.setData({          // 自定义数据
+                //     key: 666,
+                //     label: "aaa"
+                // })
+                console.groupEnd();      
+            })
+            eleTree.on("nodeEdit(data3)",function(d) {
+                console.group("编辑节点nodeEdit:")
+                console.log(d.data);        // 点击节点对于的数据
+                console.log(d.node);        // 点击的dom节点
+                console.log(d.value);       // 新输入的值
+                console.log(this);          // 与d.node相同
+                // d.stop();                // 取消编辑
+                console.groupEnd();      
+            })
+            eleTree.on("nodeRemove(data3)",function(d) {
+                console.group("删除nodeRemove:")
+                console.log(d.data);        // 点击节点对于的数据
+                console.log(d.node);        // 点击的dom节点
+                // d.stop();                // 取消删除
+                console.groupEnd();      
+            })
+            
+            
+            var el4=eleTree.render({
+                elem: '.ele4',
+                data: [
+                    {
+                        "id": 1,
+                        "label": "安徽省"
+                    },
+                    {
+                        "id": 11,
+                        "label": "江苏省"
+                    }
+                ],
+                showCheckbox: true,
+                lazy: true,
+                load: function(data,callback) {
+                    console.log(data);
+                    var newData;
+                    switch (data.id) {
+                        case 1:
+                            newData=[
+                                {
+                                    "id": 2,
+                                    "label": "马鞍山市"
+                                },
+                                {
+                                    "id": 5,
+                                    "label": "淮北市"
+                                }
+                            ]
+                            break;
+                        case 2:
+                            newData=[
+                                {
+                                    "id": 3,
+                                    "label": "和县",
+                                    "isLeaf": true
+                                }
+                            ]
+                            break;
+                        case 11:
+                            newData=[
+                                {
+                                    "id": 12,
+                                    "label": "苏州市",
+                                    "disabled": true,
+                                    "isLeaf": true
+                                }
+                            ]
+                            break;
+                    
+                        default:
+                            break;
+                    }
+                    setTimeout(function() {
+                        callback(newData);
+                    },500);
+                    
+                }
+            });
+            
+        });
+    </script>
+
+</body>
+</html>
