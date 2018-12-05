@@ -808,6 +808,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                 options.elem.append(cloneNode);
                 cloneNode.css({
                     "display": "none",
+                    "opacity": 0.7,
                     "position": "absolute",
                     "background-color": "#f5f5f5",
                     "width": "100%"

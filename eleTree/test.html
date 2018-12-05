@@ -10,10 +10,38 @@
     <style>
         html,body{
             width: 80%;
-            height: 100%;
             margin: 0 auto;
             background-color: #fff;
+            padding: 15px 0px 30px 0px;
         }
+        .nav{
+            position: fixed;
+            right: 25px;
+            top: calc(50% - 90px);
+            border: 1px solid #d2d2d2;
+            background-color:#fff;
+        }
+        .nav-title{
+            background-color: #F8F8F8; 
+            padding:0 80px 0 20px;
+            margin: 0px;
+            height: 42px;
+            line-height: 42px;
+            border-bottom: 1px solid #eee;
+        }
+        .nav ul{
+            padding:10px 0px 10px 35px;
+        }
+        .nav ul li{
+            padding: 5px 0px;
+            list-style-type: decimal;
+        }
+        .nav ul a{
+            color: #333;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
         .eleTree{
             width: 350px;
             height: 500px;
@@ -35,12 +63,29 @@
         .ele4{
             height: 200px;
         }
+        .blue{
+            color: #01AAED;
+        }
+        a:hover{
+            color: #01AAED;
+        }
     </style>
 </head>
 <body>
+    <div class="nav">
+        <h5 class="nav-title">目录</h5>
+        <ul>
+            <li><a href="#property">属性示例</a></li>
+            <li><a href="#methodEx">方法示例</a></li>
+            <li><a href="#eventEx">事件示例</a></li>
+            <li><a href="#lazyLoad">懒加载示例</a></li>
+            
+        </ul>
+    </div>
+    <a href="../eleTree/index.html" class="blue" style="line-height: 60px;font-size: 30px;">文档链接</a>
     <fieldset class="layui-elem-field layui-field-title site-title">
         <legend>
-            <a name="options">属性示例</a>
+            <a name="property">属性示例</a>
         </legend>
     </fieldset>
     <div class="eleTree ele1" lay-filter="data1"></div>
@@ -72,7 +117,7 @@
     </div>
     <fieldset class="layui-elem-field layui-field-title site-title">
         <legend>
-            <a name="options">方法示例</a>
+            <a name="methodEx">方法示例</a>
         </legend>
     </fieldset>
     <div class="eleTree ele2" lay-filter="data2"></div>
@@ -178,7 +223,7 @@ el2.insertAfter(1,{
     
     <fieldset class="layui-elem-field layui-field-title site-title">
         <legend>
-            <a name="options">事件示例</a>
+            <a name="eventEx">事件示例</a>
         </legend>
     </fieldset>
     <div class="eleTree ele3" lay-filter="data3"></div>
@@ -188,7 +233,7 @@ el2.insertAfter(1,{
 
     <fieldset class="layui-elem-field layui-field-title site-title">
         <legend>
-            <a name="options">懒加载示例</a>
+            <a name="lazyLoad">懒加载示例</a>
         </legend>
     </fieldset>
     <div class="eleTree ele4" lay-filter="data4"></div>

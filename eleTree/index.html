@@ -10,9 +10,9 @@
     <style>
         html,body{
             width: 80%;
-            height: 100%;
             margin: 0 auto;
             background-color: #fff;
+            padding: 15px 0px 30px 0px;
         }
         .eleTree{
             width: 350px;
@@ -20,13 +20,62 @@
             border: 1px solid #ccc;
             overflow: hidden;
         }
+        .red{
+            color: #ff4200;
+        }
+        .blue{
+            color: #01AAED;
+        }
+        a:hover{
+            color: #01AAED;
+        }
+
+        .nav{
+            position: fixed;
+            right: 25px;
+            top: calc(50% - 120px);
+            border: 1px solid #d2d2d2;
+            background-color:#fff;
+        }
+        .nav-title{
+            background-color: #F8F8F8; 
+            padding:0 80px 0 20px;
+            margin: 0px;
+            height: 42px;
+            line-height: 42px;
+            border-bottom: 1px solid #eee;
+        }
+        .nav ul{
+            padding:10px 0px 10px 35px;
+        }
+        .nav ul li{
+            padding: 5px 0px;
+            list-style-type: decimal;
+        }
+        .nav ul a{
+            color: #333;
+            font-size: 14px;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
-    <a href="../eleTree/test.html" style="color: #ff4200;line-height: 60px;font-size: 30px;">示例链接</a>
+    <div class="nav">
+        <h5 class="nav-title">目录</h5>
+        <ul>
+            <li><a href="#use">快速使用</a></li>
+            <li><a href="#options">基础参数</a></li>
+            <li><a href="#async">异步接口</a></li>
+            <li><a href="#baseMethod">基础方法</a></li>
+            <li><a href="#eventLis">事件监听</a></li>
+            <li><a href="#notice">注意</a></li>
+            
+        </ul>
+    </div>
+    <a href="../eleTree/test.html" class="blue" style="line-height: 60px;font-size: 30px;">示例链接</a>
     <fieldset class="layui-elem-field layui-field-title site-title">
         <legend>
-            <a name="options">快速使用</a>
+            <a name="use">快速使用</a>
         </legend>
     </fieldset>
     <div class="content1">
@@ -117,7 +166,7 @@ eleTree.render({
                 <td>url</td>
                 <td>String</td>
                 <td>异步数据接口</td>
-                <td></td>
+                <td><a href="#async" class="blue">异步数据</a></td>
             </tr>
             <tr>
                 <td>renderAfterExpand</td>
@@ -195,8 +244,8 @@ eleTree.render({
                 <td>lazy</td>
                 <td>Boolean</td>
                 <td>是否懒加载子节点，需与 load 方法结合使用。
-                    <div style="color: #ff4200;">注意：懒加载 > 展开所有 > 初始展开项 > 初始渲染所有子节点 > 初始选中项 > 每次点击只渲染当前层（默认）</div>
-                    <div style="color: #ff4200;">即 1. 如开启懒加载，则不会展开所有，每次只渲染当前层；2. 若初始有展开项或选中项，则会直接渲染所有子节点</div>
+                    <div class="red">注意：懒加载 > 展开所有 > 初始展开项 > 初始渲染所有子节点 > 初始选中项 > 每次点击只渲染当前层（默认）</div>
+                    <div class="red">即 1. 如开启懒加载，则不会展开所有，每次只渲染当前层；2. 若初始有展开项或选中项，则会直接渲染所有子节点</div>
                 </td>
                 <td>false</td>
             </tr>
@@ -223,7 +272,7 @@ eleTree.render({
 
     <fieldset class="layui-elem-field layui-field-title site-title">
         <legend>
-            <a name="options">异步数据接口</a>
+            <a name="async">异步数据接口</a>
         </legend>
     </fieldset>
     <table class="layui-table">
@@ -312,7 +361,7 @@ eleTree.render({
     
     <fieldset class="layui-elem-field layui-field-title site-title">
         <legend>
-            <a name="options">基础方法</a>
+            <a name="baseMethod">基础方法</a>
         </legend>
     </fieldset>
     <pre class="layui-code req1">
@@ -335,7 +384,7 @@ var el=eleTree.render({
     
     <fieldset class="layui-elem-field layui-field-title site-title">
         <legend>
-            <a name="options">事件监听</a>
+            <a name="eventLis">事件监听</a>
         </legend>
     </fieldset>
     <pre class="layui-code req1">
@@ -419,6 +468,15 @@ eleTree.on("nodeRemove(data1)",function(d) {
     d.stop();                   // 取消删除
 })
     </pre> 
+    
+    <fieldset class="layui-elem-field layui-field-title site-title">
+        <legend>
+            <a name="notice" class="red">注意</a>
+        </legend>
+    </fieldset>
+    <p class="red">1. 由于checbox解析直接在内部实现, 并没有使用layui的form模块, 所以不能对树进行form.render()操作</p>
+
+
 
     <script src="../layui/layui.js"></script>
     <script>
