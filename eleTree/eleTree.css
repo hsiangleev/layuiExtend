@@ -112,6 +112,7 @@ input.eleTree-hideen[type=checkbox]{
     border: 1px solid #979797;
     box-shadow: 2px 2px 2px #999;
     display: none;
+    z-index: 20181205;
 }
 #tree-menu li>a{
     display: block;
