@@ -599,7 +599,7 @@ layui.define(["jquery","laytpl"], function (exports) {
         },
         updateKeyChildren: function(key,data) {
             var options=this.config;
-            var node=$("[data-"+options.request.key+"='"+key+"']");
+            var node=options.elem.find("[data-"+options.request.key+"='"+key+"']");
             var floor=Number(node.attr("eletree-floor"))+1;
             var _self=this;
             
@@ -617,7 +617,7 @@ layui.define(["jquery","laytpl"], function (exports) {
         },
         updateKeySelf: function(key,data) {
             var options=this.config;
-            var node=$("[data-"+options.request.key+"='"+key+"']").children(".eleTree-node-content");
+            var node=options.elem.find("[data-"+options.request.key+"='"+key+"']").children(".eleTree-node-content");
             var floor=Number(node.attr("eletree-floor"))+1;
             data[options.request.name] && node.children(".eleTree-node-content-label").text(data[options.request.name]);
             data[options.request.disabled] && node.children(".eleTree-hideen").addClass("eleTree-disabled")
@@ -650,7 +650,7 @@ layui.define(["jquery","laytpl"], function (exports) {
         },
         append: function(key,data) {
             var options=this.config;
-            var node=$("[data-"+options.request.key+"='"+key+"']");
+            var node=options.elem.find("[data-"+options.request.key+"='"+key+"']");
             var floor=Number(node.attr("eletree-floor"))+1;
             // 数据更新
             this.keySearchToOpera(key,function(d,obj) {
@@ -674,7 +674,7 @@ layui.define(["jquery","laytpl"], function (exports) {
         },
         insertBefore: function(key,data) {
             var options=this.config;
-            var node=$("[data-"+options.request.key+"='"+key+"']");
+            var node=options.elem.find("[data-"+options.request.key+"='"+key+"']");
             var floor=Number(node.attr("eletree-floor"));
             // 数据更新
             this.keySearchToOpera(key,function(d,obj) {
@@ -690,7 +690,7 @@ layui.define(["jquery","laytpl"], function (exports) {
         },
         insertAfter: function(key,data) {
             var options=this.config;
-            var node=$("[data-"+options.request.key+"='"+key+"']");
+            var node=options.elem.find("[data-"+options.request.key+"='"+key+"']");
             var floor=Number(node.attr("eletree-floor"));
             // 数据更新
             this.keySearchToOpera(key,function(d,obj) {
