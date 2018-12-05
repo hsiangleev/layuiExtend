@@ -262,10 +262,17 @@ layui.define(["jquery","laytpl"], function (exports) {
             });
         },
         reload: function(options) {
+            var _self=this;
             if(this.config.data && this.config.data.constructor === Array) this.config.data=[];
             this.config = $.extend({}, this.config, options);
             $(this.config.elem).off();  // 取消事件绑定，防止多次绑定事件
-            return eleTree.render($.extend({}, this.config, options))
+            // reload记录选中的数据
+            // this.getChecked().forEach(function(val) {
+            //     if($.inArray(val.key,this.config.defaultCheckedKeys)===-1){
+            //         this.config.defaultCheckedKeys.push(val.key);
+            //     }
+            // },this);
+            return eleTree.render(this.config)
         },
         // 下拉
         eleTreeEvent: function() {
@@ -662,15 +669,16 @@ layui.define(["jquery","laytpl"], function (exports) {
                 var arr=d[obj.i][options.request.children];
                 // 添加之后长度为1，则原来没有三角，添加三角
                 if(arr.length===1){
-                    $(node).children(".eleTree-node-content").find(".eleTree-node-content-icon .layui-icon").removeAttr("style").addClass("icon-rotate");
+                    node.children(".eleTree-node-content").find(".eleTree-node-content-icon .layui-icon").removeAttr("style").addClass("icon-rotate");
                 }
                 var len=arr.length;
-                node.length!==0 && laytpl(TPL_ELEM(options,floor)).render([arr[len-1]], function(string){
-                    $(node).children(".eleTree-node-group").append(string).children().show();
+                var eletreeStatus=node.children(".eleTree-node-content").children("input.eleTree-hideen").attr("eletree-status");
+                eletreeStatus=eletreeStatus==="2" ? "0" : eletreeStatus;
+                node.length!==0 && laytpl(TPL_ELEM(options,floor,eletreeStatus)).render([arr[len-1]], function(string){
+                    node.children(".eleTree-node-group").append(string).children().show();
                 }); 
             });
-            this.unCheckNodes();
-            this.defaultChecked();
+            this.checkboxRender();
         },
         insertBefore: function(key,data) {
             var options=this.config;
@@ -681,12 +689,14 @@ layui.define(["jquery","laytpl"], function (exports) {
                 d.splice(obj.i,0,data);
                 obj.i++;
                 obj.len++;
-                node.length!==0 && laytpl(TPL_ELEM(options,floor)).render([data], function(string){
-                    $(node).before(string).prev(".eleTree-node").show();
+                var eletreeStatus=node.parent(".eleTree-node-group").length===0 ? "0" : node.parent(".eleTree-node-group").parent(".eleTree-node")
+                .children(".eleTree-node-content").children("input.eleTree-hideen").attr("eletree-status");
+                eletreeStatus=eletreeStatus==="2" ? "0" : eletreeStatus;
+                node.length!==0 && laytpl(TPL_ELEM(options,floor,eletreeStatus)).render([data], function(string){
+                    node.before(string).prev(".eleTree-node").show();
                 }); 
             });
-            this.unCheckNodes();
-            this.defaultChecked();
+            this.checkboxRender();
         },
         insertAfter: function(key,data) {
             var options=this.config;
@@ -697,13 +707,14 @@ layui.define(["jquery","laytpl"], function (exports) {
                 d.splice(obj.i+1,0,data);
                 obj.i++;
                 obj.len++;
-
-                node.length!==0 && laytpl(TPL_ELEM(options,floor)).render([data], function(string){
+                var eletreeStatus=node.parent(".eleTree-node-group").length===0 ? "0" : node.parent(".eleTree-node-group").parent(".eleTree-node")
+                .children(".eleTree-node-content").children("input.eleTree-hideen").attr("eletree-status");
+                eletreeStatus=eletreeStatus==="2" ? "0" : eletreeStatus;
+                node.length!==0 && laytpl(TPL_ELEM(options,floor,eletreeStatus)).render([data], function(string){
                     $(node).after(string).next(".eleTree-node").show();
                 }); 
             });
-            this.unCheckNodes();
-            this.defaultChecked();
+            this.checkboxRender();
             // if(!options.lazy){
             //     if(!options.renderAfterExpand || options.defaultExpandAll || options.defaultExpandedKeys.length>0){
             //         this.expandAll(options.data,[],1);
@@ -757,6 +768,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                 .parent(".eleTree-node-content-icon").parent(".eleTree-node-content")
                 .siblings(".eleTree-node-group").children(".eleTree-node").hide();
         },
+        // 节点事件
         nodeEvent: function() {
             var _self=this;
             var options=this.config;

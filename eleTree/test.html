@@ -267,7 +267,8 @@ var el4=eleTree.render({
                 elem: '.ele1',
                 url: "../eleTree/tree.json",
                 renderAfterExpand: true,
-                expandOnClickNode: true
+                expandOnClickNode: true,
+                defaultCheckedKeys: [23]
             }
 
             var el1=eleTree.render(obj);
@@ -289,7 +290,6 @@ var el4=eleTree.render({
                 if(isChecked){
                     arr.push(title);
                 }else{
-                    console.log(arr.indexOf(title));
                     arr.splice(arr.indexOf(title),1);
                 }
                 obj["contextmenuList"]=arr;
