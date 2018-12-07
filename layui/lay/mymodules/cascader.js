@@ -340,10 +340,35 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
                 }
             })
             self.initValue();
+        },
+        reload: function(option) {
+            var self=this;
+            this.domContent.off();
+            $(this.elem).off().siblings(".urp-cascader-content,.layui-icon").remove();
+            this.option = $.extend({}, this.option, option);
+            $(this.elem).val("");
+            this.domContent="";     
+            this.textArr=[];        
+            this.textStr="";        
+            this.valueArr=[];       
+            this.onOff=false;       
+            this.positionArr=[];    
+            this.blockData={};      
+            return this.initOption()
+        }
+    }
+
+    var thisCas=function() {
+        var self=this;
+        return {
+            reload: function(option) {
+                self.reload.call(self,option);
+            }
         }
     }
     
     exports('cascader', function(option) {
-        new Cascader(option);
+        var ins=new Cascader(option);
+        return thisCas.call(ins);
     });
 })

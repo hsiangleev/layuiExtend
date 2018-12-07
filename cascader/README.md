@@ -38,7 +38,7 @@ layui.use(['form',"jquery","cascader"], function(){
             label: 'b',
         }
     ]
-    cascader({
+    var cas=cascader({
         elem: "#a",
         data: data,
         // url: "/aa",
@@ -54,6 +54,8 @@ layui.use(['form',"jquery","cascader"], function(){
             console.log(labelData);
         }
     });
+
+    cas.reload({})  // 重载
 });
 ```
 
@@ -68,5 +70,8 @@ layui.use(['form',"jquery","cascader"], function(){
 > + value：传入的初始值，类型为数组，值为data的value值
 > + changeOnSelect：是否选中即改变，默认false（可以选择非叶子节点）
 > + success：回调函数，选择完成之后的回调函数，返回值第一个参数为value数组，第二个参数为label数组
+
+#### **cascader函数说明**
+> + cas.reload(): 可重新渲染数据，或赋初值
 
 

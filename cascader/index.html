@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="cascader.css" media="all">
 </head>
 <body>
+    <button class="layui-btn">reload</button>
     <div class="layui-form-item">
         <label class="layui-form-label">选择框</label>
         <div class="layui-input-block">
@@ -16,12 +17,13 @@
         </div>
     </div>
     
+    
 
     <script src="../layui/layui.js"></script>
     <script>
         layui.config({
             base: "../layui/lay/mymodules/"
-        }).use(['form',"jquery","cascader"], function(){
+        }).use(['form',"jquery","cascader","form"], function(){
             var $ = layui.jquery;
             var cascader = layui.cascader;
             
@@ -95,7 +97,7 @@
                     label: 'c',
                 }
             ]
-            cascader({
+            var cas=cascader({
                 elem: "#a",
                 data: data,
                 // url: "/aa",
@@ -111,6 +113,29 @@
                     console.log(valData,labelData);
                 }
             });
+
+            var reloadData=[
+                {
+                    value: 'A',
+                    label: 'a',
+                    children: [
+                        {
+                            value: 'AA1',
+                            label: 'aa1',
+                        },
+                        {
+                            value: 'BB1',
+                            label: 'bb1'
+                        }
+                    ]
+                }
+            ]
+            $(".layui-btn").on("click",function() {
+                cas.reload({
+                    data: reloadData,
+                    value:['A','BB1']
+                })
+            })
             
         });
     </script>
