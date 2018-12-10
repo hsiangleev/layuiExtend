@@ -1,7 +1,7 @@
 /**
  * 基于layui的tree重写
  * author: hsianglee
- * 最近修改时间: 2018/12/5
+ * 最近修改时间: 2018/12/10
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -202,6 +202,8 @@ layui.define(["jquery","laytpl"], function (exports) {
             if(!options.elem) return hint.error("缺少elem参数");
             options.elem=typeof options.elem === "string" ? $(options.elem) : options.elem;
             this.filter=options.elem.attr("lay-filter");
+            // load加载框
+            options.elem.append('<div class="eleTree-loadData"><i class="layui-icon layui-icon-loading layui-icon layui-anim layui-anim-rotate layui-anim-loop"></i></div>')
             
             // 判断加载方式
             if(options.data.length===0){
@@ -236,6 +238,7 @@ layui.define(["jquery","laytpl"], function (exports) {
             var _self=this;
             if(!options.url) {
                 options.elem.html("<h3 style='text-align: center;height: 30px;line-height: 30px;color: #888;'>"+options.emptText+"</h3>");
+                return;
             }
             var data = $.extend({}, options.where);
             if(options.contentType && options.contentType.indexOf("application/json") == 0){ //提交 json 格式
@@ -370,19 +373,19 @@ layui.define(["jquery","laytpl"], function (exports) {
 
                 if(inp.checked){
                     // 反选自身
-                    $(inp).removeAttr("checked").attr("eleTree-status","0");
+                    $(inp).prop("checked",false).attr("eleTree-status","0");
                     // 点击祖父层选中子孙层
                     if(!options.checkStrictly){
-                        childNode.removeAttr("checked");
+                        childNode.prop("checked",false);
                         childNode.attr("eleTree-status","0");
                     }
                     
                 }else{
                     // 反选自身
-                    $(inp).prop("checked","checked").attr("eleTree-status","1");
+                    $(inp).prop("checked",true).attr("eleTree-status","1");
                     // 点击祖父层选中子孙层
                     if(!options.checkStrictly){
-                        childNode.prop("checked","checked").attr("eleTree-status","1");
+                        childNode.prop("checked",true).attr("eleTree-status","1");
                     }
                 }
 
@@ -425,7 +428,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                 if(arr.every(function(val) {
                     return val==="1";
                 })){
-                    parentInput.prop("checked","checked").attr("eleTree-status","1");
+                    parentInput.prop("checked",true).attr("eleTree-status","1");
                 }
                 // 子有一个未选中则checkbox第三种状态
                 if(arr.some(function(val) {
@@ -437,7 +440,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                 if(arr.every(function(val) {
                     return val==="0";
                 })){
-                    parentInput.removeAttr("checked");
+                    parentInput.prop("checked",false);
                     parentInput.attr("eleTree-status","0");
                 }
 
@@ -758,7 +761,7 @@ layui.define(["jquery","laytpl"], function (exports) {
         unCheckNodes: function() {
             var options=this.config;
             options.elem.find("input.eleTree-hideen[eletree-status='1'],input.eleTree-hideen[eletree-status='2']").each(function(index,item) {
-                $(item).attr("eletree-status","0").removeAttr("checked");
+                $(item).attr("eletree-status","0").prop("checked",false);
             });
             this.checkboxRender();
         },
