@@ -69,6 +69,15 @@
         a:hover{
             color: #01AAED;
         }
+        .ele5{
+            height: auto;
+            width: 100%;
+            display: none;
+            position: absolute;
+            top:100%;
+            background-color: #fff;
+            z-index: 100;
+        }
     </style>
 </head>
 <body>
@@ -79,6 +88,7 @@
             <li><a href="#methodEx">方法示例</a></li>
             <li><a href="#eventEx">事件示例</a></li>
             <li><a href="#lazyLoad">懒加载示例</a></li>
+            <li><a href="#dropdown">下拉树示例</a></li>
             
         </ul>
     </div>
@@ -293,6 +303,56 @@ var el4=eleTree.render({
         
     }
 });
+</pre>
+
+    <fieldset class="layui-elem-field layui-field-title site-title">
+        <legend>
+            <a name="dropdown">下拉选择</a>
+        </legend>
+    </fieldset>
+    <div class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">输入框</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" readonly autocomplete="off" class="layui-input">
+                <div class="eleTree ele5" lay-filter="data5"></div>
+            </div>
+        </div>
+    </div>
+<pre class="layui-code lazy">
+<!-- 对应的html -->
+<div class="layui-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">输入框</label>
+        <div class="layui-input-block">
+            <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" readonly autocomplete="off" class="layui-input">
+            <div class="eleTree ele5" lay-filter="data5"></div>
+        </div>
+    </div>
+</div>
+//---------------------------------------------------------
+// 对应的js
+var el5;
+$("[name='title']").on("click",function (e) {
+    e.stopPropagation();
+    if(!el5){
+        el5=eleTree.render({
+            elem: '.ele5',
+            url: "../eleTree/tree.json",
+            defaultExpandAll: true,
+            expandOnClickNode: false,
+            highlightCurrent: true
+        });
+    }
+    $(".ele5").toggle();
+})
+eleTree.on("nodeClick(data5)",function(d) {
+    $("[name='title']").val(d.data.currentData.label)
+    $(".ele5").hide();
+}) 
+$(document).on("click",function() {
+    $(".ele5").hide();
+})
 </pre>
 
     <script src="../layui/layui.js"></script>
@@ -586,6 +646,29 @@ var el4=eleTree.render({
                     
                 }
             });
+
+            var el5;
+            $("[name='title']").on("click",function (e) {
+                e.stopPropagation();
+                if(!el5){
+                    el5=eleTree.render({
+                        elem: '.ele5',
+                        url: "../eleTree/tree.json",
+                        defaultExpandAll: true,
+                        expandOnClickNode: false,
+                        highlightCurrent: true
+                    });
+                }
+                $(".ele5").toggle();
+            })
+            eleTree.on("nodeClick(data5)",function(d) {
+                $("[name='title']").val(d.data.currentData.label)
+                $(".ele5").hide();
+            }) 
+            $(document).on("click",function() {
+                $(".ele5").hide();
+            })
+            
             
         });
     </script>
