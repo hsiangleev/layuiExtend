@@ -471,7 +471,8 @@ layui.define(["jquery","laytpl"], function (exports) {
                             el.children().show();
                         }else if(options.defaultExpandedKeys.length>0) {
                             // 展开指定id项
-                            var id=Number(el.parent(".eleTree-node").attr("data-"+options.request.key));
+                            var id=el.parent(".eleTree-node").attr("data-"+options.request.key);
+                            id=isNaN(id) ? id : Number(id);
                             if($.inArray(id,options.defaultExpandedKeys)!==-1){
                                 el.siblings(".eleTree-node-content").children(".eleTree-node-content-icon").children(".layui-icon").addClass("icon-rotate");
                                 el.children().show();
@@ -515,7 +516,8 @@ layui.define(["jquery","laytpl"], function (exports) {
             var arr=$.extend([],options.defaultCheckedKeys);
             options.defaultCheckedKeys.forEach(function(val,index) {
                 options.elem.find("[data-"+options.request.key+"='"+val+"']").find("[data-"+options.request.key+"]").each(function(i,item) {
-                    var id=Number($(item).attr("data-"+options.request.key));
+                    var id=$(item).attr("data-"+options.request.key);
+                    id=isNaN(id) ? id : Number(id);
                     var isInArrayIndex=$.inArray(id,arr);
                     if(isInArrayIndex!==-1){
                         arr.splice(isInArrayIndex,1);
@@ -741,7 +743,8 @@ layui.define(["jquery","laytpl"], function (exports) {
             el.each(function(index,item) {
                 var obj={};
                 var id=$(item).parent(".eleTree-node-content").parent(".eleTree-node").attr("data-"+options.request.key);
-                obj[options.request.key]=Number(id);
+                id=isNaN(id) ? id : Number(id);
+                obj[options.request.key]=id;
                 obj.elem=item;
                 obj.othis=$(item).siblings(".eleTree-checkbox").get(0)
                 arr.push(obj);
@@ -1001,7 +1004,8 @@ layui.define(["jquery","laytpl"], function (exports) {
                     var s=val[0].toLocaleLowerCase()+val.slice(1,val.length);
                     $("#tree-menu li."+s).off().on("click",function(e) {
                         var node=$(that).parent(".eleTree-node");
-                        var key=Number(node.attr("data-"+options.request.key));
+                        var key=node.attr("data-"+options.request.key);
+                        key=isNaN(key) ? key : Number(key);
                         var isStop=false;
                         var s=val[0].toLocaleLowerCase()+val.slice(1,val.length);
                         layui.event.call(node, MOD_NAME, 'node'+val+'('+ _self.filter +')', {
@@ -1029,7 +1033,8 @@ layui.define(["jquery","laytpl"], function (exports) {
                     e.stopPropagation();
                     $("#tree-menu").hide().remove();
                     var node=$(that).parent(".eleTree-node");
-                    var key=Number(node.attr("data-"+options.request.key));
+                    var key=node.attr("data-"+options.request.key);
+                    key=isNaN(key) ? key : Number(key);
                     var label=$(that).children(".eleTree-node-content-label").hide();
                     var text=label.text();
                     var inp="<input type='text' value='"+text+"' class='eleTree-node-content-input' />";
@@ -1063,7 +1068,8 @@ layui.define(["jquery","laytpl"], function (exports) {
                 // 删除
                 $("#tree-menu li.remove").off().on("click",function(e) {
                     var node=$(that).parent(".eleTree-node");
-                    var key=Number(node.attr("data-"+options.request.key));
+                    var key=node.attr("data-"+options.request.key);
+                    key=isNaN(key) ? key : Number(key);
                     var isStop=false;
                     layui.event.call(node, MOD_NAME, 'nodeRemove('+ _self.filter +')', {
                         node: node,
