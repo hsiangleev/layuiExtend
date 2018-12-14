@@ -741,7 +741,7 @@ layui.define(["jquery","laytpl"], function (exports) {
             el.each(function(index,item) {
                 var obj={};
                 var id=$(item).parent(".eleTree-node-content").parent(".eleTree-node").attr("data-"+options.request.key);
-                obj.key=Number(id);
+                obj[options.request.key]=Number(id);
                 obj.elem=item;
                 obj.othis=$(item).siblings(".eleTree-checkbox").get(0)
                 arr.push(obj);
