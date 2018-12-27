@@ -16,7 +16,8 @@
                         },
                         {
                             "id": 4,
-                            "label": "花山区"
+                            "label": "花山区",
+                            "checked": true
                         }
                     ]
                 },
@@ -30,7 +31,8 @@
                         },
                         {
                             "id": 24,
-                            "label": "相山区"
+                            "label": "相山区",
+                            "checked": true
                         }
                     ]
                 }

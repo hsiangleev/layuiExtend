@@ -1,7 +1,7 @@
 /**
  * 基于layui的tree重写
  * author: hsianglee
- * 最近修改时间: 2018/12/14
+ * 最近修改时间: 2018/12/27
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -121,7 +121,12 @@ layui.define(["jquery","laytpl"], function (exports) {
                                     status='"0"';
                                 }
                                 return [
-                                    '<input type="checkbox" name="eleTree-node" eleTree-status='+status+' class="eleTree-hideen ',
+                                    '{{# if(d[i]["'+options.request.checked+'"]) { }}',
+                                        '<input type="checkbox" name="eleTree-node" eleTree-status="1" checked class="eleTree-hideen ',
+                                    '{{# }else{ }}',
+                                        '<input type="checkbox" name="eleTree-node" eleTree-status='+status+' class="eleTree-hideen ',
+                                    '{{# } }}',
+
                                     '{{# if(d[i]["'+options.request.disabled+'"]) { }}',
                                         'eleTree-disabled',
                                     '{{# } }}',
@@ -188,6 +193,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                 key: "id",
                 children: "children",
                 disabled: "disabled",
+                checked: "checked",
                 isLeaf: "isLeaf"
             }
         },
@@ -232,6 +238,9 @@ layui.define(["jquery","laytpl"], function (exports) {
             this.defaultChecked();
             this.nodeEvent();
             this.rightClickMenu();
+            if(!options.checkStrictly){
+                this.checkboxInit();
+            }
         },
         ajaxGetData: function() {
             var options=this.config;
@@ -407,6 +416,28 @@ layui.define(["jquery","laytpl"], function (exports) {
                 });
             })
         },
+        // 对后台数据有 checked:true 的默认选中项渲染父子层
+        checkboxInit: function() {
+            var options=this.config;
+            var _self=this;
+            options.elem.find("input[eleTree-status='1']").each(function(index,item) {
+                var checkboxEl=$(item).siblings(".eleTree-checkbox");
+                var childNode=checkboxEl.parent(".eleTree-node-content").siblings(".eleTree-node-group").find("input[name='eleTree-node']");
+                // 选择当前
+                checkboxEl.addClass("eleTree-checkbox-checked");
+                checkboxEl.children("i").addClass("layui-icon-ok").removeClass("eleTree-checkbox-line");
+                // 选择子孙
+                childNode.prop("checked","checked").attr("eleTree-status","1");
+                childNode.siblings(".eleTree-checkbox").addClass("eleTree-checkbox-checked");
+                childNode.siblings(".eleTree-checkbox").children("i").addClass("layui-icon-ok").removeClass("eleTree-checkbox-line");
+                
+                // 选择祖父
+                var eleNode=checkboxEl.parent(".eleTree-node-content").parent(".eleTree-node");
+                var siblingNode=eleNode.siblings(".eleTree-node");
+                _self.selectParents(item,eleNode,siblingNode);
+            })
+            _self.checkboxRender();
+        },
         // 通过子元素选中祖父元素
         selectParents: function(inp,eleNode,siblingNode) {
             // inp: 实际input(dom元素)
@@ -508,7 +539,11 @@ layui.define(["jquery","laytpl"], function (exports) {
             // 判断是否父子无关
             if(options.checkStrictly){
                 options.defaultCheckedKeys.forEach(function(val,index) {
-                    options.elem.find("[data-"+options.request.key+"='"+val+"']").children(".eleTree-node-content").children(".eleTree-checkbox").trigger("click",["default"]);
+                    var nodeContent=options.elem.find("[data-"+options.request.key+"='"+val+"']").children(".eleTree-node-content");
+                    // 如果当前没选中则选中
+                    if(nodeContent.children(".eleTree-hideen").prop("checked")===false){
+                        nodeContent.children(".eleTree-checkbox").trigger("click",["default"]);
+                    }
                 })
                 return false;
             }
@@ -525,7 +560,11 @@ layui.define(["jquery","laytpl"], function (exports) {
                 })
             })
             arr.forEach(function(val,index) {
-                options.elem.find("[data-"+options.request.key+"='"+val+"']").children(".eleTree-node-content").children(".eleTree-checkbox").trigger("click",["default"]);
+                var nodeContent=options.elem.find("[data-"+options.request.key+"='"+val+"']").children(".eleTree-node-content");
+                // 如果当前没选中则选中
+                if(nodeContent.children(".eleTree-hideen").prop("checked")===false){
+                    nodeContent.children(".eleTree-checkbox").trigger("click",["default"]);
+                }
             })
         },
         // 自定义checkbox解析
@@ -733,12 +772,12 @@ layui.define(["jquery","laytpl"], function (exports) {
             leafOnly=leafOnly || false;
             includeHalfChecked=includeHalfChecked || false;
             if(leafOnly){
-                el=$(".layui-icon.leaf-icon").parent(".eleTree-node-content-icon")
+                el=options.elem.find(".layui-icon.leaf-icon").parent(".eleTree-node-content-icon")
                     .siblings("input.eleTree-hideen[eletree-status='1']");
             }else if(includeHalfChecked){
-                el=$("input.eleTree-hideen[eletree-status='1'],input.eleTree-hideen[eletree-status='2']");
+                el=options.elem.find("input.eleTree-hideen[eletree-status='1'],input.eleTree-hideen[eletree-status='2']");
             }else{
-                el=$("input.eleTree-hideen[eletree-status='1']");
+                el=options.elem.find("input.eleTree-hideen[eletree-status='1']");
             }
             el.each(function(index,item) {
                 var obj={};
