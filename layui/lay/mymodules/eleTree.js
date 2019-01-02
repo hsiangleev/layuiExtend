@@ -1,7 +1,7 @@
 /**
  * 基于layui的tree重写
  * author: hsianglee
- * 最近修改时间: 2018/12/27
+ * 最近修改时间: 2019/01/02
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -80,6 +80,9 @@ layui.define(["jquery","laytpl"], function (exports) {
             },
             reload: function(options) {
                 return _self.reload.call(_self,options);
+            },
+            search: function(value) {
+                return _self.search.call(_self,value);
             }
         }
     }
@@ -144,6 +147,10 @@ layui.define(["jquery","laytpl"], function (exports) {
         ].join("");
     }
 
+    var TPL_NoText=function() {
+        return '<h3 class="eleTree-noText" style="text-align: center;height: 30px;line-height: 30px;color: #888;">{{d.emptText}}</h3>';
+    }
+
     var Class=function(options) {
         options.response=$.extend({}, this.config.response, options.response);
         options.request=$.extend({}, this.config.request, options.request);
@@ -159,23 +166,24 @@ layui.define(["jquery","laytpl"], function (exports) {
         config: {
             elem: "",
             data: [],
-            emptText: "暂无数据",        //1 内容为空的时候展示的文本
-            renderAfterExpand: true,    //1 是否在第一次展开某个树节点后才渲染其子节点
-            highlightCurrent: false,    //1 是否高亮当前选中节点，默认值是 false。
-            defaultExpandAll: false,    //1 是否默认展开所有节点
-            expandOnClickNode: true,    //1 是否在点击节点的时候展开或者收缩节点， 默认值为 true，如果为 false，则只有点箭头图标的时候才会展开或者收缩节点。
-            checkOnClickNode: false,    //1 是否在点击节点的时候选中节点，默认值为 false，即只有在点击复选框时才会选中节点。
-            defaultExpandedKeys: [],    //1 默认展开的节点的 key 的数组
-            autoExpandParent: true,     //1 展开子节点的时候是否自动展开父节点
-            showCheckbox: false,        //1 节点是否可被选择
-            checkStrictly: false,       //1 在显示复选框的情况下，是否严格的遵循父子不互相关联的做法，默认为 false
-            defaultCheckedKeys: [],     //1 默认勾选的节点的 key 的数组
-            accordion: false,           //1 是否每次只打开一个同级树节点展开（手风琴效果）
-            indent: 16,                 //1 相邻级节点间的水平缩进，单位为像素
-            lazy: false,                //1 是否懒加载子节点，需与 load 方法结合使用
-            load: function() {},        //1 加载子树数据的方法，仅当 lazy 属性为true 时生效
-            draggable: false,           //1 是否开启拖拽节点功能
-            contextmenuList: [],        //1 启用右键菜单，支持的操作有："copy","add","edit","remove"
+            emptText: "暂无数据",        // 内容为空的时候展示的文本
+            renderAfterExpand: true,    // 是否在第一次展开某个树节点后才渲染其子节点
+            highlightCurrent: false,    // 是否高亮当前选中节点，默认值是 false。
+            defaultExpandAll: false,    // 是否默认展开所有节点
+            expandOnClickNode: true,    // 是否在点击节点的时候展开或者收缩节点， 默认值为 true，如果为 false，则只有点箭头图标的时候才会展开或者收缩节点。
+            checkOnClickNode: false,    // 是否在点击节点的时候选中节点，默认值为 false，即只有在点击复选框时才会选中节点。
+            defaultExpandedKeys: [],    // 默认展开的节点的 key 的数组
+            autoExpandParent: true,     // 展开子节点的时候是否自动展开父节点
+            showCheckbox: false,        // 节点是否可被选择
+            checkStrictly: false,       // 在显示复选框的情况下，是否严格的遵循父子不互相关联的做法，默认为 false
+            defaultCheckedKeys: [],     // 默认勾选的节点的 key 的数组
+            accordion: false,           // 是否每次只打开一个同级树节点展开（手风琴效果）
+            indent: 16,                 // 相邻级节点间的水平缩进，单位为像素
+            lazy: false,                // 是否懒加载子节点，需与 load 方法结合使用
+            load: function() {},        // 加载子树数据的方法，仅当 lazy 属性为true 时生效
+            draggable: false,           // 是否开启拖拽节点功能
+            contextmenuList: [],        // 启用右键菜单，支持的操作有："copy","add","edit","remove"
+            searchNodeMethod: null,     // 对树节点进行筛选时执行的方法，返回 true 表示这个节点可以显示，返回 false 则表示这个节点会被隐藏
 
             method: "get",
             url: "",
@@ -246,7 +254,9 @@ layui.define(["jquery","laytpl"], function (exports) {
             var options=this.config;
             var _self=this;
             if(!options.url) {
-                options.elem.html("<h3 style='text-align: center;height: 30px;line-height: 30px;color: #888;'>"+options.emptText+"</h3>");
+                laytpl(TPL_NoText()).render(options, function(string){
+                    options.elem.html(string);
+                }); 
                 return;
             }
             var data = $.extend({}, options.where);
@@ -308,7 +318,7 @@ layui.define(["jquery","laytpl"], function (exports) {
 
                 if(el.hasClass("icon-rotate")){
                     // 合并
-                    sibNode.children().hide("fast");
+                    sibNode.children(".eleTree-node:not(.eleTree-search-hide)").hide("fast");
                     el.removeClass("icon-rotate");
                     return;
                 }
@@ -333,6 +343,8 @@ layui.define(["jquery","laytpl"], function (exports) {
                             }
                             el.removeClass("lazy-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop").addClass("layui-icon-triangle-r icon-rotate");
                             _self.checkboxRender();
+
+                            // 懒加载子元素选择祖父（待写）
                         })
                     }else{
                         var eletreeStatus=eleTreeNodeContent.children("input.eleTree-hideen").attr("eletree-status");
@@ -342,13 +354,13 @@ layui.define(["jquery","laytpl"], function (exports) {
                         _self.checkboxRender();
                     }
                 }
-                
-                sibNode.children().show("fast");
+                // 显示隐藏没有搜索类的
+                sibNode.children(".eleTree-node:not(.eleTree-search-hide)").show("fast");
                 el.addClass("icon-rotate");
                 // 手风琴效果
                 if(options.accordion){
                     var node=eleTreeNodeContent.parent(".eleTree-node").siblings(".eleTree-node");
-                    node.children(".eleTree-node-group").children().hide("fast");
+                    node.children(".eleTree-node-group").children(".eleTree-node:not(.eleTree-search-hide)").hide("fast");
                     node.children(".eleTree-node-content").children(".eleTree-node-content-icon").children(".layui-icon").removeClass("icon-rotate");
                 }
             })
@@ -1124,6 +1136,62 @@ layui.define(["jquery","laytpl"], function (exports) {
 
                 _self.prevClickEle=$(this);
             })
+        },
+        search: function(value) {
+            var options=this.config;
+            if(!options.searchNodeMethod || typeof options.searchNodeMethod !== "function"){
+                return;
+            }
+            var data=options.data;
+            // 数据递归
+            var traverse=function(data) {
+                data.forEach(function(val,index) {
+                    // 所有查找到的节点增加属性
+                    val.visible=options.searchNodeMethod(value,val);
+                    if(val[options.request.children] && val[options.request.children].length>0){
+                        traverse(val[options.request.children]);
+                    }
+                    //如果当前节点属性为隐藏，判断其子节点是否有显示的，如果有，则当前节点改为显示
+                    if(!val.visible){
+                        let childSomeShow = false;
+                        if(val[options.request.children] && val[options.request.children].length>0){
+                            childSomeShow=val[options.request.children].some(function(v,i) {
+                                return v.visible;
+                            })
+                        }
+                        val.visible = childSomeShow;
+                    }
+                    // 通过节点的属性，显示隐藏各个节点，并添加删除搜索类
+                    if(val.visible){
+                        options.elem.find("[data-"+options.request.key+"='"+val[options.request.key]+"']").show().removeClass("eleTree-search-hide");
+                    }else{
+                        options.elem.find("[data-"+options.request.key+"='"+val[options.request.key]+"']").hide().addClass("eleTree-search-hide");
+                    }
+                    // 删除子层属性
+                    if(val[options.request.children] && val[options.request.children].length>0){
+                        val[options.request.children].forEach(function(v,i) {
+                            delete v.visible;
+                        })
+                    }
+                })
+            }
+            traverse(data);
+            // 删除最外层属性
+            var arr=[];
+            data.forEach(function(val) {
+                arr.push(val.visible);
+                delete val.visible;
+            })
+            // 如果第一层的所有的都隐藏，则显示文本
+            if(arr.every(function(v) {
+                return v===false;
+            })){
+                laytpl(TPL_NoText()).render(options, function(string){
+                    options.elem.append(string);
+                }); 
+            }else{
+                options.elem.children(".eleTree-noText").remove();
+            }
         }
     }
     

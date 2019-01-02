@@ -20,6 +20,7 @@
             top: calc(50% - 90px);
             border: 1px solid #d2d2d2;
             background-color:#fff;
+            z-index: 100000;
         }
         .nav-title{
             background-color: #F8F8F8; 
@@ -89,7 +90,7 @@
             <li><a href="#eventEx">事件示例</a></li>
             <li><a href="#lazyLoad">懒加载示例</a></li>
             <li><a href="#dropdown">下拉树示例</a></li>
-            
+            <li><a href="#search">节点搜索</a></li>
         </ul>
     </div>
     <a href="../eleTree/index.html" class="blue" style="line-height: 60px;font-size: 30px;">文档链接</a>
@@ -353,6 +354,38 @@ eleTree.on("nodeClick(data5)",function(d) {
 $(document).on("click",function() {
     $(".ele5").hide();
 })
+</pre>
+
+
+
+
+<fieldset class="layui-elem-field layui-field-title site-title">
+    <legend>
+        <a name="search">节点搜索</a>
+    </legend>
+</fieldset>
+<input type="text" placeholder="请输入关键字进行搜索" autocomplete="off" class="layui-input eleTree-search">
+<div class="eleTree ele6" lay-filter="data6"></div>
+<pre class="layui-code lazy">
+<!-- 对应的html -->
+<input type="text" placeholder="请输入关键字进行搜索" autocomplete="off" class="layui-input eleTree-search">
+<div class="eleTree ele6" lay-filter="data6"></div>
+//---------------------------------------------------------
+// 对应的js
+$(".eleTree-search").on("change",function() {
+    el6.search($(this).val());
+})
+var el6=eleTree.render({
+    elem: '.ele6',
+    url: "../eleTree/tree.json",
+    showCheckbox: true,
+    defaultExpandAll: true,
+    defaultCheckedKeys: [23,24],
+    searchNodeMethod: function(value,data) {
+        if (!value) return true;
+        return data.label.indexOf(value) !== -1;
+    }
+});
 </pre>
 
     <script src="../layui/layui.js"></script>
@@ -670,7 +703,22 @@ $(document).on("click",function() {
                 $(".ele5").hide();
             })
             
-            
+
+            $(".eleTree-search").on("change",function() {
+                el6.search($(this).val());
+            })
+            var el6=eleTree.render({
+                elem: '.ele6',
+                url: "../eleTree/tree.json",
+                showCheckbox: true,
+                defaultExpandAll: true,
+                defaultCheckedKeys: [23,24],
+                searchNodeMethod: function(value,data) {
+                    if (!value) return true;
+                    return data.label.indexOf(value) !== -1;
+                }
+            });
+
         });
     </script>
 
