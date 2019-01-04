@@ -1,7 +1,7 @@
 /**
  * 基于layui的tree重写
  * author: hsianglee
- * 最近修改时间: 2019/01/03
+ * 最近修改时间: 2019/01/04
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -1168,10 +1168,17 @@ layui.define(["jquery","laytpl"], function (exports) {
                         val.visible = childSomeShow;
                     }
                     // 通过节点的属性，显示隐藏各个节点，并添加删除搜索类
+                    var el=options.elem.find("[data-"+options.request.key+"='"+val[options.request.key]+"']");
                     if(val.visible){
-                        options.elem.find("[data-"+options.request.key+"='"+val[options.request.key]+"']").show().removeClass("eleTree-search-hide");
+                        el.removeClass("eleTree-search-hide");
+                        // 判断父节点是否展开，如果父节点没有展开，则子节点也不要显示
+                        var parentEl=el.parent(".eleTree-node-group").parent(".eleTree-node");
+                        var isParentOpen=parentEl.children(".eleTree-node-content").children(".eleTree-node-content-icon").children(".layui-icon.layui-icon-triangle-r").hasClass("icon-rotate")
+                        if((parentEl.length>0 && isParentOpen) || parentEl.length===0){
+                            el.show();
+                        }
                     }else{
-                        options.elem.find("[data-"+options.request.key+"='"+val[options.request.key]+"']").hide().addClass("eleTree-search-hide");
+                        el.hide().addClass("eleTree-search-hide");
                     }
                     // 删除子层属性
                     if(val[options.request.children] && val[options.request.children].length>0){
