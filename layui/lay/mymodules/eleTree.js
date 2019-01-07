@@ -1,7 +1,7 @@
 /**
  * 基于layui的tree重写
  * author: hsianglee
- * 最近修改时间: 2019/01/04
+ * 最近修改时间: 2019/01/07
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -354,6 +354,10 @@ layui.define(["jquery","laytpl"], function (exports) {
 
                         // 选择祖父
                         var eleNode1=sibNode.children(".eleTree-node").eq(0);
+                        if(eleNode1.length===0){
+                            _self.checkboxRender();
+                            return;
+                        }
                         var siblingNode1=eleNode1.siblings(".eleTree-node");
                         var item1=eleNode1.children(".eleTree-node-content").children(".eleTree-hideen").get(0);
                         _self.selectParents(item1,eleNode1,siblingNode1);
