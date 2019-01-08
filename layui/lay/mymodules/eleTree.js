@@ -1163,7 +1163,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                     }
                     //如果当前节点属性为隐藏，判断其子节点是否有显示的，如果有，则当前节点改为显示
                     if(!val.visible){
-                        let childSomeShow = false;
+                        var childSomeShow = false;
                         if(val[options.request.children] && val[options.request.children].length>0){
                             childSomeShow=val[options.request.children].some(function(v,i) {
                                 return v.visible;
