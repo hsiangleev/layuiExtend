@@ -60,9 +60,9 @@ layui.define(["jquery","laytpl"], function (exports) {
                 return _self.getChecked.call(_self,leafOnly, includeHalfChecked);
             },
             // 接收勾选节点数据的数组
-            setChecked: function(data) {
+            setChecked: function(data,isReset) {
                 if(options.data.length===0) return;
-                return _self.setChecked.call(_self,data);
+                return _self.setChecked.call(_self,data,isReset);
             },
             // 取消选中
             unCheckNodes: function() {
@@ -826,14 +826,21 @@ layui.define(["jquery","laytpl"], function (exports) {
             })
             return arr;
         },
-        setChecked: function(arr) {
+        setChecked: function(arr,isReset) {
             var options=this.config;
+            isReset=isReset || false;
             this.unCheckNodes();
-            arr.forEach(function(val) {
-                if($.inArray(val,options.defaultCheckedKeys)===-1){
-                    options.defaultCheckedKeys.push(val);
-                }
-            })
+            if(isReset){
+                options.defaultCheckedKeys=$.extend([],arr);
+            }else{
+                arr.forEach(function(val) {
+                    if($.inArray(val,options.defaultCheckedKeys)===-1){
+                        options.defaultCheckedKeys.push(val);
+                    }
+                })
+            }
+            
+            
             this.defaultChecked();
         },
         unCheckNodes: function() {
