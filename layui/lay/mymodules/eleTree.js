@@ -523,22 +523,36 @@ layui.define(["jquery","laytpl"], function (exports) {
                             el.siblings(".eleTree-node-content").children(".eleTree-node-content-icon").children(".layui-icon").addClass("icon-rotate");
                             el.children().show();
                         }else if(options.defaultExpandedKeys.length>0) {
-                            // 展开指定id项
-                            var id=el.parent(".eleTree-node").attr("data-"+options.request.key);
-                            id=isNaN(id) ? id : Number(id);
-                            if($.inArray(id,options.defaultExpandedKeys)!==-1){
-                                el.siblings(".eleTree-node-content").children(".eleTree-node-content-icon").children(".layui-icon").addClass("icon-rotate");
-                                el.children().show();
-                                // 展开子项是否继续展开祖父项
+                            // 继续展开祖父层
+                            var f=function(eleP) {
                                 if(options.autoExpandParent){
-                                    var eleP=el.parent(".eleTree-node[data-"+options.request.key+"]").parents(".eleTree-node");
-                                    eleP.each(function(i,item) {
+                                    eleP.parents(".eleTree-node").each(function(i,item) {
                                         if($(item).attr("data-"+options.request.key)){
                                             $(item).children(".eleTree-node-group").siblings(".eleTree-node-content").children(".eleTree-node-content-icon").children(".layui-icon").addClass("icon-rotate");
                                             $(item).children(".eleTree-node-group").children().show();
                                         }
                                     })
                                 }
+                            }
+                            // 展开指定id项
+                            var id=el.parent(".eleTree-node").attr("data-"+options.request.key);
+                            id=isNaN(id) ? id : Number(id);
+                            if($.inArray(id,options.defaultExpandedKeys)!==-1){
+                                // 直接展开子节点
+                                el.siblings(".eleTree-node-content").children(".eleTree-node-content-icon").children(".layui-icon").addClass("icon-rotate");
+                                el.children().show();
+                                // 展开子项是否继续展开祖父项
+                                f(el.parent(".eleTree-node[data-"+options.request.key+"]"));
+                            }else{
+                                // 如当前节点的子节点有展开项，则展开当前子节点的祖父层
+                                el.children(".eleTree-node").each(function(index, item) {
+                                    var id=$(item).attr("data-"+options.request.key);
+                                    id=isNaN(id) ? id : Number(id);
+                                    if($.inArray(id,options.defaultExpandedKeys)!==-1){
+                                        f($(item));
+                                        return false;
+                                    }
+                                })
                             }
                         }
                     });
