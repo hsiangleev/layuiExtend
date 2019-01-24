@@ -72,8 +72,9 @@ layui.define(["jquery","laytpl"], function (exports) {
             expandAll: function() {
                 options.elem.children(".eleTree-node").children(".eleTree-node-group").empty();
                 _self.expandAll.call(_self,options.data,[],1,true);
-                _self.unCheckNodes();
+                _self.unCheckNodes(true);
                 _self.defaultChecked();
+                _self.checkboxInit();
             },
             unExpandAll: function() {
                 return _self.unExpandAll.call(_self);
@@ -125,7 +126,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                                 }
                                 return [
                                     '{{# if(d[i]["'+options.request.checked+'"]) { }}',
-                                        '<input type="checkbox" name="eleTree-node" eleTree-status="1" checked class="eleTree-hideen ',
+                                        '<input type="checkbox" name="eleTree-node" eleTree-status="1" checked data-checked class="eleTree-hideen ',
                                     '{{# }else{ }}',
                                         '<input type="checkbox" name="eleTree-node" eleTree-status='+status+' class="eleTree-hideen ',
                                     '{{# } }}',
@@ -442,10 +443,11 @@ layui.define(["jquery","laytpl"], function (exports) {
         checkboxInit: function() {
             var options=this.config;
             var _self=this;
-            options.elem.find("input[eleTree-status='1']").each(function(index,item) {
+            options.elem.find("input[data-checked]").each(function(index,item) {
                 var checkboxEl=$(item).siblings(".eleTree-checkbox");
                 var childNode=checkboxEl.parent(".eleTree-node-content").siblings(".eleTree-node-group").find("input[name='eleTree-node']");
                 // 选择当前
+                $(item).prop("checked","checked").attr("eleTree-status","1");
                 checkboxEl.addClass("eleTree-checkbox-checked");
                 checkboxEl.children("i").addClass("layui-icon-ok").removeClass("eleTree-checkbox-line");
                 // 选择子孙
@@ -698,8 +700,9 @@ layui.define(["jquery","laytpl"], function (exports) {
                     $(node).children(".eleTree-node-group").empty().append(string);
                     options.defaultExpandAll && $(node).children(".eleTree-node-group").children().show();
                 }); 
-                _self.unCheckNodes();
+                _self.unCheckNodes(true);
                 _self.defaultChecked();
+                _self.checkboxInit();
             });
         },
         updateKeySelf: function(key,data) {
@@ -732,8 +735,9 @@ layui.define(["jquery","laytpl"], function (exports) {
                     pElem.siblings(".eleTree-node-content").children(".eleTree-node-content-icon").children(".layui-icon").css("color", "transparent");
                 }
             });
-            this.unCheckNodes();
+            this.unCheckNodes(true);
             this.defaultChecked();
+            this.checkboxInit();
         },
         append: function(key,data) {
             var options=this.config;
@@ -829,24 +833,29 @@ layui.define(["jquery","laytpl"], function (exports) {
         setChecked: function(arr,isReset) {
             var options=this.config;
             isReset=isReset || false;
-            this.unCheckNodes();
             if(isReset){
+                this.unCheckNodes();
                 options.defaultCheckedKeys=$.extend([],arr);
             }else{
+                this.unCheckNodes(true);
                 arr.forEach(function(val) {
                     if($.inArray(val,options.defaultCheckedKeys)===-1){
                         options.defaultCheckedKeys.push(val);
                     }
                 })
             }
-            
-            
             this.defaultChecked();
+            this.checkboxInit();
         },
-        unCheckNodes: function() {
+        unCheckNodes: function(_internal) {
+            _internal=_internal || false;
             var options=this.config;
             options.elem.find("input.eleTree-hideen[eletree-status='1'],input.eleTree-hideen[eletree-status='2']").each(function(index,item) {
                 $(item).attr("eletree-status","0").prop("checked",false);
+                // 如果外部的取消选中，则所有的记录全部取消
+                if(!_internal){
+                    $(item).removeAttr("data-checked");
+                }
             });
             this.checkboxRender();
         },
@@ -1016,9 +1025,9 @@ layui.define(["jquery","laytpl"], function (exports) {
                         .children(".eleTree-node-content-icon").children(".layui-icon")
                         .addClass("icon-rotate").removeAttr("style");
 
-                    _self.unCheckNodes();
+                    _self.unCheckNodes(true);
                     _self.defaultChecked();
-
+                    _self.checkboxInit();
                 })
             })
         },
