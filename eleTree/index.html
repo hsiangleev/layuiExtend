@@ -444,6 +444,7 @@ eleTree.on("nodeAppend(data1)",function(d) {
         key: 666,
         label: "aaa"
     })
+    console.log(d.newData); // 新增加的节点数据
 })
 // 添加节点之前事件
 eleTree.on("nodeInsertBefore(data1)",function(d) {
@@ -455,6 +456,7 @@ eleTree.on("nodeInsertBefore(data1)",function(d) {
         key: 666,
         label: "aaa"
     })
+    console.log(d.newData); // 新增加的节点数据
 })
 // 添加节点之后事件
 eleTree.on("nodeInsertAfter(data1)",function(d) {
@@ -466,6 +468,7 @@ eleTree.on("nodeInsertAfter(data1)",function(d) {
         key: 666,
         label: "aaa"
     })
+    console.log(d.newData); // 新增加的节点数据
 })
 // 节点被编辑事件
 eleTree.on("nodeEdit(data1)",function(d) {

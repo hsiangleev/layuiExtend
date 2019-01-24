@@ -1,7 +1,7 @@
 /**
  * 基于layui的tree重写
  * author: hsianglee
- * 最近修改时间: 2019/01/21
+ * 最近修改时间: 2019/01/24
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -1093,9 +1093,12 @@ layui.define(["jquery","laytpl"], function (exports) {
                         layui.event.call(node, MOD_NAME, 'node'+val+'('+ _self.filter +')', {
                             node: node,
                             data: nodeData.currentData,
+                            newData: obj,
                             // 重新设置数据
                             setData: function(o) {
-                                _self[s](key,$.extend({},obj,o));
+                                var newObj=$.extend({},obj,o);
+                                this.newData=newObj
+                                _self[s](key,newObj);
                                 isStop=true;
                             },
                             // 停止添加
