@@ -1,7 +1,7 @@
 /**
  * 基于layui的tree重写
  * author: hsianglee
- * 最近修改时间: 2019/01/24
+ * 最近修改时间: 2019/02/21
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -822,7 +822,9 @@ layui.define(["jquery","laytpl"], function (exports) {
                 var obj={};
                 var id=$(item).parent(".eleTree-node-content").parent(".eleTree-node").attr("data-"+options.request.key);
                 id=isNaN(id) ? id : Number(id);
+                var label=$(item).siblings(".eleTree-node-content-label").text();
                 obj[options.request.key]=id;
+                obj[options.request.name]=label;
                 obj.elem=item;
                 obj.othis=$(item).siblings(".eleTree-checkbox").get(0)
                 arr.push(obj);
