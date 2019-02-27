@@ -140,6 +140,7 @@
             <option value="getChecked">获取选中的节点</option>
             <option value="setChecked">设置选中的节点</option>
             <option value="unCheckNodes">取消所有选中的节点</option>
+            <option value="unCheckArrNodes">取消某个选中的节点</option>
             <option value="expandAll">展开所有</option>
             <option value="unExpandAll">合并所有</option>
             <option value="remove">删除节点</option>
@@ -487,6 +488,9 @@ var el6=eleTree.render({
                 },
                 unCheckNodes: function() {
                     el2.unCheckNodes();
+                },
+                unCheckArrNodes: function() {
+                    el2.unCheckArrNodes([24]);
                 },
                 expandAll: function() {
                     el2.expandAll();

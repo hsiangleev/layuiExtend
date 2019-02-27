@@ -69,6 +69,10 @@ layui.define(["jquery","laytpl"], function (exports) {
                 if(options.data.length===0) return;
                 return _self.unCheckNodes.call(_self);
             },
+            unCheckArrNodes: function(data) {
+                if(options.data.length===0) return;
+                return _self.unCheckArrNodes.call(_self,data);
+            },
             expandAll: function() {
                 options.elem.children(".eleTree-node").children(".eleTree-node-group").empty();
                 _self.expandAll.call(_self,options.data,[],1,true);
@@ -849,7 +853,7 @@ layui.define(["jquery","laytpl"], function (exports) {
             this.checkboxInit();
         },
         unCheckNodes: function(_internal) {
-            _internal=_internal || false;
+            _internal=_internal || false;   // _internal: 是否内部调用
             var options=this.config;
             options.elem.find("input.eleTree-hideen[eletree-status='1'],input.eleTree-hideen[eletree-status='2']").each(function(index,item) {
                 $(item).attr("eletree-status","0").prop("checked",false);
@@ -859,6 +863,15 @@ layui.define(["jquery","laytpl"], function (exports) {
                 }
             });
             this.checkboxRender();
+        },
+        unCheckArrNodes: function(arr) {
+            var options=this.config;
+            arr.forEach(function(val,index) {
+                var inp=options.elem.find(".eleTree-node[data-"+options.request.key+"='"+val+"']").children(".eleTree-node-content").children(".eleTree-hideen[eletree-status='1'],.eleTree-hideen[eletree-status='2']")
+                if(inp.length>0){
+                    inp.prop("checked",true).removeAttr("data-checked").siblings(".eleTree-checkbox").trigger("click");
+                }
+            })
         },
         unExpandAll: function() {
             var options=this.config;

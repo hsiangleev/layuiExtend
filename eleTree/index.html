@@ -386,6 +386,7 @@ var el=eleTree.render({
 > el.getChecked(leafOnly, includeHalfChecked)   // 获取选中的节点，接收两个 boolean 类型的参数，1. 是否只是叶子节点，默认值为 false 2. 是否包含半选节点，默认值为 false
 > el.setChecked(arr,isReset) //设置选中的节点，传入数组key值，isReset：是否重新设置选中项，默认false，若为false，则在原有的选中基础上增加选中项
 > el.unCheckNodes() //取消所有选中的节点
+> el.unCheckArrNodes(arr) //取消部分选中的节点(包括半选节点)，arr为id组成的数组
 > el.expandAll() //展开所有
 > el.unExpandAll() //合并所有
 > el.remove(key) //删除节点
