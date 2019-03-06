@@ -1,9 +1,8 @@
  /**
- 
- @Name : layui.step 基于layui的步骤条面板
- * author: hsianglee
+ * @Name: step 基于layui的步骤条面板
+ * @Author: 李祥
+ * @License：MIT
  * 最近修改时间: 2018/11/16
- 
  */
 
 layui.define(["jquery"], function (exports) {

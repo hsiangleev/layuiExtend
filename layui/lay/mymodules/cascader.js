@@ -1,54 +1,8 @@
 /**
- * 基于layui的无限级联选择器
- * author: hsianglee
+ * @Name: 基于layui的无限级联选择器
+ * @Author: 李祥
+ * @License：MIT
  * 最近修改时间: 2018/11/16
- * 使用：
- * layui.cascader({
-        // 必选参数：选择器
-        elem: "#a",
-        // 必选参数：data或url参数二选一，data优先
-        data: [
-            {
-                value: 'BB2',
-                label: 'bb2',
-                children: [
-                    {
-                        value: 'AAA4',
-                        label: 'aaa4',
-                        children: [
-                            {
-                                value: 'AAA4',
-                                label: 'aaa4',
-                            },
-                        ]
-                    },
-                ]
-            }
-        ],
-        // 数据请求地址
-        url: "/aa",
-        // 后台参数返回格式：{
-        //     "Data": data,
-        //     "Code": 0,
-        //     "Msg": "错误！！"
-        // }
-
-        // 可选参数：默认get
-        type: "post",
-        // 可选参数：ajax附带的额外参数
-        where: {},
-        // 可选参数：触发方式，不填或其他都为click, "change": 鼠标移入
-        triggerType: "change",
-        // 可选参数：只显示最后一级,默认false全显示
-        showLastLevels: true,
-        // 可选参数：赋初值，数组形式给出每一块的value值
-        value: ["B", "AA2", "AAA3"],
-        // 可选参数：拿到选择的value值存进数组
-        success: function (data) {
-            console.log(data);
-        }
-    });
- * 
  */
 
 layui.define(["jquery","laytpl","layer"], function (exports) {

@@ -1,9 +1,8 @@
  /**
- 
- @Name : layui.dropdown 基于layui的下拉菜单
- * author: hsianglee
+ * @Name: layui.dropdown 基于layui的下拉菜单
+ * @Author: 李祥
+ * @License：MIT
  * 最近修改时间: 2018/11/16
- 
  */
 
 layui.define(["jquery"], function (exports) {
