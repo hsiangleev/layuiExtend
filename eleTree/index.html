@@ -496,6 +496,7 @@ eleTree.on("nodeRemove(data1)",function(d) {
     </fieldset>
     <p class="red">1. 由于checbox解析直接在内部实现, 并没有使用layui的form模块, 所以不能对树进行form.render()操作</p>
     <p class="red">2. 每次执行reload操作时，需要重新赋值给参数，即 var el=eleTree.render(...);&nbsp;&nbsp; el=el.reload(...);</p>
+    <p class="red">3. 静态数据reload需要重新传data数据，即el2=el2.reload({data: data})</p>
 
 
 

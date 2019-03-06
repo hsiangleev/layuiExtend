@@ -230,7 +230,7 @@ el2.insertAfter(1,{
         </div>
         <div class="reload met">
 <pre class="layui-code code">
- el2=el2.reload();
+ el2=el2.reload({data: data});
 </pre>
         </div>
     </div>
@@ -602,7 +602,7 @@ var el6=eleTree.render({
                     })
                 },
                 reload: function() {
-                    el2=el2.reload();
+                    el2=el2.reload({data: data});
                 }
             }
             
