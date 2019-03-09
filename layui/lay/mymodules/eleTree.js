@@ -131,9 +131,9 @@ layui.define(["jquery","laytpl"], function (exports) {
                                 }
                                 return [
                                     '{{# if(d[i]["'+options.request.checked+'"]) { }}',
-                                        '<input type="checkbox" name="eleTree-node" eleTree-status="1" checked data-checked class="eleTree-hideen ',
+                                        '<input type="checkbox" name="eleTree-node" lay-ignore eleTree-status="1" checked data-checked class="layui-hide eleTree-hideen ',
                                     '{{# }else{ }}',
-                                        '<input type="checkbox" name="eleTree-node" eleTree-status='+status+' class="eleTree-hideen ',
+                                        '<input type="checkbox" name="eleTree-node" lay-ignore eleTree-status='+status+' class="layui-hide eleTree-hideen ',
                                     '{{# } }}',
 
                                     '{{# if(d[i]["'+options.request.disabled+'"]) { }}',
