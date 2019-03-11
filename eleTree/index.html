@@ -82,7 +82,7 @@
         </legend>
     </fieldset>
     <div class="content1">
-        <div class="eleTree ele1"></div>
+        <div class="eleTree ele1" lay-filter="data1"></div>
         <h3>下面就是它对应的代码：</h3>
         <pre class="layui-code pre1">
 <!-- <div class="eleTree ele1"></div> -->
@@ -175,7 +175,7 @@ eleTree.render({
                 <td>renderAfterExpand</td>
                 <td>Boolean</td>
                 <td>是否在第一次展开某个树节点后才渲染其子节点</td>
-                <td>false</td>
+                <td>true</td>
             </tr>
             <tr>
                 <td>highlightCurrent</td>
@@ -211,7 +211,7 @@ eleTree.render({
                 <td>autoExpandParent</td>
                 <td>Boolean</td>
                 <td>展开子节点的时候是否自动展开父节点</td>
-                <td>false</td>
+                <td>true</td>
             </tr>
             <tr>
                 <td>showCheckbox</td>
@@ -494,9 +494,8 @@ eleTree.on("nodeRemove(data1)",function(d) {
             <a name="notice" class="red">注意</a>
         </legend>
     </fieldset>
-    <p class="red">1. 由于checbox解析直接在内部实现, 并没有使用layui的form模块, 所以不能对树进行form.render()操作</p>
-    <p class="red">2. 每次执行reload操作时，需要重新赋值给参数，即 var el=eleTree.render(...);&nbsp;&nbsp; el=el.reload(...);</p>
-    <p class="red">3. 静态数据reload需要重新传data数据，即el2=el2.reload({data: data})</p>
+    <p class="red">1. 每次执行reload操作时，需要重新赋值给参数，即 var el=eleTree.render(...);&nbsp;&nbsp; el=el.reload(...);</p>
+    <p class="red">2. 静态数据reload需要重新传data数据，即el2=el2.reload({data: data})</p>
 
 
 
