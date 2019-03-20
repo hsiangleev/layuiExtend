@@ -708,14 +708,22 @@ var el6=eleTree.render({
                 console.log(d.value);       // 新输入的值
                 console.log(this);          // 与d.node相同
                 // d.stop();                // 取消编辑
-                console.groupEnd();      
+                console.groupEnd();   
+                // 异步修改节点
+                // setTimeout(function() {
+                //     d.async()
+                // },300)
             })
             eleTree.on("nodeRemove(data3)",function(d) {
                 console.group("删除nodeRemove:")
                 console.log(d.data);        // 点击节点对于的数据
                 console.log(d.node);        // 点击的dom节点
                 // d.stop();                // 取消删除
-                console.groupEnd();      
+                console.groupEnd();   
+                // 异步删除节点
+                // setTimeout(function() {
+                //     d.async()
+                // },300)   
             })
             
             

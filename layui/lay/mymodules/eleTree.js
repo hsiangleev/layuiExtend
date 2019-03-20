@@ -1061,8 +1061,8 @@ layui.define(["jquery","laytpl"], function (exports) {
                     '<li class="insertBefore"><a href="javascript:;">插入节点前</a></li>'+
                     '<li class="insertAfter"><a href="javascript:;">插入节点后</a></li>'+
                     '<li class="append"><a href="javascript:;">插入子节点</a></li>' : ""
-                ,$.inArray("edit",options.contextmenuList)!==-1?'<li class="edit"><a href="javascript:;">修改</a></li>':''
-                ,$.inArray("remove",options.contextmenuList)!==-1?'<li class="remove"><a href="javascript:;">删除</a></li>':''
+                ,($.inArray("edit",options.contextmenuList)!==-1 || $.inArray("edit.async",options.contextmenuList)!==-1)?'<li class="edit"><a href="javascript:;">修改</a></li>':''
+                ,($.inArray("remove",options.contextmenuList)!==-1 || $.inArray("remove.async",options.contextmenuList)!==-1)?'<li class="remove"><a href="javascript:;">删除</a></li>':''
             ,'</ul>'].join("");
             this.treeMenu=$(menuStr);
             options.elem.off("contextmenu").on("contextmenu",".eleTree-node-content",function(e) {
@@ -1166,14 +1166,26 @@ layui.define(["jquery","laytpl"], function (exports) {
                                 isStop=true;
                                 $(inpThis).siblings(".eleTree-node-content-label").show();
                                 $(inpThis).remove();
+                            },
+                            async: function() {
+                                if(isStop) return;
+                                // 修改数据
+                                _self.reInitData(eleNode).currentData[options.request.name]=val;
+                                // 修改dom
+                                $(inpThis).siblings(".eleTree-node-content-label").text(val).show();
+                                $(inpThis).remove();
                             }
                         });
-                        if(isStop) return;
-                        // 修改数据
-                        _self.reInitData(eleNode).currentData[options.request.name]=val;
-                        // 修改dom
-                        $(this).siblings(".eleTree-node-content-label").text(val).show();
-                        $(this).remove();
+                        // 不是异步
+                        if($.inArray("edit.async",options.contextmenuList)===-1){
+                            if(isStop) return;
+                            // 修改数据
+                            _self.reInitData(eleNode).currentData[options.request.name]=val;
+                            // 修改dom
+                            $(this).siblings(".eleTree-node-content-label").text(val).show();
+                            $(this).remove();
+                        }
+                            
                     }).on("mousedown",function(e) {
                         // 防止input拖拽
                         e.stopPropagation();
@@ -1191,10 +1203,20 @@ layui.define(["jquery","laytpl"], function (exports) {
                         // 停止添加
                         stop: function() {
                             isStop=true;
+                            return this;
+                        },
+                        async: function() {
+                            if(isStop) return;
+                            _self.remove(key);
+                            return this;
                         }
                     });
-                    if(isStop) return;
-                    _self.remove(key);
+                    // 不是异步
+                    if($.inArray("remove.async",options.contextmenuList)===-1){
+                        if(isStop) return;
+                        _self.remove(key);
+                    }
+                    
                 })
 
                 _self.prevClickEle=$(this);
