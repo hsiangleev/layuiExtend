@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/03/06
+ * 最近修改时间: 2019/03/20
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -1120,9 +1120,12 @@ layui.define(["jquery","laytpl"], function (exports) {
                             newData: obj,
                             // 重新设置数据
                             setData: function(o) {
+                                obj[options.request.key]=Date.now();
+                                obj[options.request.name]="未命名"+_self.nameIndex;
                                 var newObj=$.extend({},obj,o);
                                 this.newData=newObj
                                 _self[s](key,newObj);
+                                _self.nameIndex++;
                                 isStop=true;
                             },
                             // 停止添加
