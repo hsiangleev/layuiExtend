@@ -2,7 +2,7 @@
  * @Name: 基于layui的无限级联选择器
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2018/11/16
+ * 最近修改时间: 2019/03/20
  */
 
 layui.define(["jquery","laytpl","layer"], function (exports) {
@@ -84,7 +84,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
 
             // 显示隐藏第一层的标签
             for(var i=0;i<this.d.length;i++){
-                ("children" in this.d[i])?(
+                ("children" in this.d[i] && this.d[i]["children"].length>0)?(
                     this.domContent.find("ul.urp-cascader-child li").eq(i).find("i").show()
                 ):(
                     this.domContent.find("ul.urp-cascader-child li").eq(i).find("i").hide()
@@ -144,7 +144,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
 
             // 显示隐藏第二层的标签
             for(var i=0;i<this.blockData["children"].length;i++){
-                ("children" in this.blockData["children"][i])?(
+                ("children" in this.blockData["children"][i] && this.blockData["children"][i]["children"].length>0)?(
                     this.domContent.find("ul.urp-cascader-child:gt("+(this.floor)+")").find("li").eq(i).find("i").show()
                 ):(
                     this.domContent.find("ul.urp-cascader-child:gt("+(this.floor)+")").find("li").eq(i).find("i").hide()
@@ -248,7 +248,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
                 self.getBlockData(event,this);
                 $(this).addClass("active").siblings("li").removeClass("active");
                 // 判断当前是否存在子层
-                ("children" in self.blockData)?(
+                ("children" in self.blockData && self.blockData["children"].length>0)?(
                     // 初始化子层
                     self.initChild(triggerData)
                 ):(
