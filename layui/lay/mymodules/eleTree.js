@@ -1057,7 +1057,7 @@ layui.define(["jquery","laytpl"], function (exports) {
             });
             var menuStr=['<ul id="tree-menu">'
                 ,$.inArray("copy",options.contextmenuList)!==-1?'<li class="copy"><a href="javascript:;">复制</a></li>':''
-                ,$.inArray("add",options.contextmenuList)!==-1?'<li class="add"><a href="javascript:;">新增</a></li>'+
+                ,($.inArray("add",options.contextmenuList)!==-1 || $.inArray("add.async",options.contextmenuList)!==-1)?'<li class="add"><a href="javascript:;">新增</a></li>'+
                     '<li class="insertBefore"><a href="javascript:;">插入节点前</a></li>'+
                     '<li class="insertAfter"><a href="javascript:;">插入节点后</a></li>'+
                     '<li class="append"><a href="javascript:;">插入子节点</a></li>' : ""
@@ -1133,9 +1133,12 @@ layui.define(["jquery","laytpl"], function (exports) {
                                 isStop=true;
                             }
                         });
-                        if(isStop) return;
-                        _self[s](key,obj)
-                        _self.nameIndex++;
+                        // 不是异步添加
+                        if($.inArray("add.async",options.contextmenuList)===-1){
+                            if(isStop) return;
+                            _self[s](key,obj)
+                            _self.nameIndex++;
+                        }
                     })
                 })
                 

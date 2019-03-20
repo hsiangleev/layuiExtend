@@ -614,7 +614,7 @@ var el6=eleTree.render({
                 showCheckbox: true,
                 defaultExpandAll: true,
                 draggable: true,
-                contextmenuList: ["copy","add","edit","remove"]
+                contextmenuList: ["copy","add.async","edit","remove"]
             });
             eleTree.on("nodeClick(data3)",function(d) {
                 console.group("节点点击nodeClick:")
@@ -660,6 +660,10 @@ var el6=eleTree.render({
                 //     id: 666,
                 //     label: "aaa"
                 // })
+                setTimeout(function() {
+                    // 异步添加节点
+                    d.setData()
+                },300)
                 console.log(d.newData); // 新增加的节点数据
                 console.groupEnd();      
             })
@@ -673,6 +677,10 @@ var el6=eleTree.render({
                 //     key: 666,
                 //     label: "aaa"
                 // })
+                setTimeout(function() {
+                    // 异步添加节点
+                    d.setData()
+                },300)
                 console.log(d.newData); // 新增加的节点数据
                 console.groupEnd();      
             })
@@ -686,6 +694,10 @@ var el6=eleTree.render({
                 //     key: 666,
                 //     label: "aaa"
                 // })
+                setTimeout(function() {
+                    // 异步添加节点
+                    d.setData()
+                },300)
                 console.log(d.newData); // 新增加的节点数据
                 console.groupEnd();      
             })

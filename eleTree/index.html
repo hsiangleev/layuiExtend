@@ -267,7 +267,8 @@ eleTree.render({
             <tr>
                 <td>contextmenuList</td>
                 <td>Array</td>
-                <td>启用右键菜单，支持的操作有："copy","add","edit","remove"</td>
+                <td>启用右键菜单，支持的操作有："copy","add","edit","remove"
+                    <div class="red">如果需要异步添加节点，则可以使用"add.async"，这种方式必需主动在触发的事件中调用添加数据的方法，即d.setData()，不调用则不会添加节点</div></td>
                 <td>["copy","add","edit","remove"]</td>
             </tr>
             <tr>
