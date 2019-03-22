@@ -407,21 +407,21 @@ eleTree.render({
 })
 // 节点点击事件
 eleTree.on("nodeClick(data1)",function(d) {
-    console.log(d.data);    // 点击节点对于的数据
+    console.log(d.data);    // 点击节点对应的数据
     console.log(d.event);   // event对象
     console.log(d.node);    // 点击的dom节点
     console.log(this);      // 与d.node相同
 }) 
 // input被选中事件
 eleTree.on("nodeChecked(data1)",function(d) {
-    console.log(d.data);    // 点击节点对于的数据
+    console.log(d.data);    // 点击节点对应的数据
     console.log(d.isChecked);   // input是否被选中
     console.log(d.node);    // 点击的dom节点
     console.log(this);      // input对于的dom
 })
 // 鼠标右键事件
 eleTree.on("nodeContextmenu(data1)",function(d) {
-    console.log(d.data);    // 点击节点对于的数据
+    console.log(d.data);    // 点击节点对应的数据
     console.log(d.event);   // event对象
     console.log(d.node);    // 点击的dom节点
     console.log(this);      // 与d.node相同
@@ -436,7 +436,7 @@ eleTree.on("nodeDrag(data1)",function(d) {
 })
 // 添加子节点事件
 eleTree.on("nodeAppend(data1)",function(d) {
-    console.log(d.data);    // 点击节点对于的数据
+    console.log(d.data);    // 点击节点对应的数据
     console.log(d.node);    // 点击的dom节点
     console.log(this);      // 与d.node相同
     d.stop();               // 取消添加
@@ -448,7 +448,7 @@ eleTree.on("nodeAppend(data1)",function(d) {
 })
 // 添加节点之前事件
 eleTree.on("nodeInsertBefore(data1)",function(d) {
-    console.log(d.data);    // 点击节点对于的数据
+    console.log(d.data);    // 点击节点对应的数据
     console.log(d.node);    // 点击的dom节点
     console.log(this);      // 与d.node相同
     d.stop();               // 取消添加
@@ -460,7 +460,7 @@ eleTree.on("nodeInsertBefore(data1)",function(d) {
 })
 // 添加节点之后事件
 eleTree.on("nodeInsertAfter(data1)",function(d) {
-    console.log(d.data);    // 点击节点对于的数据
+    console.log(d.data);    // 点击节点对应的数据
     console.log(d.node);    // 点击的dom节点
     console.log(this);      // 与d.node相同
     d.stop();               // 取消添加
@@ -472,7 +472,7 @@ eleTree.on("nodeInsertAfter(data1)",function(d) {
 })
 // 节点被编辑事件
 eleTree.on("nodeEdit(data1)",function(d) {
-    console.log(d.data);        // 点击节点对于的数据
+    console.log(d.data);        // 点击节点对应的数据
     console.log(d.node);        // 点击的dom节点
     console.log(d.value);       // 新输入的值
     console.log(this);          // 与d.node相同
@@ -480,7 +480,7 @@ eleTree.on("nodeEdit(data1)",function(d) {
 })
 // 节点被删除事件
 eleTree.on("nodeRemove(data1)",function(d) {
-    console.log(d.data);        // 点击节点对于的数据
+    console.log(d.data);        // 点击节点对应的数据
     console.log(d.node);        // 点击的dom节点
     d.stop();                   // 取消删除
 })
