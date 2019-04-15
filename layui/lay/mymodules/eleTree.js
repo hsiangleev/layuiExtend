@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/03/20
+ * 最近修改时间: 2019/04/15
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -233,6 +233,7 @@ layui.define(["jquery","laytpl"], function (exports) {
         },
         renderData: function() {
             var options=this.config;
+            $(this.config.elem).off();  // 取消事件绑定，防止多次绑定事件
             // 渲染第一层
             laytpl(TPL_ELEM(options,0)).render(options.data, function(string){
                 options.elem.html(string).children().show();
@@ -292,7 +293,7 @@ layui.define(["jquery","laytpl"], function (exports) {
             var _self=this;
             if(this.config.data && this.config.data.constructor === Array) this.config.data=[];
             this.config = $.extend({}, this.config, options);
-            $(this.config.elem).off();  // 取消事件绑定，防止多次绑定事件
+            // $(this.config.elem).off();  // 取消事件绑定，防止多次绑定事件
             // reload记录选中的数据
             // this.getChecked().forEach(function(val) {
             //     if($.inArray(val.key,this.config.defaultCheckedKeys)===-1){
@@ -652,11 +653,11 @@ layui.define(["jquery","laytpl"], function (exports) {
             var parentData=oData[arr[0]];
             // 当前节点的data数据
             var d = oData[arr[0]];
-            for(var i = 1; i<arr.length; i++){
-                d = d[options.request.children]?d[options.request.children][arr[i]]:d;
+            for(var j = 1; j<arr.length; j++){
+                d = d[options.request.children]?d[options.request.children][arr[j]]:d;
             }
-            for(var i = 1; i<arr.length-1; i++){
-                parentData = parentData[options.request.children]?parentData[options.request.children][arr[i]]:parentData;
+            for(var k = 1; k<arr.length-1; k++){
+                parentData = parentData[options.request.children]?parentData[options.request.children][arr[k]]:parentData;
             }
 
             return {
@@ -1011,13 +1012,14 @@ layui.define(["jquery","laytpl"], function (exports) {
 
                     // dom互换
                     eleNode.remove();
+                    var floor=null;
                     // 最外层判断
                     if(isTargetOuterMost){
                         target.append(temNode);
-                        var floor=0;
+                        floor=0;
                     }else{
                         target.children(".eleTree-node-group").append(temNode);
-                        var floor=Number(target.attr("eletree-floor"))+1;
+                        floor=Number(target.attr("eletree-floor"))+1;
                     }
                     // 加floor和padding
                     temNode.attr("eletree-floor",String(floor));
@@ -1123,7 +1125,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                                 obj[options.request.key]=Date.now();
                                 obj[options.request.name]="未命名"+_self.nameIndex;
                                 var newObj=$.extend({},obj,o);
-                                this.newData=newObj
+                                this.newData=newObj;
                                 _self[s](key,newObj);
                                 _self.nameIndex++;
                                 isStop=true;
@@ -1136,7 +1138,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                         // 不是异步添加
                         if($.inArray("add.async",options.contextmenuList)===-1){
                             if(isStop) return;
-                            _self[s](key,obj)
+                            _self[s](key,obj);
                             _self.nameIndex++;
                         }
                     })
