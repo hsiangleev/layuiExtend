@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/04/15
+ * 最近修改时间: 2019/04/17
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -336,14 +336,11 @@ layui.define(["jquery","laytpl"], function (exports) {
                     var selectParentsFn=function() {
                         if(!options.checkStrictly){
                             var eleNode1=sibNode.children(".eleTree-node").eq(0);
-                            if(eleNode1.length===0){
-                                _self.checkboxRender();
-                                return;
+                            if(eleNode1.length!==0){
+                                var siblingNode1=eleNode1.siblings(".eleTree-node");
+                                var item1=eleNode1.children(".eleTree-node-content").children(".eleTree-hideen").get(0);
+                                _self.selectParents(item1,eleNode1,siblingNode1);
                             }
-                            var siblingNode1=eleNode1.siblings(".eleTree-node");
-                            var item1=eleNode1.children(".eleTree-node-content").children(".eleTree-hideen").get(0);
-                            _self.selectParents(item1,eleNode1,siblingNode1);
-                            _self.checkboxRender();
                         }
                     }
 
@@ -363,10 +360,10 @@ layui.define(["jquery","laytpl"], function (exports) {
                                 el.css("color","transparent").addClass("leaf-icon");
                             }
                             el.removeClass("lazy-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop").addClass("layui-icon-triangle-r icon-rotate");
-                            _self.checkboxRender();
 
                             // 懒加载子元素选择祖父（待写）
                             selectParentsFn();
+                            _self.checkboxRender();
                         })
                     }else{
                         var eletreeStatus=eleTreeNodeContent.children("input.eleTree-hideen").attr("eletree-status");
@@ -375,6 +372,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                         });
                         // 选择祖父
                         selectParentsFn();
+                        _self.checkboxRender();
                     }
                 }
                 // 显示隐藏没有搜索类的
