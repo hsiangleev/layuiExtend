@@ -332,6 +332,21 @@ layui.define(["jquery","laytpl"], function (exports) {
                 if(sibNode.children(".eleTree-node").length===0){
                     var floor=Number(eleNode.attr("eletree-floor"))+1;
 
+                    // 选择祖父
+                    var selectParentsFn=function() {
+                        if(!options.checkStrictly){
+                            var eleNode1=sibNode.children(".eleTree-node").eq(0);
+                            if(eleNode1.length===0){
+                                _self.checkboxRender();
+                                return;
+                            }
+                            var siblingNode1=eleNode1.siblings(".eleTree-node");
+                            var item1=eleNode1.children(".eleTree-node-content").children(".eleTree-hideen").get(0);
+                            _self.selectParents(item1,eleNode1,siblingNode1);
+                            _self.checkboxRender();
+                        }
+                    }
+
                     var data=_self.reInitData(eleNode);
                     var d=data.currentData;
                     // 是否懒加载
@@ -351,23 +366,15 @@ layui.define(["jquery","laytpl"], function (exports) {
                             _self.checkboxRender();
 
                             // 懒加载子元素选择祖父（待写）
+                            selectParentsFn();
                         })
                     }else{
                         var eletreeStatus=eleTreeNodeContent.children("input.eleTree-hideen").attr("eletree-status");
                         d[options.request.children] && d[options.request.children].length>0 && laytpl(TPL_ELEM(options,floor,eletreeStatus)).render(d[options.request.children], function(string){
                             sibNode.append(string);
                         });
-
                         // 选择祖父
-                        var eleNode1=sibNode.children(".eleTree-node").eq(0);
-                        if(eleNode1.length===0){
-                            _self.checkboxRender();
-                            return;
-                        }
-                        var siblingNode1=eleNode1.siblings(".eleTree-node");
-                        var item1=eleNode1.children(".eleTree-node-content").children(".eleTree-hideen").get(0);
-                        _self.selectParents(item1,eleNode1,siblingNode1);
-                        _self.checkboxRender();
+                        selectParentsFn();
                     }
                 }
                 // 显示隐藏没有搜索类的
