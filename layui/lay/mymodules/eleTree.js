@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/04/17
+ * 最近修改时间: 2019/04/23
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -350,10 +350,16 @@ layui.define(["jquery","laytpl"], function (exports) {
                     if(options.lazy && el.hasClass("lazy-icon")){
                         el.removeClass("layui-icon-triangle-r").addClass("layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop");
                         options.load(d,function(getData) {
-                            d[options.request.children]=getData;
+                            // 如果原来有数据则合并，没有则赋值
+                            if(d[options.request.children]){
+                                d[options.request.children]=d[options.request.children].concat(getData);
+                            }else{
+                                d[options.request.children]=getData;
+                            }
                             var eletreeStatus=eleTreeNodeContent.children("input.eleTree-hideen").attr("eletree-status");
                             if(d[options.request.children] && d[options.request.children].length>0){
-                                laytpl(TPL_ELEM(options,floor,eletreeStatus)).render(d[options.request.children], function(string){
+                                // 只渲染获取到的数据
+                                laytpl(TPL_ELEM(options,floor,eletreeStatus)).render(getData, function(string){
                                     sibNode.append(string).children().show("fast");
                                 });
                             }else{
@@ -761,16 +767,32 @@ layui.define(["jquery","laytpl"], function (exports) {
                     d[obj.i][options.request.children]=[data];
                 }
                 var arr=d[obj.i][options.request.children];
+                var icon=node.children(".eleTree-node-content").find(".eleTree-node-content-icon .layui-icon");
                 // 添加之后长度为1，则原来没有三角，添加三角
                 if(arr.length===1){
-                    node.children(".eleTree-node-content").find(".eleTree-node-content-icon .layui-icon").removeAttr("style").addClass("icon-rotate");
+                    icon.removeAttr("style");
                 }
-                var len=arr.length;
-                var eletreeStatus=node.children(".eleTree-node-content").children("input.eleTree-hideen").attr("eletree-status");
-                eletreeStatus=eletreeStatus==="2" ? "0" : eletreeStatus;
-                node.length!==0 && laytpl(TPL_ELEM(options,floor,eletreeStatus)).render([arr[len-1]], function(string){
-                    node.children(".eleTree-node-group").append(string).children().show();
-                }); 
+                // 判断原来是否没有展开
+                if(!icon.hasClass("icon-rotate")){
+                    var expandOnClickNode=options.expandOnClickNode?node.children(".eleTree-node-content"):node.children(".eleTree-node-content").children(".eleTree-node-content-icon");
+                    expandOnClickNode.trigger("click");
+                }
+                // 判断节点是否已存在
+                var isExist=false;
+                node.children(".eleTree-node-group").children(".eleTree-node").each(function(index,item){
+                    if(data[options.request.key]==$(item).data(options.request.key)){
+                        isExist=true;
+                    }
+                })
+                if(!isExist){
+                    var len=arr.length;
+                    var eletreeStatus=node.children(".eleTree-node-content").children("input.eleTree-hideen").attr("eletree-status");
+                    eletreeStatus=eletreeStatus==="2" ? "0" : eletreeStatus;
+                    node.length!==0 && laytpl(TPL_ELEM(options,floor,eletreeStatus)).render([arr[len-1]], function(string){
+                        node.children(".eleTree-node-group").append(string).children().show();
+                    }); 
+                }
+                
             });
             this.checkboxRender();
         },
@@ -1111,6 +1133,9 @@ layui.define(["jquery","laytpl"], function (exports) {
                 var obj={};
                 obj[options.request.key]=Date.now();
                 obj[options.request.name]="未命名"+_self.nameIndex;
+                if(options.lazy){
+                    obj[options.request.isLeaf]=true;
+                }
                 
                 var arr=["Append","InsertBefore","InsertAfter"];
                 arr.forEach(function(val) {
@@ -1129,6 +1154,9 @@ layui.define(["jquery","laytpl"], function (exports) {
                             setData: function(o) {
                                 obj[options.request.key]=Date.now();
                                 obj[options.request.name]="未命名"+_self.nameIndex;
+                                if(options.lazy){
+                                    obj[options.request.isLeaf]=true;
+                                }
                                 var newObj=$.extend({},obj,o);
                                 this.newData=newObj;
                                 _self[s](key,newObj);
