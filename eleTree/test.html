@@ -186,6 +186,11 @@ el2.setChecked([12])
 el2.unCheckNodes();
 </pre>
         </div>
+        <div class="unCheckArrNodes met">
+<pre class="layui-code code">
+el2.unCheckArrNodes(22,24);
+</pre>
+        </div>
         <div class="expandAll met">
 <pre class="layui-code code">
 el2.expandAll();
@@ -563,13 +568,13 @@ var el6=eleTree.render({
                     console.log(el2.getChecked(true,false));
                 },
                 setChecked: function() {
-                    el2.setChecked([12])
+                    el2.setChecked([12]);
                 },
                 unCheckNodes: function() {
                     el2.unCheckNodes();
                 },
                 unCheckArrNodes: function() {
-                    el2.unCheckArrNodes([24]);
+                    el2.unCheckArrNodes([22,24]);
                 },
                 expandAll: function() {
                     el2.expandAll();
