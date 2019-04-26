@@ -543,7 +543,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                             var f=function(eleP) {
                                 if(options.autoExpandParent){
                                     eleP.parents(".eleTree-node").each(function(i,item) {
-                                        if($(item).attr("data-"+options.request.key)){
+                                        if($(item).data(options.request.key)){
                                             $(item).children(".eleTree-node-group").siblings(".eleTree-node-content").children(".eleTree-node-content-icon").children(".layui-icon").addClass("icon-rotate");
                                             $(item).children(".eleTree-node-group").children().show();
                                         }
@@ -551,8 +551,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                                 }
                             }
                             // 展开指定id项
-                            var id=el.parent(".eleTree-node").attr("data-"+options.request.key);
-                            id=isNaN(id) ? id : Number(id);
+                            var id=el.parent(".eleTree-node").data(options.request.key);
                             if($.inArray(id,options.defaultExpandedKeys)!==-1){
                                 // 直接展开子节点
                                 el.siblings(".eleTree-node-content").children(".eleTree-node-content-icon").children(".layui-icon").addClass("icon-rotate");
@@ -562,8 +561,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                             }else{
                                 // 如当前节点的子节点有展开项，则展开当前子节点的祖父层
                                 el.children(".eleTree-node").each(function(index, item) {
-                                    var id=$(item).attr("data-"+options.request.key);
-                                    id=isNaN(id) ? id : Number(id);
+                                    var id=$(item).data(options.request.key);
                                     if($.inArray(id,options.defaultExpandedKeys)!==-1){
                                         f($(item));
                                         return false;
@@ -609,7 +607,7 @@ layui.define(["jquery","laytpl"], function (exports) {
             }
             arr.forEach(function(val,index) {
                 var nodeContent=options.elem.find("[data-"+options.request.key+"='"+val+"']").children(".eleTree-node-content");
-                _self.checkedOneNode(nodeContent);
+                nodeContent.length>0 && _self.checkedOneNode(nodeContent);
             })
             this.checkboxInit();
         },
@@ -683,7 +681,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                     len: data.length
                 }
                 for(;obj.i<obj.len;obj.i++){
-                    if(data[obj.i][options.request.key]!==key){
+                    if(data[obj.i][options.request.key]!=key){
                         if(data[obj.i][options.request.children] && data[obj.i][options.request.children].length>0){
                             fn(data[obj.i][options.request.children]);
                         }
@@ -710,7 +708,6 @@ layui.define(["jquery","laytpl"], function (exports) {
                 }); 
                 _self.unCheckNodes(true);
                 _self.defaultChecked();
-                _self.checkboxInit();
             });
         },
         updateKeySelf: function(key,data) {
@@ -845,8 +842,7 @@ layui.define(["jquery","laytpl"], function (exports) {
             }
             el.each(function(index,item) {
                 var obj={};
-                var id=$(item).parent(".eleTree-node-content").parent(".eleTree-node").attr("data-"+options.request.key);
-                id=isNaN(id) ? id : Number(id);
+                var id=$(item).parent(".eleTree-node-content").parent(".eleTree-node").data(options.request.key);
                 var label=$(item).siblings(".eleTree-node-content-label").text();
                 obj[options.request.key]=id;
                 obj[options.request.name]=label;
@@ -1152,8 +1148,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                     var s=val[0].toLocaleLowerCase()+val.slice(1,val.length);
                     $("#tree-menu li."+s).off().on("click",function(e) {
                         var node=$(that).parent(".eleTree-node");
-                        var key=node.attr("data-"+options.request.key);
-                        key=isNaN(key) ? key : Number(key);
+                        var key=node.data(options.request.key);
                         var isStop=false;
                         var s=val[0].toLocaleLowerCase()+val.slice(1,val.length);
                         layui.event.call(node, MOD_NAME, 'node'+val+'('+ _self.filter +')', {
@@ -1192,8 +1187,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                     e.stopPropagation();
                     $("#tree-menu").hide().remove();
                     var node=$(that).parent(".eleTree-node");
-                    var key=node.attr("data-"+options.request.key);
-                    key=isNaN(key) ? key : Number(key);
+                    var key=node.data(options.request.key);
                     var label=$(that).children(".eleTree-node-content-label").hide();
                     var text=label.text();
                     var inp="<input type='text' value='"+text+"' class='eleTree-node-content-input' />";
@@ -1239,8 +1233,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                 // 删除
                 $("#tree-menu li.remove").off().on("click",function(e) {
                     var node=$(that).parent(".eleTree-node");
-                    var key=node.attr("data-"+options.request.key);
-                    key=isNaN(key) ? key : Number(key);
+                    var key=node.data(options.request.key);
                     var isStop=false;
                     layui.event.call(node, MOD_NAME, 'nodeRemove('+ _self.filter +')', {
                         node: node,
