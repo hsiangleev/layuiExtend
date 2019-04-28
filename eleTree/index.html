@@ -268,9 +268,10 @@ eleTree.render({
             <tr>
                 <td>contextmenuList</td>
                 <td>Array</td>
-                <td>启用右键菜单，支持的操作有："copy","add","edit","remove"
-                    <div class="red">如果需要异步操作节点，则可以使用".async"做后缀，如"add.async，edit.async，remove.async"，这种方式必需主动在触发的事件中调用相关的方法，不调用则不生效</div>
+                <td>1. 启用右键菜单，内置的操作有："copy","add","edit","remove"
+                    <div class="red">2. 如果需要异步操作节点，则可以使用".async"做后缀，如"add.async，edit.async，remove.async"，这种方式必需主动在触发的事件中调用相关的方法，不调用则不生效</div>
                     <div class="red">add.async需调用d.setData()，edit.async和remove.async则需调用d.async()</div>
+                    3. 增加自定义菜单功能，如传入对象{eventName: "test", text: "test"}，简写为字符串test，eventName代表回调事件名，node加eventName的首字母大写，例如(nodeTest)，text为右键显示的文字
                 </td>
                 <td>["copy","add","edit","remove"]</td>
             </tr>
@@ -491,6 +492,14 @@ eleTree.on("nodeRemove(data1)",function(d) {
     console.log(d.node);        // 点击的dom节点
     d.stop();                   // 取消删除
 })
+// 自定义右键菜单回调
+eleTree.on("nodeTest(data3)",function(d) {
+    console.group("自定义右键菜单回调nodeTest:")
+    console.log(d.data);    // 点击节点对于的数据
+    console.log(d.node);    // 点击的dom节点
+    console.log(this);      // 与d.node相同
+    console.groupEnd();      
+}) 
     </pre> 
     
     <fieldset class="layui-elem-field layui-field-title site-title">

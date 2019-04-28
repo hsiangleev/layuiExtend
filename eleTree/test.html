@@ -121,6 +121,7 @@
             <input type="checkbox" name="opera" autocomplete="off"  lay-filter="menuList" title="add" lay-skin="primary">
             <input type="checkbox" name="opera" autocomplete="off"  lay-filter="menuList" title="edit" lay-skin="primary">
             <input type="checkbox" name="opera" autocomplete="off"  lay-filter="menuList" title="remove" lay-skin="primary">
+            <input type="checkbox" name="opera" autocomplete="off"  lay-filter="menuList" title="test" lay-skin="primary">
         </div> 
         <!-- <div class="inp"><input type="checkbox" name="opera" lay-filter="test" title="defaultExpandedKeys" lay-skin="primary"></div>  -->
         <!-- <div class="inp"><input type="checkbox" name="opera" lay-filter="test" title="defaultCheckedKeys" lay-skin="primary"></div>  -->
@@ -620,7 +621,7 @@ var el6=eleTree.render({
                 showCheckbox: true,
                 defaultExpandAll: true,
                 draggable: true,
-                contextmenuList: ["copy","add.async","edit","remove"]
+                contextmenuList: ["copy","add.async","edit","remove",{eventName: "test", text: "测试"}]
             });
             eleTree.on("nodeClick(data3)",function(d) {
                 console.group("节点点击nodeClick:")
@@ -731,7 +732,14 @@ var el6=eleTree.render({
                 //     d.async()
                 // },300)   
             })
-            
+            // 自定义右键菜单回调
+            eleTree.on("nodeTest(data3)",function(d) {
+                console.group("自定义右键菜单回调nodeTest:")
+                console.log(d.data);    // 点击节点对于的数据
+                console.log(d.node);    // 点击的dom节点
+                console.log(this);      // 与d.node相同
+                console.groupEnd();      
+            }) 
             
             var el4=eleTree.render({
                 elem: '.ele4',

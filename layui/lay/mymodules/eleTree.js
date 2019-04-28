@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/04/26
+ * 最近修改时间: 2019/04/28
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -1090,6 +1090,16 @@ layui.define(["jquery","laytpl"], function (exports) {
             $(document).on("click",function() {
                 $("#tree-menu").hide().remove();
             });
+
+            var customizeMenu=[];   // 用户自定义的
+            var internalMenu=["copy","add","add.async","insertBefore","insertAfter","append","edit","edit.async","remove","remove.async"];  // 系统自带的
+            var customizeStr='';
+            options.contextmenuList.forEach(function(val) {
+                if($.inArray(val,internalMenu)===-1){
+                    customizeMenu.push(val);
+                    customizeStr+='<li class="'+(val.eventName || val)+'"><a href="javascript:;">'+(val.text || val)+'</a></li>';
+                }
+            })
             var menuStr=['<ul id="tree-menu">'
                 ,$.inArray("copy",options.contextmenuList)!==-1?'<li class="copy"><a href="javascript:;">复制</a></li>':''
                 ,($.inArray("add",options.contextmenuList)!==-1 || $.inArray("add.async",options.contextmenuList)!==-1)?'<li class="add"><a href="javascript:;">新增</a></li>'+
@@ -1098,6 +1108,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                     '<li class="append"><a href="javascript:;">插入子节点</a></li>' : ""
                 ,($.inArray("edit",options.contextmenuList)!==-1 || $.inArray("edit.async",options.contextmenuList)!==-1)?'<li class="edit"><a href="javascript:;">修改</a></li>':''
                 ,($.inArray("remove",options.contextmenuList)!==-1 || $.inArray("remove.async",options.contextmenuList)!==-1)?'<li class="remove"><a href="javascript:;">删除</a></li>':''
+                ,customizeStr
             ,'</ul>'].join("");
             this.treeMenu=$(menuStr);
             options.elem.off("contextmenu").on("contextmenu",".eleTree-node-content",function(e) {
@@ -1112,8 +1123,8 @@ layui.define(["jquery","laytpl"], function (exports) {
 
                 // 菜单位置
                 $(document.body).after(_self.treeMenu);
-                $("#tree-menu li.insertBefore,#tree-menu li.insertAfter,#tree-menu li.append").hide();
-                $("#tree-menu li.copy,#tree-menu li.add,#tree-menu li.edit,#tree-menu li.remove").show();
+                $("#tree-menu").find("li.append,li.insertAfter,li.insertBefore").hide();
+                $("#tree-menu").find(":not(li.append,li.insertAfter,li.insertBefore)").show();
                 $("#tree-menu").css({
                     left: e.pageX,
                     top: e.pageY
@@ -1132,7 +1143,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                 // 新增
                 $("#tree-menu li.add").off().on("click",function(e) {
                     e.stopPropagation();
-                    $(this).hide().siblings("li.copy,li.edit,li.remove").hide();
+                    $(this).hide().siblings("li:not(.append,.insertAfter,.insertBefore)").hide();
                     $(this).siblings(".append,li.insertAfter,li.insertBefore").show();
                 })
                 // 添加的默认数据
@@ -1255,6 +1266,19 @@ layui.define(["jquery","laytpl"], function (exports) {
                         _self.remove(key);
                     }
                     
+                })
+
+                // 自定义菜单回调
+                customizeMenu.forEach(function(val) {
+                    var text=val.eventName || val;
+                    $("#tree-menu li."+text).off().on("click",function() {
+                        var node=$(that).parent(".eleTree-node");
+                        var isStop=false;
+                        layui.event.call(node, MOD_NAME, 'node'+text.replace(text.charAt(0),text.charAt(0).toUpperCase())+'('+ _self.filter +')', {
+                            node: node,
+                            data: nodeData.currentData,
+                        });
+                    });
                 })
 
                 _self.prevClickEle=$(this);
