@@ -448,7 +448,7 @@ eleTree.on("nodeAppend(data1)",function(d) {
     console.log(d.node);    // 点击的dom节点
     console.log(this);      // 与d.node相同
     d.stop();               // 取消添加
-    d.setData({             // 自定义数据
+    d.setData({             // 自定义数据（异步操作必须调用之后才会添加数据，如果不需要修改值，可以不传参数）
         key: 666,
         label: "aaa"
     })
@@ -460,7 +460,7 @@ eleTree.on("nodeInsertBefore(data1)",function(d) {
     console.log(d.node);    // 点击的dom节点
     console.log(this);      // 与d.node相同
     d.stop();               // 取消添加
-    d.setData({             // 自定义数据
+    d.setData({             // 自定义数据（异步操作必须调用之后才会添加数据，如果不需要修改值，可以不传参数）
         key: 666,
         label: "aaa"
     })
@@ -472,7 +472,7 @@ eleTree.on("nodeInsertAfter(data1)",function(d) {
     console.log(d.node);    // 点击的dom节点
     console.log(this);      // 与d.node相同
     d.stop();               // 取消添加
-    d.setData({             // 自定义数据
+    d.setData({             // 自定义数据（异步操作必须调用之后才会添加数据，如果不需要修改值，可以不传参数）
         key: 666,
         label: "aaa"
     })
@@ -484,12 +484,14 @@ eleTree.on("nodeEdit(data1)",function(d) {
     console.log(d.node);        // 点击的dom节点
     console.log(d.value);       // 新输入的值
     console.log(this);          // 与d.node相同
+    d.async();                  // 异步操作必须调用之后才会修改
     d.stop();                   // 取消编辑
 })
 // 节点被删除事件
 eleTree.on("nodeRemove(data1)",function(d) {
     console.log(d.data);        // 点击节点对应的数据
     console.log(d.node);        // 点击的dom节点
+    d.async();                  // 异步操作必须调用之后才会删除
     d.stop();                   // 取消删除
 })
 // 自定义右键菜单回调

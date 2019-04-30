@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/04/28
+ * 最近修改时间: 2019/04/30
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -1162,34 +1162,80 @@ layui.define(["jquery","laytpl"], function (exports) {
                         var key=node.data(options.request.key);
                         var isStop=false;
                         var s=val[0].toLocaleLowerCase()+val.slice(1,val.length);
-                        layui.event.call(node, MOD_NAME, 'node'+val+'('+ _self.filter +')', {
-                            node: node,
-                            data: nodeData.currentData,
-                            newData: obj,
-                            // 重新设置数据
-                            setData: function(o) {
-                                obj[options.request.key]=Date.now();
-                                obj[options.request.name]="未命名"+_self.nameIndex;
-                                if(options.lazy){
-                                    obj[options.request.isLeaf]=true;
-                                }
-                                var newObj=$.extend({},obj,o);
-                                this.newData=newObj;
-                                _self[s](key,newObj);
-                                _self.nameIndex++;
-                                isStop=true;
-                            },
-                            // 停止添加
-                            stop: function() {
-                                isStop=true;
+                        // 每次只能添加一条数据，不可以批量添加
+                        _self[s](key,obj);
+                        var nodeArr=[];
+                        node.children(".eleTree-node-group").children(".eleTree-node").each(function(i,itemNode) {
+                            nodeArr.push(itemNode);
+                        })
+                        node.siblings(".eleTree-node").each(function(i,itemNode) {
+                            nodeArr.push(itemNode);
+                        })
+                        $.each(nodeArr, function(i,itemNode) {
+                            if(obj[options.request.key]===$(itemNode).data(options.request.key)){
+                                var label=$(itemNode).children(".eleTree-node-content").children(".eleTree-node-content-label").hide();
+                                var text=label.text();
+                                var inp="<input type='text' value='"+obj[options.request.name]+"' class='eleTree-node-content-input' />";
+                                label.after(inp);
+
+                                label.siblings(".eleTree-node-content-input").focus().off().on("blur",function() {
+                                    var v=$(this).val();
+                                    obj[options.request.name]=v;
+                                    var inpThis=this;
+
+                                    layui.event.call(node, MOD_NAME, 'node'+val+'('+ _self.filter +')', {
+                                        node: node,
+                                        data: nodeData.currentData,
+                                        newData: obj,
+                                        // 重新设置数据
+                                        setData: function(o) {
+                                            // obj[options.request.key]=Date.now();
+                                            obj[options.request.name]=v;
+                                            if(options.lazy){
+                                                obj[options.request.isLeaf]=true;
+                                            }
+                                            var newObj=$.extend({},obj,o);
+                                            this.newData=newObj;
+                                            // 修改数据
+                                            var d=_self.reInitData($(itemNode)).currentData;
+                                            d[options.request.name]=newObj[options.request.name];
+                                            d[options.request.key]=newObj[options.request.key];
+                                            // 修改dom
+                                            $(inpThis).siblings(".eleTree-node-content-label").text(newObj[options.request.name]).show();
+                                            $(itemNode).attr("data-"+options.request.key,newObj[options.request.key]);  // 改变页面上面的显示的key，之后可以获取dom
+                                            $(itemNode).data(options.request.key,newObj[options.request.key]);          // 改变data数据，之后可以通过data获取key
+                                            $(inpThis).remove();
+            
+                                            _self.nameIndex++;
+                                            isStop=true;
+                                        },
+                                        // 停止添加
+                                        stop: function() {
+                                            isStop=true;
+                                            this.newData={};
+                                            _self.remove(obj[options.request.key]);
+                                        }
+                                    });
+
+                                    // 不是异步添加
+                                    if($.inArray("add.async",options.contextmenuList)===-1){
+                                        if(isStop) return;
+                                        // 修改数据
+                                        _self.reInitData($(itemNode)).currentData[options.request.name]=v;
+                                        // 修改dom
+                                        $(this).siblings(".eleTree-node-content-label").text(v).show();
+                                        $(this).remove();
+
+                                        _self.nameIndex++;
+                                    }
+                                }).on("mousedown",function(e) {
+                                    // 防止input拖拽
+                                    e.stopPropagation();
+                                }).on("click",function(e) {
+                                    e.stopPropagation();
+                                })
                             }
-                        });
-                        // 不是异步添加
-                        if($.inArray("add.async",options.contextmenuList)===-1){
-                            if(isStop) return;
-                            _self[s](key,obj);
-                            _self.nameIndex++;
-                        }
+                        })
                     })
                 })
                 
