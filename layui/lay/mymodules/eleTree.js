@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/04/30
+ * 最近修改时间: 2019/05/08
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -746,6 +746,21 @@ layui.define(["jquery","laytpl"], function (exports) {
         },
         append: function(key,data) {
             var options=this.config;
+            // 如果不传key，则直接添加到根节点
+            if(typeof key==="object" && key!==null){
+                data=key;
+                key=null;
+            }
+            if(key===null || key===""){
+                options.data.push(data);
+                laytpl(TPL_ELEM(options,0,"0")).render([data], function(string){
+                    $(options.elem).append(string);
+                    $(options.elem).children(".eleTree-node:last").show();
+                }); 
+                this.checkboxRender();
+                return;
+            }
+            // 传key则添加到子节点
             var node=options.elem.find("[data-"+options.request.key+"='"+key+"']");
             var floor=Number(node.attr("eletree-floor"))+1;
             // 数据更新
