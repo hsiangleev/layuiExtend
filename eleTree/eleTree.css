@@ -22,6 +22,7 @@
     cursor: pointer;
     height: 26px;
     line-height: 1.3;
+    white-space: nowrap;
 }
 .eleTree-node-content:hover,
 .eleTree-node-content.eleTree-node-content-active{
