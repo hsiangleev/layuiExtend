@@ -1402,7 +1402,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                 return v===false;
             })){
                 laytpl(TPL_NoText()).render(options, function(string){
-                    options.elem.append(string);
+                    options.elem.html(string);
                 }); 
             }else{
                 options.elem.children(".eleTree-noText").remove();
