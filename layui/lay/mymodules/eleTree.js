@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/05/08
+ * 最近修改时间: 2019/05/20
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -97,7 +97,7 @@ layui.define(["jquery","laytpl"], function (exports) {
     var TPL_ELEM=function(options,floor,parentStatus) {
         return [
             '{{# for(var i=0;i<d.length;i++){ }}',
-                '<div class="eleTree-node" data-'+options.request.key+'="{{d[i]["'+options.request.key+'"]}}" eletree-floor="'+floor+'" style="display: none;">',
+                '<div class="eleTree-node {{# if(!d[i].visible){ }}eleTree-search-hide{{# } }}" data-'+options.request.key+'="{{d[i]["'+options.request.key+'"]}}" eletree-floor="'+floor+'" style="display: none;">',
                     '<div class="eleTree-node-content" style="padding-left: '+(options.indent*floor)+'px;">',
                         '<span class="eleTree-node-content-icon">',
                             '<i class="layui-icon layui-icon-triangle-r ',
@@ -1383,11 +1383,11 @@ layui.define(["jquery","laytpl"], function (exports) {
                         el.hide().addClass("eleTree-search-hide");
                     }
                     // 删除子层属性
-                    if(val[options.request.children] && val[options.request.children].length>0){
-                        val[options.request.children].forEach(function(v,i) {
-                            delete v.visible;
-                        })
-                    }
+                    // if(val[options.request.children] && val[options.request.children].length>0){
+                    //     val[options.request.children].forEach(function(v,i) {
+                    //         delete v.visible;
+                    //     })
+                    // }
                 })
             }
             traverse(data);
@@ -1395,17 +1395,20 @@ layui.define(["jquery","laytpl"], function (exports) {
             var arr=[];
             data.forEach(function(val) {
                 arr.push(val.visible);
-                delete val.visible;
+                // delete val.visible;
             })
+            var isNotext=options.elem.children(".eleTree-noText");
             // 如果第一层的所有的都隐藏，则显示文本
             if(arr.every(function(v) {
                 return v===false;
             })){
-                laytpl(TPL_NoText()).render(options, function(string){
-                    options.elem.html(string);
-                }); 
+                if(isNotext.length===0){
+                    laytpl(TPL_NoText()).render(options, function(string){
+                        options.elem.append(string);
+                    });
+                }
             }else{
-                options.elem.children(".eleTree-noText").remove();
+                isNotext.remove();
             }
         }
     }
