@@ -97,7 +97,7 @@ layui.define(["jquery","laytpl"], function (exports) {
     var TPL_ELEM=function(options,floor,parentStatus) {
         return [
             '{{# for(var i=0;i<d.length;i++){ }}',
-                '<div class="eleTree-node {{# if(!d[i].visible){ }}eleTree-search-hide{{# } }}" data-'+options.request.key+'="{{d[i]["'+options.request.key+'"]}}" eletree-floor="'+floor+'" style="display: none;">',
+                '<div class="eleTree-node {{# if(d[i].visible===false){ }}eleTree-search-hide{{# } }}" data-'+options.request.key+'="{{d[i]["'+options.request.key+'"]}}" eletree-floor="'+floor+'" style="display: none;">',
                     '<div class="eleTree-node-content" style="padding-left: '+(options.indent*floor)+'px;">',
                         '<span class="eleTree-node-content-icon">',
                             '<i class="layui-icon layui-icon-triangle-r ',
