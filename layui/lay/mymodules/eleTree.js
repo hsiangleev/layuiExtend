@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/05/20
+ * 最近修改时间: 2019/05/22
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -419,11 +419,10 @@ layui.define(["jquery","laytpl"], function (exports) {
 
                 if(inp.checked){
                     // 反选自身
-                    $(inp).prop("checked",false).attr("eleTree-status","0");
+                    $(inp).prop("checked",false).attr("eleTree-status","0").removeAttr("data-checked");
                     // 点击祖父层选中子孙层
                     if(!options.checkStrictly){
-                        childNode.prop("checked",false);
-                        childNode.attr("eleTree-status","0");
+                        childNode.prop("checked",false).attr("eleTree-status","0").removeAttr("data-checked");
                     }
                     
                 }else{

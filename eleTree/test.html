@@ -179,7 +179,7 @@ console.log(el2.getChecked(true,false));
         </div>
         <div class="setChecked met">
 <pre class="layui-code code">
-el2.setChecked([12])
+el2.setChecked([12],true)
 </pre>
         </div>
         <div class="unCheckNodes met">
@@ -569,7 +569,7 @@ var el6=eleTree.render({
                     console.log(el2.getChecked(true,false));
                 },
                 setChecked: function() {
-                    el2.setChecked([12]);
+                    el2.setChecked([12],true);
                 },
                 unCheckNodes: function() {
                     el2.unCheckNodes();
