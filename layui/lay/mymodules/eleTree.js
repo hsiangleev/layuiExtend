@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/05/22
+ * 最近修改时间: 2019/05/28
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -314,13 +314,6 @@ layui.define(["jquery","laytpl"], function (exports) {
                 var eleNode=eleTreeNodeContent.parent(".eleTree-node");
                 var sibNode=eleTreeNodeContent.siblings(".eleTree-node-group");
                 var el=eleTreeNodeContent.children(".eleTree-node-content-icon").children(".layui-icon");
-
-                // 添加active背景
-                if(_self.prevClickEle) _self.prevClickEle.removeClass("eleTree-node-content-active");
-                if(options.highlightCurrent) eleTreeNodeContent.addClass("eleTree-node-content-active");
-                _self.prevClickEle=eleTreeNodeContent;
-
-                
 
                 if(el.hasClass("icon-rotate")){
                     // 合并
@@ -935,6 +928,12 @@ layui.define(["jquery","laytpl"], function (exports) {
             // 节点被点击的回调事件
             options.elem.on("click",".eleTree-node-content",function(e) {
                 var eleNode=$(this).parent(".eleTree-node");
+                var eleTreeNodeContent=eleNode.children(".eleTree-node-content");
+                // 添加active背景
+                if(_self.prevClickEle) _self.prevClickEle.removeClass("eleTree-node-content-active");
+                if(options.highlightCurrent) eleTreeNodeContent.addClass("eleTree-node-content-active");
+                _self.prevClickEle=eleTreeNodeContent;
+
                 $("#tree-menu").hide().remove();
                 layui.event.call(eleNode, MOD_NAME, 'nodeClick('+ _self.filter +')', {
                     node: eleNode,
