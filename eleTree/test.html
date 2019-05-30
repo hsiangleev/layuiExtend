@@ -152,6 +152,7 @@
             <option value="insertBefore">添加到节点之前</option>
             <option value="insertAfter">添加到节点之后</option>
             <option value="reload">重新加载树</option>
+            <option value="getAllNodeData">获取所有节点数据</option>
         </select>  
         <div class="updateKeyChildren met">
 <pre class="layui-code code ">
@@ -240,6 +241,14 @@ el2.insertAfter(1,{
  el2=el2.reload({data: data});
 </pre>
         </div>
+        <div class="getAllNodeData met">
+<pre class="layui-code code">
+getAllNodeData: function() {
+    console.log(el2.getAllNodeData())
+}
+</pre>
+        </div>
+        
     </div>
     
     <fieldset class="layui-elem-field layui-field-title site-title">
@@ -610,6 +619,9 @@ var el6=eleTree.render({
                 },
                 reload: function() {
                     el2=el2.reload({data: data});
+                },
+                getAllNodeData: function() {
+                    console.log(el2.getAllNodeData())
                 }
             }
             
