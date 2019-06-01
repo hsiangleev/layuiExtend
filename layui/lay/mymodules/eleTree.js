@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/05/30
+ * 最近修改时间: 2019/06/01
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -100,7 +100,20 @@ layui.define(["jquery","laytpl"], function (exports) {
     var TPL_ELEM=function(options,floor,parentStatus) {
         return [
             '{{# for(var i=0;i<d.length;i++){ }}',
-                '<div class="eleTree-node {{# if(d[i].visible===false){ }}eleTree-search-hide{{# } }}" data-'+options.request.key+'="{{d[i]["'+options.request.key+'"]}}" eletree-floor="'+floor+'" style="display: none;">',
+                '<div class="eleTree-node {{# if(d[i].visible===false){ }}eleTree-search-hide{{# } }}" data-padding="'+options.indent*floor+'" data-'+options.request.key+'="{{d[i]["'+options.request.key+'"]}}" eletree-floor="'+floor+'" style="display: none;">',
+                    function() {
+                        // 是否显示连线
+                        if(!options.showLine) return '';
+                        if(floor!==0){
+                            var s='<i class="eleTree-node-verticalline" style="left: '+(9+options.indent*(floor-1))+'px;"></i>'+
+                            '<i class="eleTree-node-horizontalline" style="width: '+(options.indent-4)+'px;left: '+(9+options.indent*(floor-1))+'px;"></i>';
+                            return s;
+                        }else{
+                            var s='<i class="eleTree-node-verticalline" style="left: '+(9+options.indent*(floor-1))+'px;display: none;"></i>'+
+                            '<i class="eleTree-node-horizontalline" style="width: '+(options.indent-4)+'px;left: '+(9+options.indent*(floor-1))+'px;display: none;"></i>';
+                            return s;
+                        }
+                    }(),
                     '<div class="eleTree-node-content" style="padding-left: '+(options.indent*floor)+'px;">',
                         '<span class="eleTree-node-content-icon">',
                             '<i class="layui-icon layui-icon-triangle-r ',
@@ -192,6 +205,7 @@ layui.define(["jquery","laytpl"], function (exports) {
             draggable: false,           // 是否开启拖拽节点功能
             contextmenuList: [],        // 启用右键菜单，支持的操作有："copy","add","edit","remove"
             searchNodeMethod: null,     // 对树节点进行筛选时执行的方法，返回 true 表示这个节点可以显示，返回 false 则表示这个节点会被隐藏
+            showLine: false,            // 是否显示连线，默认false
 
             method: "get",
             url: "",
@@ -1073,12 +1087,22 @@ layui.define(["jquery","laytpl"], function (exports) {
                     // 加floor和padding
                     temNode.attr("eletree-floor",String(floor));
                     temNode.children(".eleTree-node-content").css("padding-left",floor*options.indent+"px");
+                    // 计算线条的left
+                    if(options.showLine){
+                        // 判断目标是否是最外层，是的话隐藏线条
+                        if(floor===0){
+                            temNode.children(".eleTree-node-verticalline,.eleTree-node-horizontalline").hide();
+                        }else{
+                            temNode.children(".eleTree-node-verticalline,.eleTree-node-horizontalline").css("left",options.indent*(floor-1)+9+"px").show();
+                        }
+                    }
                     // 通过floor差值计算子元素的floor
                     var countFloor=eleFloor-floor;
                     temNode.find(".eleTree-node").each(function(index,item) {
                         var f=Number($(item).attr("eletree-floor"))-countFloor;
                         $(item).attr("eletree-floor",String(f));
                         $(item).children(".eleTree-node-content").css("padding-left",f*options.indent+"px");
+                        options.showLine && $(item).children(".eleTree-node-verticalline,.eleTree-node-horizontalline").css("left",options.indent*(f-1)+9+"px").show();
                     })
                     // 原dom去三角
                     var leaf=groupNode.children(".eleTree-node").length===0;
@@ -1086,10 +1110,13 @@ layui.define(["jquery","laytpl"], function (exports) {
                         .children(".eleTree-node-content-icon").children(".layui-icon")
                         .removeClass("icon-rotate").css("color","transparent");
                     // 当前的增加三角
-                    var cLeaf=target.children(".eleTree-node-group").children(".eleTree-node").length===0;
-                        !cLeaf && target.children(".eleTree-node-content")
+                    var cLeaf=target.children(".eleTree-node-group").children(".eleTree-node").length===1;
+                        cLeaf && target.children(".eleTree-node-content")
                         .children(".eleTree-node-content-icon").children(".layui-icon")
                         .addClass("icon-rotate").removeAttr("style");
+                    // 判断当前是否需要显示
+                    var isShowNode=target.children(".eleTree-node-content").find(".layui-icon").hasClass("icon-rotate");
+                        !isTargetOuterMost && !isShowNode && temNode.hide();
 
                     _self.unCheckNodes(true);
                     _self.defaultChecked();

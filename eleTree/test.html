@@ -114,6 +114,7 @@
         <div class="inp"><input type="checkbox" autocomplete="off" name="opera" lay-filter="test" title="checkStrictly" lay-skin="primary"> </div>
         <div class="inp"><input type="checkbox" autocomplete="off" name="opera" lay-filter="test" title="accordion" lay-skin="primary"> </div>
         <div class="inp"><input type="checkbox" autocomplete="off" name="opera" lay-filter="test" title="draggable" lay-skin="primary"> </div>
+        <div class="inp"><input type="checkbox" autocomplete="off" name="opera" lay-filter="test" title="showLine" lay-skin="primary"> </div>
 
         <div class="inp">
             <h3>contextmenuList</h3>
@@ -633,6 +634,7 @@ var el6=eleTree.render({
                 showCheckbox: true,
                 defaultExpandAll: true,
                 draggable: true,
+                showLine: true,
                 contextmenuList: ["copy","add.async","edit","remove",{eventName: "test", text: "测试"}]
             });
             eleTree.on("nodeClick(data3)",function(d) {

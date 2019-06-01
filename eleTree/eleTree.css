@@ -55,6 +55,24 @@
     font-size: 12px;
 }
 
+/* 线条样式 */
+.eleTree-node{
+    position: relative;
+}
+.eleTree-node .eleTree-node-verticalline{
+    position: absolute;
+    width: 0;
+    height: 100%;
+    border: 1px dotted #ccc;
+    z-index: 1;
+}
+.eleTree-node .eleTree-node-horizontalline{
+    position: absolute;
+    height: 0;
+    top: 13px;
+    border: 1px dotted #ccc;
+    z-index: 1;
+}
 
 /* checkbox第三种状态 */
 input.eleTree-hideen[type=checkbox]{
