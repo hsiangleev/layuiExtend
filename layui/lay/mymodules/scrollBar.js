@@ -2,7 +2,7 @@
 * @Name: 滚动条
 * @Author: 李祥
 * @License：MIT
-* 最近修改时间: 2019/06/11
+* 最近修改时间: 2019/06/12
 */
 
 /**
@@ -49,7 +49,11 @@ layui.define(["jquery"], function (exports) {
             );
 
             var res = new RegExp(/[A-Za-z]+$/);
-            this.contentEL.css("padding-right", parseFloat(this.width) + 10 + res.exec("6px")[0]);
+            var pRight=this.width;
+            if(res.exec(this.width)[0]==="px"){
+                pRight=parseFloat(this.width) + 10 + "px"
+            }
+            this.contentEL.css("padding-right", pRight);
             this.scrollBarEL = this.wrapEl.children(".urp-scrollBar");
             this.scrollBarBodyEL = this.scrollBarEL.children(".urp-scrollBar-body");
             this.countHeight();
@@ -65,9 +69,9 @@ layui.define(["jquery"], function (exports) {
             }
             this.scrollBarBodyHeight = this.scrollBarEL.height() * this.rate;
             this.scrollBarBodyEL.css("height", this.scrollBarBodyHeight);
-
+            // 重新计算最大位置
             this.maxCurrent = this.scrollBarEL.height() - this.scrollBarBodyHeight;
-
+            // 如果当前的位置超出最大位置，则重置当前位置为最大位置
             this.current = this.current > this.maxCurrent ? this.maxCurrent : this.current;
             this.scrollFn();
         },
@@ -86,14 +90,17 @@ layui.define(["jquery"], function (exports) {
             var clientY = 0, moveType, endType;
             e.preventDefault();
             if (type === "mouse") {
+                // 滚动条拖拽滚动
                 this.y = e.clientY - this.wrapEl.offset().top - this.scrollBarBodyEL.position().top;
                 moveType = "mousemove";
                 endType = "mouseup";
             } else if (type === "touch") {
+                // 滚动条手势滚动
                 this.y = e.originalEvent.touches[0].clientY - this.wrapEl.offset().top - this.scrollBarBodyEL.position().top;
                 moveType = "touchmove";
                 endType = "touchend";
             } else {
+                // 页面手势滚动
                 this.pageY = e.originalEvent.touches[0].pageY;
                 moveType = "touchmove";
                 endType = "touchend";
