@@ -2,7 +2,7 @@
 * @Name: 滚动条
 * @Author: 李祥
 * @License：MIT
-* 最近修改时间: 2019/06/12
+* 最近修改时间: 2019/06/13
 */
 
 /**
@@ -141,14 +141,21 @@ layui.define(["jquery"], function (exports) {
                 }
                 that.scrollFn();
             })
-            this.wrapEl.on("mousewheel DOMMouseScroll", function (e) {
-                if (that.rate < 1) {
-                    e.preventDefault();
-                }
+
+            var f=function(e) {
                 var value = e.originalEvent.wheelDelta || -e.originalEvent.detail;
                 that.current = value > 0 ? that.current - 15 : that.current + 15;
                 that.scrollFn();
-            })
+
+                if(that.current >= that.maxCurrent || that.current <= 0){
+                    // 滚动到最大最小时，重新绑定事件，相当于移除preventDefault
+                    that.wrapEl.off("mousewheel DOMMouseScroll", f).on("mousewheel DOMMouseScroll", f);
+                }else{
+                    e.preventDefault();
+                }
+            }
+            this.wrapEl.on("mousewheel DOMMouseScroll", f);
+
             var scrollFn = this.throttle(function () {
                 that.countHeight();
             });
