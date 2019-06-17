@@ -9,6 +9,7 @@ html{
     overflow: hidden;
     padding-right: 5px;
     position: relative;
+    touch-action: none;     /* 控制台报错问题 Ignored attempt to cancel a touchmove event with cancelable=false */
 }
 .urp-scrollBar{
     width: 5px;

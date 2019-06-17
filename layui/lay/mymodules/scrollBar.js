@@ -2,7 +2,7 @@
 * @Name: 滚动条
 * @Author: 李祥
 * @License：MIT
-* 最近修改时间: 2019/06/13
+* 最近修改时间: 2019/06/17
 */
 
 /**
@@ -49,9 +49,9 @@ layui.define(["jquery"], function (exports) {
             );
 
             var res = new RegExp(/[A-Za-z]+$/);
-            var pRight=this.width;
-            if(res.exec(this.width)[0]==="px"){
-                pRight=parseFloat(this.width) + 10 + "px"
+            var pRight = this.width;
+            if (res.exec(this.width)[0] === "px") {
+                pRight = parseFloat(this.width) + 10 + "px"
             }
             this.contentEL.css("padding-right", pRight);
             this.scrollBarEL = this.wrapEl.children(".urp-scrollBar");
@@ -88,15 +88,14 @@ layui.define(["jquery"], function (exports) {
         },
         down: function (type, e) {
             var clientY = 0, moveType, endType;
-            e.preventDefault();
             if (type === "mouse") {
                 // 滚动条拖拽滚动
-                this.y = e.clientY - this.wrapEl.offset().top - this.scrollBarBodyEL.position().top;
+                this.y = e.clientY - this.wrapEl.offset().top - this.scrollBarBodyEL.position().top + $(document).scrollTop();
                 moveType = "mousemove";
                 endType = "mouseup";
             } else if (type === "touch") {
                 // 滚动条手势滚动
-                this.y = e.originalEvent.touches[0].clientY - this.wrapEl.offset().top - this.scrollBarBodyEL.position().top;
+                this.y = e.originalEvent.touches[0].clientY - this.wrapEl.offset().top - this.scrollBarBodyEL.position().top + $(document).scrollTop();
                 moveType = "touchmove";
                 endType = "touchend";
             } else {
@@ -113,10 +112,11 @@ layui.define(["jquery"], function (exports) {
         },
         move: function (type, e) {
             var clientY = 0;
+            e.preventDefault();
             if (type === "mouse") {
-                this.current = e.clientY - this.y - this.wrapEl.offset().top;
+                this.current = e.clientY - this.y - this.wrapEl.offset().top + $(document).scrollTop();
             } else if (type === "touch") {
-                this.current = e.originalEvent.touches[0].clientY - this.y - this.wrapEl.offset().top;
+                this.current = e.originalEvent.touches[0].clientY - this.y - this.wrapEl.offset().top + $(document).scrollTop();
             } else {
                 this.current = this.current - (e.originalEvent.touches[0].pageY - this.pageY) / 10;
             }
@@ -132,7 +132,7 @@ layui.define(["jquery"], function (exports) {
                 e.stopPropagation();
             });
             this.scrollBarEL.on("click", function (e) {
-                var y = e.clientY - that.wrapEl.offset().top;
+                var y = e.clientY - that.wrapEl.offset().top + $(document).scrollTop();
                 // 判断点击的是上面还是下面
                 if (y > that.current) {
                     that.current += that.scrollBarBodyHeight;
@@ -142,15 +142,15 @@ layui.define(["jquery"], function (exports) {
                 that.scrollFn();
             })
 
-            var f=function(e) {
+            var f = function (e) {
                 var value = e.originalEvent.wheelDelta || -e.originalEvent.detail;
                 that.current = value > 0 ? that.current - 15 : that.current + 15;
                 that.scrollFn();
 
-                if(that.current >= that.maxCurrent || that.current <= 0){
+                if (that.current >= that.maxCurrent || that.current <= 0) {
                     // 滚动到最大最小时，重新绑定事件，相当于移除preventDefault
                     that.wrapEl.off("mousewheel DOMMouseScroll", f).on("mousewheel DOMMouseScroll", f);
-                }else{
+                } else {
                     e.preventDefault();
                 }
             }
