@@ -28,7 +28,7 @@ layui.define(function (exports) {
             this.textFont=this.options.textFont || "14px serif";    // 默认字体
             this.nodeType=this.options.nodeType || {};              // 获取的节点类型对应的图形
             this.event=this.options.event || {};                    // 事件
-            this.arrowSize={                                        // 箭头大小(x,y为相对箭头顶点坐标，distance为在箭头反方向到顶点的距离)
+            this.arrowSize={                                        // 箭头大小(x,y为相对箭头顶点坐标，x/y越大，角度越大，distance为在箭头反方向到顶点的距离)
                 x: 10,
                 y: 10,
                 distance: 3
