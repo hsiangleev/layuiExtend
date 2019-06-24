@@ -1,11 +1,13 @@
 ## 程序流程图
 
+**[示例](https://layuiextend.hsianglee.cn/eFlowChart)**
+
 #### 使用方式：
-1. 引入flowChart模块
+1. 引入eFlowChart模块
 2. 使用：
 ```javascript
 // <canvas id="cvs" width="800" height="800"></canvas>      // html
-layui.flowChart.render({
+layui.eFlowChart.render({
     el: "#cvs",
     data: [
         // ...
@@ -75,4 +77,3 @@ layui.flowChart.render({
 7. event参数说明：
     * click: 点击事件，返回值为点击的节点对象
     * mouseenter和mouseleave为一对，组成hover事件，即鼠标移入移出事件，返回值为点击的节点对象
-8. [示例](https://layuiextend.hsianglee.cn/flowChart)

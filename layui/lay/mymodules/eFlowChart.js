@@ -314,5 +314,5 @@ layui.define(function (exports) {
         }
     }
 
-    exports('flowChart', obj);
+    exports('eFlowChart', obj);
 })
