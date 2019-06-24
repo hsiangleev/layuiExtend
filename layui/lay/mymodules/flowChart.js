@@ -243,7 +243,7 @@ layui.define(function (exports) {
                 // 重绘，因为isPointInPath方法只对最后一个闭合路径生效，所以每次画一个图像都进行判断点击的是否是当前绘制的图形
                 self.ctx.clearRect(0, 0, self.cvs.width, self.cvs.height);
                 self.eventData=null;
-                self.init({x,y})
+                self.init({x:x,y:y});
                 if(!self.eventData) return;
 
                 self.event["click"](self.eventData);
@@ -262,7 +262,7 @@ layui.define(function (exports) {
                 // 重绘，因为isPointInPath方法只对最后一个闭合路径生效，所以每次画一个图像都进行判断点击的是否是当前绘制的图形
                 self.ctx.clearRect(0, 0, self.cvs.width, self.cvs.height);
                 self.eventData=null;
-                self.init({x,y})
+                self.init({x:x,y:y})
                 // 鼠标移入
                 if(self.eventData && self.eventData.text!==oldEventData.text) {
                     self.event["mouseenter"] && self.event["mouseenter"](self.eventData);
