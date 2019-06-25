@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/06/05
+ * 最近修改时间: 2019/06/25
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -1223,7 +1223,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                                 var inp="<input type='text' value='"+obj[options.request.name]+"' class='eleTree-node-content-input' />";
                                 label.after(inp);
 
-                                label.siblings(".eleTree-node-content-input").focus().off().on("blur",function() {
+                                label.siblings(".eleTree-node-content-input").focus().select().off().on("blur",function() {
                                     var v=$(this).val();
                                     obj[options.request.name]=v;
                                     var inpThis=this;
