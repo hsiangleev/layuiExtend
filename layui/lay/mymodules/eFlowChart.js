@@ -2,7 +2,7 @@
  * @Name: 程序流程图
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/06/24
+ * 最近修改时间: 2019/06/25
  */
 
 layui.define(function (exports) {
@@ -110,8 +110,8 @@ layui.define(function (exports) {
                 this.ctx.save();  
                 // 切换原点坐标
                 this.ctx.translate(val.xEnd,val.yEnd);
-                // 判断如果起始点在上，斜率大于0，或者起始点在下，斜率小于0,或者为从左到右的水平线段，即逆时针方向
-                if(val.yEnd>val.yStart && k>0 || val.yEnd<val.yStart && k<0 || val.xStart<val.yStart && k===0){
+                // 判断如果起始点在上，斜率大于0，或者起始点在下，斜率小于0,或者为从左到右的水平线段，即箭头方向不是左侧
+                if(val.yEnd>val.yStart && k>0 || val.yEnd<val.yStart && k<0 || val.xStart<val.xEnd && k===0){
                     this.ctx.rotate(Math.atan(k)-Math.PI/2); 
                 }else{
                     this.ctx.rotate(Math.atan(k)+Math.PI/2); 
