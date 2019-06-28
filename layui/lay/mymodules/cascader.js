@@ -2,7 +2,7 @@
  * @Name: 基于layui的无限级联选择器
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/03/20
+ * 最近修改时间: 2019/06/28
  */
 
 layui.define(["jquery","laytpl","layer"], function (exports) {
@@ -66,8 +66,9 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
         },
         // 初始化容器和标签
         init: function () {
-            $(this.elem).after('<i class="layui-icon layui-icon-down"></i>');
+            $(this.elem).after('<i class="layui-icon layui-icon-down" data-cascader="icon"></i>');
             $(this.elem).after('<div class="urp-cascader-content"></div>');
+            $(this.elem).data("cascader","elem");
         },
         // 初始化第一层
         initFirst: function () {
@@ -178,7 +179,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
             
             this.onOff = false;
             $(this.elem).siblings(".urp-cascader-content").find("ul").slideUp(100);
-            $(this.elem).siblings("i").replaceWith('<i class="layui-icon layui-icon-down"></i>');
+            $(this.elem).siblings("i").replaceWith('<i class="layui-icon layui-icon-down" data-cascader="icon"></i>');
 
             // 如果有初始值，则第一次不回调
             if(triggerData!=="initValue" && this.option.success) this.option.success(this.valueArr,this.textArr);
@@ -271,26 +272,27 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
             })
                 
             // input点击显示隐藏
-            $(self.elem).on("click", function () {
+            $(document).on("click",self.elem+","+self.elem+" ~ i.layui-icon", function () {
                 self.onOff = !self.onOff;
                 zIndex++;
                 if (self.onOff) {
                     $(self.elem).siblings(".urp-cascader-content").find("ul").slideDown(100);
-                    $(self.elem).siblings("i").replaceWith('<i class="layui-icon layui-icon-up"></i>');
+                    $(self.elem).siblings("i").replaceWith('<i class="layui-icon layui-icon-up" data-cascader="icon"></i>');
 
                     self.domContent.css("zIndex",zIndex);
                 } else {
                     $(self.elem).siblings(".urp-cascader-content").find("ul").slideUp(100);
-                    $(self.elem).siblings("i").replaceWith('<i class="layui-icon layui-icon-down"></i>');
+                    $(self.elem).siblings("i").replaceWith('<i class="layui-icon layui-icon-down" data-cascader="icon"></i>');
                 }
             })
             // 点击外层文档隐藏
             $(document).on("click",function(event) {
-                if(event.target.isEqualNode($(self.elem).get(0))) return;
+                var d=$(event.target).data("cascader");
+                if(d==="icon" || d==="elem") return;    // 判断点击的是否是input
                 self.onOff = false;
                 if(!self.onOff){
                     $(self.elem).siblings(".urp-cascader-content").find("ul").slideUp(100);
-                    $(self.elem).siblings("i").replaceWith('<i class="layui-icon layui-icon-down"></i>');
+                    $(self.elem).siblings("i").replaceWith('<i class="layui-icon layui-icon-down" data-cascader="icon"></i>');
                 }
             })
             self.initValue();
