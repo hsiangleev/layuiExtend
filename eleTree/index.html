@@ -520,8 +520,6 @@ eleTree.on("nodeTest(data3)",function(d) {
     </fieldset>
     <p class="red">1. 每次执行reload操作时，需要重新赋值给参数，即 var el=eleTree.render(...);&nbsp;&nbsp; el=el.reload(...);</p>
     <p class="red">2. 静态数据reload需要重新传data数据，即el2=el2.reload({data: data})</p>
-    <p class="red">3. 当列折叠时若选中父列，如果出现子列未被选中，并且父子是关联的，可以在初始化的时候添加一个参数renderAfterExpand:false，此处为尚未解决的bug，即默认使用的方式为只渲染第一层，选中第一层的时候子层dom还没有渲染导致的。</p>
-
 
 
     <script src="../layui/layui.js"></script>
