@@ -2,7 +2,7 @@
  * @Name: 基于layui的无限级联选择器
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/07/26
+ * 最近修改时间: 2019/07/29
  */
 
 layui.define(["jquery","laytpl","layer"], function (exports) {
@@ -154,7 +154,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
 
             if(this.changeOnSelect){
                 // 文本拼接
-                this.textStr=this.textArr.join("/");
+                this.textStr=this.option.showLastLevels ? this.textArr[this.textArr.length-1] : this.textArr.join("/");
                 $(this.elem).val(this.textStr);
                 
                 if(triggerData!=="initValue" && this.option.success) this.option.success(this.valueArr,this.textArr);
