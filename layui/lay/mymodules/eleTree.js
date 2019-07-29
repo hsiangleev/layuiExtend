@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/06/25
+ * 最近修改时间: 2019/07/29
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -100,7 +100,7 @@ layui.define(["jquery","laytpl"], function (exports) {
     var TPL_ELEM=function(options,floor,parentStatus) {
         return [
             '{{# for(var i=0;i<d.length;i++){ }}',
-                '<div class="eleTree-node {{# if(d[i].visible===false){ }}eleTree-search-hide{{# } }}" data-padding="'+options.indent*floor+'" data-'+options.request.key+'="{{d[i]["'+options.request.key+'"]}}" eletree-floor="'+floor+'" style="display: none;">',
+                '<div class="eleTree-node {{# if(d[i].visible===false){ }}eleTree-search-hide{{# } }}" data-padding="'+options.indent*floor+'" data-'+options.customKey+'="{{d[i]["'+options.request.key+'"]}}" eletree-floor="'+floor+'" style="display: none;">',
                     function() {
                         // 是否显示连线
                         if(!options.showLine) return '';
@@ -179,6 +179,7 @@ layui.define(["jquery","laytpl"], function (exports) {
         options.response=$.extend({}, this.config.response, options.response);
         options.request=$.extend({}, this.config.request, options.request);
         this.config = $.extend({}, this.config, options);
+        this.config.customKey=this.customKeyInit();
         this.prevClickEle=null;
         this.nameIndex=1;
         this.render();
@@ -227,7 +228,8 @@ layui.define(["jquery","laytpl"], function (exports) {
                 disabled: "disabled",
                 checked: "checked",
                 isLeaf: "isLeaf"
-            }
+            },
+            customKey: "id",            // 自定义key转义，即appKey=>app-id
         },
         render: function() {
             if(this.config.indent>30){
@@ -320,6 +322,16 @@ layui.define(["jquery","laytpl"], function (exports) {
             //     }
             // },this);
             return eleTree.render(this.config)
+        },
+        // 自定义data属性修改，即 appId=>app-id，解决key包含大写的问题
+        customKeyInit: function() {
+            var options=this.config;
+            var key="";
+            for(var i=0;i<options.request.key.length;i++){
+                var s=options.request.key.charAt(i);
+                key+=(/[A-Z]/.test(s)) ? ("-"+s.toLocaleLowerCase()) : s;
+            }
+            return key;
         },
         // 下拉
         eleTreeEvent: function() {
@@ -568,7 +580,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                                 el.siblings(".eleTree-node-content").children(".eleTree-node-content-icon").children(".layui-icon").addClass("icon-rotate");
                                 el.children().show();
                                 // 展开子项是否继续展开祖父项
-                                f(el.parent(".eleTree-node[data-"+options.request.key+"]"));
+                                f(el.parent(".eleTree-node[data-"+options.customKey+"]"));
                             }else{
                                 // 如当前节点的子节点有展开项，则展开当前子节点的祖父层
                                 el.children(".eleTree-node").each(function(index, item) {
@@ -617,7 +629,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                 return false;
             }
             arr.forEach(function(val,index) {
-                var nodeContent=options.elem.find("[data-"+options.request.key+"='"+val+"']").children(".eleTree-node-content");
+                var nodeContent=options.elem.find("[data-"+options.customKey+"='"+val+"']").children(".eleTree-node-content");
                 nodeContent.length>0 && _self.checkedOneNode(nodeContent);
             })
             this.checkboxInit();
@@ -705,7 +717,7 @@ layui.define(["jquery","laytpl"], function (exports) {
         },
         updateKeyChildren: function(key,data) {
             var options=this.config;
-            var node=options.elem.find("[data-"+options.request.key+"='"+key+"']");
+            var node=options.elem.find("[data-"+options.customKey+"='"+key+"']");
             var floor=Number(node.attr("eletree-floor"))+1;
             var _self=this;
             
@@ -723,7 +735,7 @@ layui.define(["jquery","laytpl"], function (exports) {
         },
         updateKeySelf: function(key,data) {
             var options=this.config;
-            var node=options.elem.find("[data-"+options.request.key+"='"+key+"']").children(".eleTree-node-content");
+            var node=options.elem.find("[data-"+options.customKey+"='"+key+"']").children(".eleTree-node-content");
             var floor=Number(node.attr("eletree-floor"))+1;
             data[options.request.name] && node.children(".eleTree-node-content-label").text(data[options.request.name]);
             data[options.request.disabled] && node.children(".eleTree-hideen").addClass("eleTree-disabled")
@@ -738,7 +750,7 @@ layui.define(["jquery","laytpl"], function (exports) {
         },
         remove: function(key) {
             var options=this.config;
-            var node=options.elem.find("[data-"+options.request.key+"='"+key+"']");
+            var node=options.elem.find("[data-"+options.customKey+"='"+key+"']");
             var pElem=node.parent(".eleTree-node-group");
             // 数据删除
             this.keySearchToOpera(key,function(data,obj) {
@@ -746,7 +758,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                 obj.i--;
                 obj.len--;
 
-                node.length!==0 && options.elem.find("[data-"+options.request.key+"='"+key+"']").remove();
+                node.length!==0 && options.elem.find("[data-"+options.customKey+"='"+key+"']").remove();
                 if(pElem.children(".eleTree-node").length===0){
                     pElem.siblings(".eleTree-node-content").children(".eleTree-node-content-icon").children(".layui-icon").css("color", "transparent");
                 }
@@ -772,7 +784,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                 return;
             }
             // 传key则添加到子节点
-            var node=options.elem.find("[data-"+options.request.key+"='"+key+"']");
+            var node=options.elem.find("[data-"+options.customKey+"='"+key+"']");
             var floor=Number(node.attr("eletree-floor"))+1;
             // 数据更新
             this.keySearchToOpera(key,function(d,obj) {
@@ -813,7 +825,7 @@ layui.define(["jquery","laytpl"], function (exports) {
         },
         insertBefore: function(key,data) {
             var options=this.config;
-            var node=options.elem.find("[data-"+options.request.key+"='"+key+"']");
+            var node=options.elem.find("[data-"+options.customKey+"='"+key+"']");
             var floor=Number(node.attr("eletree-floor"));
             // 数据更新
             this.keySearchToOpera(key,function(d,obj) {
@@ -831,7 +843,7 @@ layui.define(["jquery","laytpl"], function (exports) {
         },
         insertAfter: function(key,data) {
             var options=this.config;
-            var node=options.elem.find("[data-"+options.request.key+"='"+key+"']");
+            var node=options.elem.find("[data-"+options.customKey+"='"+key+"']");
             var floor=Number(node.attr("eletree-floor"));
             // 数据更新
             this.keySearchToOpera(key,function(d,obj) {
@@ -1247,7 +1259,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                                             d[options.request.key]=newObj[options.request.key];
                                             // 修改dom
                                             $(inpThis).siblings(".eleTree-node-content-label").text(newObj[options.request.name]).show();
-                                            $(itemNode).attr("data-"+options.request.key,newObj[options.request.key]);  // 改变页面上面的显示的key，之后可以获取dom
+                                            $(itemNode).attr("data-"+options.customKey,newObj[options.request.key]);  // 改变页面上面的显示的key，之后可以获取dom
                                             $(itemNode).data(options.request.key,newObj[options.request.key]);          // 改变data数据，之后可以通过data获取key
                                             $(inpThis).remove();
             
@@ -1400,7 +1412,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                         val.visible = childSomeShow;
                     }
                     // 通过节点的属性，显示隐藏各个节点，并添加删除搜索类
-                    var el=options.elem.find("[data-"+options.request.key+"='"+val[options.request.key]+"']");
+                    var el=options.elem.find("[data-"+options.customKey+"='"+val[options.request.key]+"']");
                     if(val.visible){
                         el.removeClass("eleTree-search-hide");
                         // 判断父节点是否展开，如果父节点没有展开，则子节点也不要显示
