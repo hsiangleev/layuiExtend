@@ -154,7 +154,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
 
             if(this.changeOnSelect){
                 // 文本拼接
-                this.textStr=this.option.showLastLevels ? this.textArr[this.textArr.length-1] : this.textArr.join("/");
+                this.textStr=this.option.showLastLevels ? this.textArr[this.textArr.length-1] : this.textArr.join("  /  ");
                 $(this.elem).val(this.textStr);
                 
                 if(triggerData!=="initValue" && this.option.success) this.option.success(this.valueArr,this.textArr);
@@ -169,7 +169,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
             this.valueArr.length=this.floor;
             this.valueArr.push(this.blockData.value);
             // 文本拼接
-            this.textStr=this.textArr.join("/");
+            this.textStr=this.textArr.join("  /  ");
 
             (this.option.showLastLevels)?(
                 $(this.elem).val(this.textArr[this.textArr.length-1])
@@ -286,6 +286,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
                     $(self.elem).siblings("i").replaceWith('<i class="layui-icon layui-icon-up" data-cascader="icon"></i>');
 
                     self.domContent.css("zIndex",zIndex);
+                    self.onOff = false;
                 } else {
                     $(self.elem).siblings(".urp-cascader-content").find("ul").slideUp(100);
                     $(self.elem).siblings("i").replaceWith('<i class="layui-icon layui-icon-down" data-cascader="icon"></i>');
