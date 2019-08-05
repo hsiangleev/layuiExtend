@@ -278,7 +278,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
             })
                 
             // input点击显示隐藏
-            $(document).on("click",self.elem+","+self.elem+" ~ i.layui-icon", function () {
+            $(document).on("click.cascader",self.elem+","+self.elem+" ~ i.layui-icon", function () {
                 self.onOff = !self.onOff;
                 zIndex++;
                 if (self.onOff) {
@@ -292,7 +292,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
                 }
             })
             // 点击外层文档隐藏
-            $(document).on("click",function(event) {
+            $(document).on("click.cascader",function(event) {
                 var d=$(event.target).data("cascader");
                 if(d==="icon" || d==="elem") return;    // 判断点击的是否是input
                 self.onOff = false;
@@ -306,6 +306,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
         reload: function(option) {
             var self=this;
             this.domContent.off();
+            $(document).off(".cascader");
             $(this.elem).off().siblings(".urp-cascader-content,.layui-icon").remove();
             this.option = $.extend({}, this.option, option);
             $(this.elem).val("");
