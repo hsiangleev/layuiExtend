@@ -75,13 +75,11 @@ layui.define(["jquery","laytpl"], function (exports) {
                 return _self.unCheckArrNodes.call(_self,data);
             },
             expandAll: function() {
-                options.elem.children(".eleTree-node").children(".eleTree-node-group").empty();
-                _self.expandAll.call(_self,options.data,[],1,true);
-                _self.unCheckNodes(true);
-                _self.defaultChecked();
-                _self.checkboxInit();
+                if(options.data.length===0) return;
+                return _self.expandAll.call(_self);
             },
             unExpandAll: function() {
+                if(options.data.length===0) return;
                 return _self.unExpandAll.call(_self);
             },
             reload: function(options) {
@@ -182,6 +180,7 @@ layui.define(["jquery","laytpl"], function (exports) {
         this.config.customKey=this.customKeyInit();
         this.prevClickEle=null;
         this.nameIndex=1;
+        this.isRenderAllDom=false;
         this.render();
     };
 
@@ -263,7 +262,7 @@ layui.define(["jquery","laytpl"], function (exports) {
             // 判断所有dom是否全部加载
             if(!options.lazy){
                 if(!options.renderAfterExpand || options.defaultExpandAll || options.defaultExpandedKeys.length>0 || options.defaultCheckedKeys.length>0){
-                    this.expandAll(options.data,[],1);
+                    this.initialExpandAll(options.data,[],1);
                 }
             }
 
@@ -545,9 +544,10 @@ layui.define(["jquery","laytpl"], function (exports) {
             }
         },
         // 初始展开所有
-        expandAll: function(data,arr,floor,isMethodsExpandAll) {
+        initialExpandAll: function(data,arr,floor,isMethodsExpandAll) {
             var options=this.config;
             var _self=this;
+            this.isRenderAllDom=true;
             data.forEach(function(val,index) {
                 arr.push(index);
                 if(val[options.request.children] && val[options.request.children].length>0){
@@ -591,14 +591,12 @@ layui.define(["jquery","laytpl"], function (exports) {
                         }
                     });
                     floor++;
-                    _self.expandAll(val[options.request.children],arr,floor,isMethodsExpandAll);
+                    _self.initialExpandAll(val[options.request.children],arr,floor,isMethodsExpandAll);
                     floor--;
                 }
                 // 重置数组索引
                 arr.pop();
             })
-
-            
         },
         // 选中单个节点
         checkedOneNode: function(nodeContent){
@@ -857,7 +855,7 @@ layui.define(["jquery","laytpl"], function (exports) {
             this.checkboxRender();
             // if(!options.lazy){
             //     if(!options.renderAfterExpand || options.defaultExpandAll || options.defaultExpandedKeys.length>0){
-            //         this.expandAll(options.data,[],1);
+            //         this.initialExpandAll(options.data,[],1);
             //     }
             // }
         },
@@ -948,6 +946,20 @@ layui.define(["jquery","laytpl"], function (exports) {
             options.elem.find(".layui-icon.icon-rotate").removeClass("icon-rotate")
                 .parent(".eleTree-node-content-icon").parent(".eleTree-node-content")
                 .siblings(".eleTree-node-group").hide();
+        },
+        // 方法展开所有节点
+        expandAll: function() {
+            var options=this.config;
+            if(this.isRenderAllDom){
+                return void options.elem.find(".eleTree-node-content-icon>.layui-icon").addClass("icon-rotate")
+                    .parent(".eleTree-node-content-icon").parent(".eleTree-node-content")
+                    .siblings(".eleTree-node-group").show();
+            }
+            options.elem.children(".eleTree-node").children(".eleTree-node-group").empty();
+            this.initialExpandAll(options.data,[],1,true);
+            this.unCheckNodes(true);
+            this.defaultChecked();
+            this.checkboxInit();
         },
         // 节点事件
         nodeEvent: function() {
