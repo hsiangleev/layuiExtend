@@ -2,7 +2,8 @@
 .eleTree{
     position: relative;
 }
-.eleTree-hide{
+.eleTree-hide,
+.eleTree-search-hide{
     display: none;
 }
 .eleTree-loadData{
