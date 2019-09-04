@@ -19,6 +19,12 @@
             <input type="text" id="a" class="layui-input" readonly="readonly">
         </div>
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">懒加载示例</label>
+        <div class="layui-input-block">
+            <input type="text" id="b" class="layui-input" readonly="readonly">
+        </div>
+    </div>
     
     
 
@@ -139,6 +145,37 @@
                     value:['A','BB1']
                 })
             })
+
+
+            var id=1;
+            var cas2=cascader({
+                elem: "#b",
+                data: [
+                    {
+                        value: 'A',
+                        label: 'a'
+                    }
+                ],
+                lazy: true,
+                lazyLoad: function (node, callback) {
+                    setTimeout(() => {
+                        var arr=[];
+                        id++;
+                        for(var i=0;i<id;i++){
+                            arr.push({
+                                value: id+"-"+i,
+                                label: "选项"+id+"-"+i,
+                                leaf: id >= 3
+                            })
+                        }
+                        // node节点数据需要与新数据一并传递回去
+                        callback(arr,node);
+                    }, 1000);
+                },
+                success: function (valData,labelData) {
+                    console.log(valData,labelData);
+                }
+            });
             
         });
     </script>

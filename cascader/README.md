@@ -70,6 +70,8 @@ layui.use(['form',"jquery","cascader"], function(){
 > + value：传入的初始值，类型为数组，值为data的value值
 > + changeOnSelect：是否选中即改变，默认false（可以选择非叶子节点）
 > + success：回调函数，选择完成之后的回调函数，返回值第一个参数为value数组，第二个参数为label数组
+> + lazy：是否开启懒加载功能
+> + lazyLoad：懒加载回调函数，仅在lazy为true时有效，有两个参数node和callback函数，node为当前点击的节点数据，callback函数需要把新数据和node节点同时传递回去，即callback(newArray,node);
 
 #### **cascader函数说明**
 > + cas.reload(): 可重新渲染数据，或赋初值

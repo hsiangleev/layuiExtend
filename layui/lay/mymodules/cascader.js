@@ -2,7 +2,7 @@
  * @Name: 基于layui的无限级联选择器
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/07/29
+ * 最近修改时间: 2019/09/04
  */
 
 layui.define(["jquery","laytpl","layer"], function (exports) {
@@ -85,7 +85,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
 
             // 显示隐藏第一层的标签
             for(var i=0;i<this.d.length;i++){
-                ("children" in this.d[i] && this.d[i]["children"].length>0)?(
+                ("children" in this.d[i] && this.d[i]["children"].length>0 || (this.option.lazy && !this.d[i]["leaf"]))?(
                     this.domContent.find("ul.urp-cascader-child li").eq(i).find("i").show()
                 ):(
                     this.domContent.find("ul.urp-cascader-child li").eq(i).find("i").hide()
@@ -126,26 +126,27 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
             
         },
         // 若有第二层则初始化第二层
-        initChild: function (triggerData) {
+        initChild: function (triggerData,node) {
             // 删除后面的面板
             this.domContent.find(".urp-cascader-child:gt("+(this.floor)+")").remove();
             // 获取text值
             this.textArr.length=this.floor;
-            this.textArr.push(this.blockData.label);
+            var blockData=node || this.blockData;
+            this.textArr.push(blockData.label);
             this.valueArr.length=this.floor;
-            this.valueArr.push(this.blockData.value);
+            this.valueArr.push(blockData.value);
             var string =  laytpl(
                 '<ul class="urp-cascader-child">'+
                     '{{# for(var i=0;i< d.length;i++){ }}'+
                         '<li>{{ d[i].label }}<i class="layui-icon layui-icon-right"></i></li>'+
                     '{{# } }}'+
                 '</ul>'
-            ).render(this.blockData["children"]);
+            ).render(blockData["children"]);
             this.domContent.append(string);
 
             // 显示隐藏第二层的标签
-            for(var i=0;i<this.blockData["children"].length;i++){
-                ("children" in this.blockData["children"][i] && this.blockData["children"][i]["children"].length>0)?(
+            for(var i=0;i<blockData["children"].length;i++){
+                ("children" in blockData["children"][i] && blockData["children"][i]["children"].length>0 || (this.option.lazy && !blockData["children"][i]["leaf"]))?(
                     this.domContent.find("ul.urp-cascader-child:gt("+(this.floor)+")").find("li").eq(i).find("i").show()
                 ):(
                     this.domContent.find("ul.urp-cascader-child:gt("+(this.floor)+")").find("li").eq(i).find("i").hide()
@@ -192,7 +193,8 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
         // 赋初值
         initValue: function() {
             var self=this;
-            ($.isArray(this.option.value) && this.option.value.length>0)?(function(){
+            if($.isArray(this.option.value) && this.option.value.length>0) {
+                if(self.option.lazy) throw "懒加载暂不支持赋初值"
                 var value=self.option.value;
                 $(self.elem).trigger("click");
 
@@ -242,7 +244,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
                 //         obj.domContent.find(".urp-cascader-child").eq(2).find("li").eq(i).trigger(triggerType);
                 //     }
                 // }
-            })():"";
+            }
         },
         callback: function () {
             // 初始化第一层
@@ -255,12 +257,22 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
                 self.getBlockData(event,this);
                 $(this).addClass("active").siblings("li").removeClass("active");
                 // 判断当前是否存在子层
-                ("children" in self.blockData && self.blockData["children"].length>0)?(
+                if("children" in self.blockData && self.blockData["children"].length>0){
                     // 初始化子层
                     self.initChild(triggerData)
-                ):(
+                }else if(self.option.lazy && !self.blockData["leaf"]){
+                    if(typeof self.option.lazyLoad !== "function") throw "缺少懒加载回调函数";
+                    // 判断事件是否已经加载，防止多次点击触发多次事件
+                    if($(_self).children("i").hasClass("layui-icon-loading")) return;
+                    $(_self).children("i").removeClass("layui-icon-right").addClass("layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop");
+                    self.option.lazyLoad(self.blockData, function(data,node) {
+                        $(_self).children("i").removeClass("layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop").addClass("layui-icon-right");
+                        node["children"]=data;
+                        self.initChild(triggerData,node)
+                    })
+                }else{
                     // 判断触发方式
-                    self.triggerType==="mouseenter"?(function() {
+                    if(self.triggerType==="mouseenter") {
                         self.domContent.find(".urp-cascader-child:gt("+(self.floor)+")").remove();
                         // click事件先解除再定义，防止多次定义
                         $(_self).off("click").on("click",function() {
@@ -271,10 +283,10 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
                         if(triggerData==="initValue"){
                             $(_self).trigger("click");
                         }
-                    })():(
+                    }else{
                         self.finishInitData(triggerData)
-                    )
-                );
+                    }
+                }
             })
                 
             // input点击显示隐藏
