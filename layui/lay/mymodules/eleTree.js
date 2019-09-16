@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/08/20
+ * 最近修改时间: 2019/09/16
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -390,23 +390,27 @@ layui.define(["jquery","laytpl"], function (exports) {
                             }
                             el.removeClass("lazy-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop").addClass("layui-icon-triangle-r icon-rotate");
 
-                            // 懒加载子元素选择祖父（待写）
+                            // 懒加载子元素选择祖父
                             selectParentsFn();
                             _self.checkboxRender();
                         })
                     }else{
                         var eletreeStatus=eleTreeNodeContent.children("input.eleTree-hideen").attr("eletree-status");
-                        d[options.request.children] && d[options.request.children].length>0 && laytpl(TPL_ELEM(options,floor,eletreeStatus)).render(d[options.request.children], function(string){
-                            sibNode.append(string);
-                        });
-                        // 选择祖父
-                        selectParentsFn();
-                        _self.checkboxRender();
+                        if(d[options.request.children] && d[options.request.children].length>0){
+                            laytpl(TPL_ELEM(options,floor,eletreeStatus)).render(d[options.request.children], function(string){
+                                sibNode.append(string);
+                            });
+                            // 选择祖父
+                            selectParentsFn();
+                            _self.checkboxRender();
+                        }
                     }
+                }else{
+                    // 有子节点则展开子节点
+                    sibNode.show("fast");
+                    el.addClass("icon-rotate");
                 }
-                // 显示隐藏没有搜索类的
-                sibNode.show("fast");
-                el.addClass("icon-rotate");
+                
                 // 手风琴效果
                 if(options.accordion){
                     var node=eleTreeNodeContent.parent(".eleTree-node").siblings(".eleTree-node");
