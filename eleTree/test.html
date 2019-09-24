@@ -661,7 +661,7 @@ var el6=eleTree.render({
                 data: data,
                 // url: "../eleTree/tree.json",
                 showCheckbox: true,
-                // defaultExpandAll: true,
+                defaultExpandAll: true,
                 draggable: true,
                 showLine: true,
                 contextmenuList: ["copy","add.async","edit","remove",{eventName: "test", text: "测试"}]
@@ -779,11 +779,10 @@ var el6=eleTree.render({
             // 自定义右键菜单回调
             eleTree.on("nodeTest(data3)",function(d) {
                 console.group("自定义右键菜单回调nodeTest:")
-                // console.log(d.data);    // 点击节点对于的数据
-                // console.log(d.node);    // 点击的dom节点
-                // console.log(this);      // 与d.node相同
-                // console.groupEnd();      
-                el3.toggleExpandNode(d.data.id)
+                console.log(d.data);    // 点击节点对于的数据
+                console.log(d.node);    // 点击的dom节点
+                console.log(this);      // 与d.node相同
+                console.groupEnd();      
             }) 
             
             var el4=eleTree.render({
