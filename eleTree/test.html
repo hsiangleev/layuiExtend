@@ -150,6 +150,9 @@
             <option value="unCheckArrNodes">取消某个选中的节点</option>
             <option value="expandAll">展开所有</option>
             <option value="unExpandAll">合并所有</option>
+            <option value="expandNode">展开某节点的所有子节点</option>
+            <option value="unExpandNode">合并某节点的所有子节点</option>
+            <option value="toggleExpandNode">切换某节点的所有子节点的展开合并状态</option>
             <option value="remove">删除节点</option>
             <option value="append">添加子节点</option>
             <option value="insertBefore">添加到节点之前</option>
@@ -204,6 +207,21 @@ el2.expandAll();
         <div class="unExpandAll met">
 <pre class="layui-code code">
 el2.unExpandAll();
+</pre>
+        </div>
+        <div class="expandNode met">
+<pre class="layui-code code">
+el2.expandNode(10);
+</pre>
+        </div>
+        <div class="unExpandNode met">
+<pre class="layui-code code">
+el2.unExpandNode(10);
+</pre>
+        </div>
+        <div class="toggleExpandNode met">
+<pre class="layui-code code">
+el2.toggleExpandNode(10);
 </pre>
         </div>
         <div class="remove met">
@@ -595,6 +613,15 @@ var el6=eleTree.render({
                 unExpandAll: function() {
                     el2.unExpandAll();
                 },
+                expandNode: function() {
+                    el2.expandNode(10);
+                },
+                unExpandNode: function() {
+                    el2.unExpandNode(10);
+                },
+                toggleExpandNode: function() {
+                    el2.toggleExpandNode(10);
+                },
                 remove: function() {
                     el2.remove(23);
                     el2.remove(24);
@@ -634,7 +661,7 @@ var el6=eleTree.render({
                 data: data,
                 // url: "../eleTree/tree.json",
                 showCheckbox: true,
-                defaultExpandAll: true,
+                // defaultExpandAll: true,
                 draggable: true,
                 showLine: true,
                 contextmenuList: ["copy","add.async","edit","remove",{eventName: "test", text: "测试"}]
@@ -752,10 +779,11 @@ var el6=eleTree.render({
             // 自定义右键菜单回调
             eleTree.on("nodeTest(data3)",function(d) {
                 console.group("自定义右键菜单回调nodeTest:")
-                console.log(d.data);    // 点击节点对于的数据
-                console.log(d.node);    // 点击的dom节点
-                console.log(this);      // 与d.node相同
-                console.groupEnd();      
+                // console.log(d.data);    // 点击节点对于的数据
+                // console.log(d.node);    // 点击的dom节点
+                // console.log(this);      // 与d.node相同
+                // console.groupEnd();      
+                el3.toggleExpandNode(d.data.id)
             }) 
             
             var el4=eleTree.render({

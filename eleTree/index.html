@@ -406,6 +406,9 @@ var el=eleTree.render({
 > el.unCheckArrNodes(arr) //取消部分选中的节点，arr为id组成的数组，如果父子节点同时选中，并且checkStrictly不为true，如果要取消子节点选中，则arr需包含父节点id，即需同时取消父节点选中
 > el.expandAll() //展开所有
 > el.unExpandAll() //合并所有
+> el.expandNode(key) //展开某节点的所有子节点
+> el.unExpandNode(key) //合并某节点的所有子节点
+> el.toggleExpandNode(key) //切换某节点的所有子节点的展开合并状态
 > el.remove(key) //删除节点
 > el.append(key,data) //添加子节点，如果不传key，或者直接传key为null或者为空的话，则直接添加到根节点
 > el.insertBefore(key,data) //添加到节点之前
@@ -522,6 +525,7 @@ eleTree.on("nodeTest(data3)",function(d) {
     </fieldset>
     <p class="red">1. 每次执行reload操作时，需要重新赋值给参数，即 var el=eleTree.render(...);&nbsp;&nbsp; el=el.reload(...);</p>
     <p class="red">2. 静态数据reload需要重新传data数据，即el2=el2.reload({data: data})</p>
+    <p class="red">3. 使用拖拽功能最好先加载所有节点的dom, 即renderAfterExpand设为false, 两者的冲突尚未解决</p>
 
 
     <script src="../layui/layui.js"></script>

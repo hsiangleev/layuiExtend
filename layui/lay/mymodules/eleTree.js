@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/09/16
+ * 最近修改时间: 2019/09/24
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -77,6 +77,18 @@ layui.define(["jquery","laytpl"], function (exports) {
             expandAll: function() {
                 if(options.data.length===0) return;
                 return _self.expandAll.call(_self);
+            },
+            expandNode: function(key) {
+                if(options.data.length===0) return;
+                return _self.expandNode.call(_self,key);
+            },
+            unExpandNode: function(key) {
+                if(options.data.length===0) return;
+                return _self.unExpandNode.call(_self,key);
+            },
+            toggleExpandNode: function(key) {
+                if(options.data.length===0) return;
+                return _self.toggleExpandNode.call(_self,key);
             },
             unExpandAll: function() {
                 if(options.data.length===0) return;
@@ -398,7 +410,8 @@ layui.define(["jquery","laytpl"], function (exports) {
                         var eletreeStatus=eleTreeNodeContent.children("input.eleTree-hideen").attr("eletree-status");
                         if(d[options.request.children] && d[options.request.children].length>0){
                             laytpl(TPL_ELEM(options,floor,eletreeStatus)).render(d[options.request.children], function(string){
-                                sibNode.append(string);
+                                sibNode.append(string).show("fast");
+                                el.addClass("icon-rotate");
                             });
                             // 选择祖父
                             selectParentsFn();
@@ -964,6 +977,71 @@ layui.define(["jquery","laytpl"], function (exports) {
             this.unCheckNodes(true);
             this.defaultChecked();
             this.checkboxInit();
+        },
+        // 展开某节点的所有子节点
+        expandNode: function(key) {
+            var options=this.config;
+            var parentsEl=options.elem.find("[data-"+options.customKey+"='"+key+"']");
+            var isExpand=parentsEl.children(".eleTree-node-content").find(".eleTree-node-content-icon>.layui-icon.layui-icon-triangle-r").hasClass("icon-rotate");
+            var parentGroup=parentsEl.find(".eleTree-node-group");
+            // 判断是否已经展开
+            if(isExpand) return false;
+            // 判断子节点是否已经渲染(目前只判断所有子节点是否已经全部渲染，而不是当前子节点是否全部渲染)
+            if(this.isRenderAllDom){
+                parentGroup.show("fast");
+                parentsEl.find(".layui-icon.layui-icon-triangle-r").addClass("icon-rotate");
+                return false;
+            }
+            if(options.lazy) return hint.error("展开所有子节点方法暂不支持懒加载");
+            
+            var data=this.reInitData(parentsEl);
+            var d=data.currentData;
+            var floor=Number(parentsEl.attr("eletree-floor"))+1;
+            var fn=function(data,arr,floor) {
+                data.forEach(function(val,index) {
+                    arr.push(index);
+                    if(val[options.request.children] && val[options.request.children].length>0){
+                        var el=parentsEl.children(".eleTree-node-group");
+                        for(var i=1;i<arr.length;i++){
+                            el=el.children(".eleTree-node").eq(arr[i]).children(".eleTree-node-group");
+                        }
+                        laytpl(TPL_ELEM(options,floor)).render(val[options.request.children], function(string){
+                            el.html(string);
+                            el.show().siblings(".eleTree-node-content").children(".eleTree-node-content-icon").children(".layui-icon").addClass("icon-rotate");
+                        });
+                        floor++;
+                        fn(val[options.request.children],arr,floor);
+                        floor--;
+                    }
+                    // 重置数组索引
+                    arr.pop();
+                })
+            }
+            fn([d],[],floor);
+            this.unCheckNodes(true);
+            this.defaultChecked();
+            this.checkboxInit();
+        },
+        // 合并某节点的所有子节点
+        unExpandNode: function(key) {
+            var options=this.config;
+            var parentsEl=options.elem.find("[data-"+options.customKey+"='"+key+"']");
+            var isExpand=parentsEl.children(".eleTree-node-content").find(".eleTree-node-content-icon>.layui-icon.layui-icon-triangle-r").hasClass("icon-rotate");
+            // 判断是否已经合并
+            if(!isExpand) return false;
+            parentsEl.find(".eleTree-node-group").hide("fast");
+            parentsEl.find(".layui-icon.layui-icon-triangle-r").removeClass("icon-rotate");
+        },
+        // 切换某节点的所有子节点的展开合并状态
+        toggleExpandNode: function(key) {
+            var options=this.config;
+            var parentsEl=options.elem.find("[data-"+options.customKey+"='"+key+"']");
+            var isExpand=parentsEl.children(".eleTree-node-content").find(".eleTree-node-content-icon>.layui-icon.layui-icon-triangle-r").hasClass("icon-rotate");
+            if(isExpand){
+                this.unExpandNode(key);
+            }else{
+                this.expandNode(key);
+            }
         },
         // 节点事件
         nodeEvent: function() {
