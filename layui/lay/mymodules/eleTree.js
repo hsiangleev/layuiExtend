@@ -310,12 +310,27 @@ layui.define(["jquery","laytpl"], function (exports) {
                 ,dataType: 'json'
                 ,headers: options.headers || {}
                 ,success: function(res){
-                    if(res[options.response.statusName] != options.response.statusCode || !res[options.response.dataName]){
+                    // response接口支持多级子项的方式，即"a.b"为res.a.b
+                    var fn=function (responseMsg) {
+                        var responseMsgArr = responseMsg.split(".");
+                        var s = res[responseMsgArr[0]];
+                        var len=responseMsgArr.length;
+                        if(len>1){
+                            for(var i = 1; i < len; i++){
+                                s=s[responseMsgArr[i]];
+                            }
+                        }
+                        return s;
+                    }
+                    
+                    var status=fn(options.response.statusName);
+                    var data=fn(options.response.dataName);
+                    if(status != options.response.statusCode || !data){
                         hint.error("请检查数据格式是否符合规范");
                         typeof options.done === 'function' && options.done(res);
                         return;
                     }
-                    options.data=res[options.response.dataName];
+                    options.data=data;
                     _self.renderData();
                     typeof options.done === 'function' && options.done(res);
                 }
