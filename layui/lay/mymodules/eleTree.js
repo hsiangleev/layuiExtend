@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/09/24
+ * 最近修改时间: 2019/10/22
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -1520,7 +1520,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                     // 通过节点的属性，显示隐藏各个节点，并添加删除搜索类
                     var el=options.elem.find("[data-"+options.customKey+"='"+val[options.request.key]+"']");
                     if(val.visible){
-                        el.removeClass("eleTree-search-hide");
+                        el.show().removeClass("eleTree-search-hide");
                         // 判断父节点是否展开，如果父节点没有展开，则子节点也不要显示
                         var parentEl=el.parent(".eleTree-node-group").parent(".eleTree-node");
                         var isParentOpen=parentEl.children(".eleTree-node-content").children(".eleTree-node-content-icon").children(".layui-icon.layui-icon-triangle-r").hasClass("icon-rotate")
