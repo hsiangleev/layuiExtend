@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/10/22
+ * 最近修改时间: 2019/10/24
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -1114,7 +1114,7 @@ layui.define(["jquery","laytpl"], function (exports) {
 
                 var isStop=false;
 
-                $(document).on("mousemove",function(e) {
+                $(document).on("mousemove.docMove",function(e) {
                     // t为了区别click事件
                     time++;
                     if(time>2){
@@ -1127,8 +1127,8 @@ layui.define(["jquery","laytpl"], function (exports) {
                             top: yy+"px"
                         })
                     }
-                }).on("mouseup",function(e) {
-                    $(document).off("mousemove").off("mouseup");
+                }).on("mouseup.docUp",function(e) {
+                    $(document).off("mousemove.docMove").off("mouseup.docUp");
                     var target=$(e.target).parents(".eleTree-node").eq(0);
                     cloneNode.remove();
                     options.elem.css("user-select","auto");
