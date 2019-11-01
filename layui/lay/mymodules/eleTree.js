@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/10/24
+ * 最近修改时间: 2019/11/01
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -223,7 +223,6 @@ layui.define(["jquery","laytpl"], function (exports) {
 
             method: "get",
             url: "",
-            contentType: "",
             headers: {},
             done: null,
             
