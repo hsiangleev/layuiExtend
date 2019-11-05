@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/11/01
+ * 最近修改时间: 2019/11/05
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -942,6 +942,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                     $(item).removeAttr("data-checked");
                 }
             });
+            options.defaultCheckedKeys=[];
             this.checkboxRender();
         },
         unCheckArrNodes: function(arr) {
