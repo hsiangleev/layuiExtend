@@ -102,6 +102,12 @@ layui.define(["jquery","laytpl"], function (exports) {
             },
             getAllNodeData: function() {
                 return _self.getAllNodeData.call(_self);
+            },
+            setHighlightNode: function(key) {
+                return _self.setHighlightNode.call(_self,key);
+            },
+            getHighlightNode: function(key) {
+                return _self.getHighlightNode.call(_self,key);
             }
         }
     }
@@ -1562,6 +1568,23 @@ layui.define(["jquery","laytpl"], function (exports) {
         getAllNodeData: function() {
             var options=this.config;
             return options.data;
+        },
+        // 设置高亮选中节点
+        setHighlightNode: function(key) {
+            var options=this.config;
+            if(!options.highlightCurrent) return;
+            if(this.prevClickEle) this.prevClickEle.removeClass("eleTree-node-content-active");
+            this.prevClickEle=options.elem.find(".eleTree-node[data-"+options.customKey+"='"+key+"']").children(".eleTree-node-content");
+            this.prevClickEle.addClass("eleTree-node-content-active");
+        },
+        // 获取当前高亮选中的节点
+        getHighlightNode: function(key) {
+            var options=this.config;
+            var obj={};
+            if(!this.prevClickEle) return obj;
+            obj["node"]=this.prevClickEle;
+            obj[options.request.key]=this.prevClickEle.parent(".eleTree-node").data(options.request.key);
+            return obj;
         }
     }
     
