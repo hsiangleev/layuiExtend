@@ -567,7 +567,7 @@ var el6=eleTree.render({
                 // url: "../eleTree/tree.json",
                 showCheckbox: true,
                 defaultExpandAll: true,
-                defaultCheckedKeys: [23,24],
+                // defaultCheckedKeys: [23,24],
                 done: function() {
                     // el2.remove(24);
                 }
@@ -592,7 +592,8 @@ var el6=eleTree.render({
                 updateKeySelf: function() {
                     el2.updateKeySelf(22,{
                         label: "淮北市1",
-                        disabled: true
+                        disabled: true,
+                        checked: true
                     })
                 },
                 getChecked: function() {

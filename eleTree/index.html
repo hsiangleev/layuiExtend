@@ -528,6 +528,7 @@ eleTree.on("nodeTest(data3)",function(d) {
     <p class="red">1. 每次执行reload操作时，需要重新赋值给参数，即 var el=eleTree.render(...);&nbsp;&nbsp; el=el.reload(...);</p>
     <p class="red">2. 静态数据reload需要重新传data数据，即el2=el2.reload({data: data})</p>
     <p class="red">3. 使用拖拽功能最好先加载所有节点的dom, 即renderAfterExpand设为false, 两者的冲突尚未解决</p>
+    <p class="red">4. bug: 执行某些方法之后，手动选中的checked会被清除</p>
 
 
     <script src="../layui/layui.js"></script>
