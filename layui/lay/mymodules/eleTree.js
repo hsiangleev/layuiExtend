@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/12/12
+ * 最近修改时间: 2020/01/09
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -1161,7 +1161,13 @@ layui.define(["jquery","laytpl"], function (exports) {
                         target=options.elem;
                     }
                     // 判断是否超出边界
-                    if(target.parents(options.elem).length===0 && !isTargetOuterMost){
+                    var attrs=options.elem.get(0).attributes;
+                    var elemStr="";
+                    // 拼接根选择器字符串
+                    for(var k=0;k<attrs.length;k++){
+                        elemStr+="["+attrs[k].name+"='"+attrs[k].value+"']";
+                    }
+                    if(target.parents(elemStr).length===0 && !isTargetOuterMost){
                         return;
                     }
                     // 判断初始与结束是否是同一个节点
