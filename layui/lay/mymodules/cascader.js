@@ -2,7 +2,7 @@
  * @Name: 基于layui的无限级联选择器
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2019/09/04
+ * 最近修改时间: 2020/01/19
  */
 
 layui.define(["jquery","laytpl","layer"], function (exports) {
@@ -66,7 +66,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
         },
         // 初始化容器和标签
         init: function () {
-            $(this.elem).after('<i class="layui-icon layui-icon-down" data-cascader="icon"></i>');
+            $(this.elem).after('<i class="layui-icon layui-icon-down" data-cascader="elem"></i>');
             $(this.elem).after('<div class="urp-cascader-content"></div>');
             $(this.elem).data("cascader","elem");
         },
@@ -180,7 +180,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
             
             this.onOff = false;
             $(this.elem).siblings(".urp-cascader-content").find("ul").slideUp(100);
-            $(this.elem).siblings("i").replaceWith('<i class="layui-icon layui-icon-down" data-cascader="icon"></i>');
+            $(this.elem).siblings("i").removeClass("layui-icon-up").addClass("layui-icon-down");
 
             // 如果有初始值，则第一次不回调
             if(triggerData!=="initValue" && this.option.success) this.option.success(this.valueArr,this.textArr);
@@ -223,7 +223,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
                 self.onOff = false;
                 zIndex++;
                 $(self.elem).siblings(".urp-cascader-content").find("ul").hide();
-                $(self.elem).siblings("i").replaceWith('<i class="layui-icon layui-icon-down" data-cascader="icon"></i>');
+                $(self.elem).siblings("i").removeClass("layui-icon-up").addClass("layui-icon-down");
 
                 // for(var i=0;i<d.length;i++){
                 //     if(d[i].value==value[0]){
@@ -288,29 +288,28 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
                     }
                 }
             })
-                
             // input点击显示隐藏
-            $(document).on("click.cascader",self.elem+","+self.elem+" ~ i.layui-icon", function () {
+            $(self.elem+","+self.elem+" ~ i.layui-icon").on("click.cascader", function () {
                 self.onOff = !self.onOff;
                 zIndex++;
                 if (self.onOff) {
                     $(self.elem).siblings(".urp-cascader-content").find("ul").slideDown(100);
-                    $(self.elem).siblings("i").replaceWith('<i class="layui-icon layui-icon-up" data-cascader="icon"></i>');
+                    $(self.elem).siblings("i").removeClass("layui-icon-down").addClass("layui-icon-up")
 
                     self.domContent.css("zIndex",zIndex);
                 } else {
                     $(self.elem).siblings(".urp-cascader-content").find("ul").slideUp(100);
-                    $(self.elem).siblings("i").replaceWith('<i class="layui-icon layui-icon-down" data-cascader="icon"></i>');
+                    $(self.elem).siblings("i").removeClass("layui-icon-up").addClass("layui-icon-down")
                 }
             })
             // 点击外层文档隐藏
             $(document).on("click.cascader",function(event) {
                 var d=$(event.target).data("cascader");
-                if(d==="icon" || d==="elem") return;    // 判断点击的是否是input
+                if(d==="elem") return;    // 判断点击的是否是input
                 self.onOff = false;
                 if(!self.onOff){
                     $(self.elem).siblings(".urp-cascader-content").find("ul").slideUp(100);
-                    $(self.elem).siblings("i").replaceWith('<i class="layui-icon layui-icon-down" data-cascader="icon"></i>');
+                    $(self.elem).siblings("i").removeClass("layui-icon-up").addClass("layui-icon-down")
                 }
             })
             self.initValue();
@@ -318,8 +317,8 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
         reload: function(option) {
             var self=this;
             this.domContent.off();
-            $(document).off(".cascader");
-            $(this.elem).off().siblings(".urp-cascader-content,.layui-icon").remove();
+            $(this.elem+","+this.elem+" ~ i.layui-icon").off(".cascader");
+            $(this.elem).siblings(".urp-cascader-content,.layui-icon").remove();
             this.option = $.extend({}, this.option, option);
             $(this.elem).val("");
             this.domContent="";     
