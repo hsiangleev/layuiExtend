@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2020/01/09
+ * 最近修改时间: 2020/03/23
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -928,6 +928,22 @@ layui.define(["jquery","laytpl"], function (exports) {
                 obj.othis=$(item).siblings(".eleTree-checkbox").get(0)
                 arr.push(obj);
             })
+            // 合并其他自定义数据到选中节点数据
+            var f=function(data) {
+                data.forEach(function(val) {
+                    var bool=false;
+                    arr.forEach(function(value) {
+                        if(val[options.request.key]===value[options.request.key]){
+                            bool=true;
+                            for(var k in val){
+                                if(!value[k] && k!==options.request.children) value[k]=val[k];
+                            }
+                        }
+                    })
+                    if(!bool && val[options.request.children]) f(val[options.request.children]);
+                })
+            }
+            f(options.data);
             return arr;
         },
         setChecked: function(arr,isReset) {
