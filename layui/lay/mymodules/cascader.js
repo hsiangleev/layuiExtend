@@ -2,7 +2,7 @@
  * @Name: 基于layui的无限级联选择器
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2020/01/19
+ * 最近修改时间: 2020/04/13
  */
 
 layui.define(["jquery","laytpl","layer"], function (exports) {
@@ -205,10 +205,13 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
                 value.forEach(function(val,index){
                     // console.log(data);
                     if(!data) throw "选择器"+self.elem+"初始化数据不匹配";
+                    var oLiHeight=self.domContent.find(".urp-cascader-child").eq(index).find("li").outerHeight();
                     for(var i=0;i<data.length;i++){
                         if(data[i].value==val){
                             arrr.push(i);
                             self.domContent.find(".urp-cascader-child").eq(index).find("li").eq(i).trigger(self.triggerType,"initValue");
+                            // 若有滚动条则滚动定位
+                            self.domContent.find(".urp-cascader-child").eq(index).scrollTop(oLiHeight * i);
                             $(self.elem).siblings(".urp-cascader-content").find("ul").finish();      // 停止当前正在运行的动画
                         }
                     }
