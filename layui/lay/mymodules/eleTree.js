@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2020/03/23
+ * 最近修改时间: 2020/04/15
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -405,6 +405,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                     if(options.lazy && el.hasClass("lazy-icon")){
                         el.removeClass("layui-icon-triangle-r").addClass("layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop");
                         options.load(d,function(getData) {
+                            var getData=getData || [];
                             // 如果原来有数据则合并，没有则赋值
                             if(d[options.request.children]){
                                 d[options.request.children]=d[options.request.children].concat(getData);
@@ -413,8 +414,14 @@ layui.define(["jquery","laytpl"], function (exports) {
                             }
                             var eletreeStatus=eleTreeNodeContent.children("input.eleTree-hideen").attr("eletree-status");
                             if(d[options.request.children] && d[options.request.children].length>0){
-                                // 只渲染获取到的数据
-                                laytpl(TPL_ELEM(options,floor,eletreeStatus)).render(getData, function(string){
+                                // 渲染数据（不包括右键新增加的）
+                                var otherData;
+                                if(sibNode.children(".eleTree-node").length>0){
+                                    otherData=d[options.request.children].filter(function(val) {
+                                        return val[options.request.key]!=sibNode.children(".eleTree-node").eq(0).data(options.request.key)
+                                    })
+                                }
+                                laytpl(TPL_ELEM(options,floor,eletreeStatus)).render(otherData || d[options.request.children], function(string){
                                     sibNode.append(string).show("fast");
                                 });
                             }else{
@@ -436,6 +443,8 @@ layui.define(["jquery","laytpl"], function (exports) {
                             // 选择祖父
                             selectParentsFn();
                             _self.checkboxRender();
+                        }else{
+                            el.addClass("icon-rotate");
                         }
                     }
                 }else{
