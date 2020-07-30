@@ -2,7 +2,7 @@
  * @Name: step 基于layui的步骤条面板
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2018/11/16
+ * 最近修改时间: 2020/07/30
  */
 
 layui.define(["jquery"], function (exports) {
@@ -18,6 +18,7 @@ layui.define(["jquery"], function (exports) {
         this.isOpenStepLevel=option.isOpenStepLevel?option.isOpenStepLevel:false;
         this.len=0;   // 页面个数
         this.currentStep=(option.currentStep && option.currentStep>=1)?option.currentStep:1;    // 当前走到第几步
+        this.iconClickCallback=option.iconClickCallback || null
 
         this.disabledStep=Object.prototype.toString.call(option.disabledStep)==="[object Array]"?option.disabledStep:[];
 
@@ -159,6 +160,7 @@ layui.define(["jquery"], function (exports) {
                     // 判断点击的是否为disabled
                     if($.inArray(index, self.disabledStep) === -1){
                         self.goStep(index);
+                        self.iconClickCallback && self.iconClickCallback(index);
                     }
                 })
             })():"";
@@ -178,6 +180,7 @@ layui.define(["jquery"], function (exports) {
                     // 判断点击的是否为disabled
                     if($.inArray(index, self.disabledStep) === -1){
                         self.goStep(index);
+                        self.iconClickCallback && self.iconClickCallback(index);
                     }
                 })
             })():"";

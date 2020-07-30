@@ -47,7 +47,10 @@
                 // currentStep: 2,
                 // canIconClick: true,
                 // disabledStep: [1,3],
-                isOpenStepLevel: true
+                isOpenStepLevel: true,
+                iconClickCallback: function(index) {
+                    console.log(index)
+                }
             });
             $(".goFirst").on("click",function() {
                 step.goFirst();
