@@ -24,7 +24,7 @@ layui.define(["jquery"], function (exports) {
 
         this.styleLine=$(option.elem).hasClass("layui-step-line");
 
-        this.finalStep=1;       // 当前走到最远的步骤
+        this.finalStep=1;       // 当前走到最远的步骤（this.finalStep=this.currentStep）
 
         this.parameterInit();
         this.domRender();
