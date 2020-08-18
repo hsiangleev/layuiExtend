@@ -2,7 +2,7 @@
  * @Name: 基于layui的tree重写
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2020/04/15
+ * 最近修改时间: 2020/08/18
  */
 
 layui.define(["jquery","laytpl"], function (exports) {
@@ -787,8 +787,11 @@ layui.define(["jquery","laytpl"], function (exports) {
                 d[obj.i]=$.extend({},d[obj.i],data);
                 // dom渲染
                 data[options.request.name] && node.children(".eleTree-node-content-label").text(data[options.request.name]);
-                data[options.request.disabled] && node.children(".eleTree-hideen").addClass("eleTree-disabled")
-                    .siblings(".eleTree-checkbox").addClass("eleTree-checkbox-disabled");
+                if(data[options.request.disabled] === true) {
+                    node.children(".eleTree-hideen").addClass("eleTree-disabled").siblings(".eleTree-checkbox").addClass("eleTree-checkbox-disabled");
+                }else if(data[options.request.disabled] === false){
+                    node.children(".eleTree-hideen").removeClass("eleTree-disabled").siblings(".eleTree-checkbox").removeClass("eleTree-checkbox-disabled");
+                }
                 if(data[options.request.checked]){
                     node.children(".eleTree-hideen").prop("checked",true).attr("eleTree-status","1").attr("data-checked","");
                     _self._unCheckNodes();
