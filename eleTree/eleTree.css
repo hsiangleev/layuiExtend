@@ -64,14 +64,14 @@
     position: absolute;
     width: 0;
     height: 100%;
-    border: 1px dotted #ccc;
+    border-left: 1px dotted #ccc;
     z-index: 1;
 }
 .eleTree-node .eleTree-node-horizontalline{
     position: absolute;
     height: 0;
     top: 13px;
-    border: 1px dotted #ccc;
+    border-top: 1px dotted #ccc;
     z-index: 1;
 }
 
