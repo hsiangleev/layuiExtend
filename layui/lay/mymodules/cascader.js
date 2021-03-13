@@ -123,7 +123,31 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
             //     default:
             //         break;
             // }
-            
+
+                  
+            if (this.option.canParentSelect) {
+                this.parentSelect();
+            }
+                   
+        },
+        //非叶子节点的取值
+        parentSelect:function(){
+          //如canParentSelect为true，立即给组件赋值
+          this.finishInitData();
+          if (!this.blockData["children"]) {
+            //如选择了叶子节点则立即关闭下拉
+            if (this.option.lazy && !this.blockData.leaf) {
+              return;
+            } else {
+              this.domContent
+                .find(".urp-cascader-child:gt(" + this.floor + ")")
+                .remove();
+              $(this.elem)
+                .siblings(".urp-cascader-content")
+                .find("ul")
+                .slideUp(100);
+            }
+          }
         },
         // 若有第二层则初始化第二层
         initChild: function (triggerData,node) {
@@ -160,10 +184,11 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
                 
                 if(triggerData!=="initValue" && this.option.success) this.option.success(this.valueArr,this.textArr);
             }
+        
         },
         // 结束之后拿取数据
         finishInitData: function (triggerData) {
-            this.domContent.find(".urp-cascader-child:gt("+(this.floor)+")").remove();
+            
             
             this.textArr.length=this.floor;
             this.textArr.push(this.blockData.label);
@@ -179,7 +204,14 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
             );
             
             this.onOff = false;
-            $(this.elem).siblings(".urp-cascader-content").find("ul").slideUp(100);
+            //如canParentSelect为true，立即关闭下拉
+            if (!this.option.canParentSelect){
+                 this.domContent
+                   .find(".urp-cascader-child:gt(" + this.floor + ")")
+                   .remove();
+                 $(this.elem).siblings(".urp-cascader-content").find("ul").slideUp(100);
+            }
+          
             $(this.elem).siblings("i").removeClass("layui-icon-up").addClass("layui-icon-down");
 
             // 如果有初始值，则第一次不回调
