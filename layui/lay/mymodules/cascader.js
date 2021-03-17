@@ -2,7 +2,7 @@
  * @Name: 基于layui的无限级联选择器
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2020/04/13
+ * 最近修改时间: 2021/03/17
  */
 
 layui.define(["jquery","laytpl","layer"], function (exports) {
@@ -93,7 +93,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
             }
         },
         // 获取当前点击的当前面板的数据
-        getBlockData: function (event,el) {
+        getBlockData: function (event,el,triggerData) {
             event.stopPropagation();
             this.floor=$(el).parent().index();     // 当前点击的是第几层
             var index=$(el).index();              // 当前点击的是这一层的第几个
@@ -126,28 +126,29 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
 
                   
             if (this.option.canParentSelect) {
-                this.parentSelect();
+                this.parentSelect(triggerData);
             }
                    
         },
         //非叶子节点的取值
-        parentSelect:function(){
-          //如canParentSelect为true，立即给组件赋值
-          this.finishInitData();
-          if (!this.blockData["children"]) {
-            //如选择了叶子节点则立即关闭下拉
-            if (this.option.lazy && !this.blockData.leaf) {
-              return;
-            } else {
-              this.domContent
-                .find(".urp-cascader-child:gt(" + this.floor + ")")
-                .remove();
-              $(this.elem)
-                .siblings(".urp-cascader-content")
-                .find("ul")
-                .slideUp(100);
+        parentSelect:function(triggerData){
+            if (!this.blockData["children"]) {
+                //如选择了叶子节点则立即关闭下拉
+                if (this.option.lazy && !this.blockData.leaf) {
+                return;
+                } else {
+                this.domContent
+                    .find(".urp-cascader-child:gt(" + this.floor + ")")
+                    .remove();
+                $(this.elem)
+                    .siblings(".urp-cascader-content")
+                    .find("ul")
+                    .slideUp(100);
+                }
+            }else{
+                //如canParentSelect为true，立即给组件赋值
+                this.finishInitData(triggerData);
             }
-          }
         },
         // 若有第二层则初始化第二层
         initChild: function (triggerData,node) {
@@ -289,7 +290,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
             // 每层点击时绑定事件
             self.domContent.on(self.triggerType,".urp-cascader-child li",function(event,triggerData){
                 var _self=this;     // 点击的对象
-                self.getBlockData(event,this);
+                self.getBlockData(event,this,triggerData);
                 $(this).addClass("active").siblings("li").removeClass("active");
                 // 判断当前是否存在子层
                 if("children" in self.blockData && self.blockData["children"].length>0){
