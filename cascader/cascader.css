@@ -52,10 +52,6 @@ ul.urp-cascader-child li.active{
 ul.urp-cascader-child>li:hover{
     background-color: #f5f5f5;
 }
-.layui-form-item{
-    width: 350px;
-    display: inline-block;
-}
 
 ul.urp-cascader-child:first-of-type:after{
     content: "";
