@@ -2,7 +2,7 @@
  * @Name: 基于layui的无限级联选择器
  * @Author: 李祥
  * @License：MIT
- * 最近修改时间: 2021/03/17
+ * 最近修改时间: 2021/06/25
  */
 
 layui.define(["jquery","laytpl","layer"], function (exports) {
@@ -134,17 +134,9 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
         parentSelect:function(triggerData){
             if (!this.blockData["children"]) {
                 //如选择了叶子节点则立即关闭下拉
-                if (this.option.lazy && !this.blockData.leaf) {
-                return;
-                } else {
-                this.domContent
-                    .find(".urp-cascader-child:gt(" + this.floor + ")")
-                    .remove();
-                $(this.elem)
-                    .siblings(".urp-cascader-content")
-                    .find("ul")
-                    .slideUp(100);
-                }
+                if (this.option.lazy && !this.blockData.leaf || this.triggerType === "mouseenter") return;
+                this.domContent.find(".urp-cascader-child:gt(" + this.floor + ")").remove();
+                $(this.elem).siblings(".urp-cascader-content").find("ul").slideUp(100);
             }else{
                 //如canParentSelect为true，立即给组件赋值
                 this.finishInitData(triggerData);
